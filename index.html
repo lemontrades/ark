@@ -31,7 +31,7 @@ th.num{text-align:right;}
   .card.pad{padding:16px}
 
   .grid{display:grid;gap:12px}
-  .grid.fit-240{grid-template-columns:repeat(auto-fit,minmax( 180px,1fr))}
+  .grid.fit-240{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
   .grid.two-col{grid-template-columns:2fr 1fr}
   @media (max-width:1100px){ .grid.two-col{grid-template-columns:1fr} }
 
@@ -110,31 +110,47 @@ input[type="text"] {
   #suggestions{box-shadow:0 6px 20px rgba(0,0,0,.35);}
 
 
-/* --- Responsive fixes --- */
-.table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-
+/* ===== Mobile polish (v2) ===== */
 @media (max-width: 600px){
-  .container{padding:16px}
-  h1{font-size:18px}
-  .chips{flex-wrap:wrap; overflow-x:visible; gap:8px}
+  /* Layout spacing & typography */
+  .container{padding:12px}
+  section{margin-bottom:14px}
+  h1{font-size:18px;line-height:1.2}
+  h2{font-size:16px;line-height:1.2}
+  label{font-size:13px}
+
+  /* Controls: stack nicely, no overflow */
+  .controls.grid{gap:10px}
+  .controls.grid.fit-240{grid-template-columns:1fr}
+  .card.pad{padding:12px}
   .date-card, .search-card{max-width:none}
-  input[type="date"], input[type="text"], select, button{max-width:none; width:100%}
-  #table{table-layout:auto; font-size:13px}
-  #table colgroup col{width:auto !important}
-  #table td a .muted,
-  #table td, #table th{white-space:normal; word-break:break-word}
-  .overlay{padding:10px}
-  .overlay .panel{width:100%; max-width:100%; max-height:90vh;}
+  input[type="date"], input[type="text"], select, button{width:100%;max-width:none;font-size:14px}
+
+  /* Chips block: allow wrapping */
+  .chips{flex-wrap:wrap; overflow:visible; gap:8px}
 }
 
-@media (max-width: 480px){
-  .grid.fit-240{grid-template-columns:1fr;}
+/* Results table: make it denser and avoid overflow */
+@media (max-width: 600px){
+  #table{table-layout:auto; font-size:13px}
+  #table th, #table td{padding:8px 10px}
+  #table colgroup col{width:auto !important}
+  #table td a .muted, #table td, #table th{white-space:normal; word-break:break-word}
+  .ticker-pill{font-size:11px; padding:4px 8px}
+}
+
+/* Extra-compact on very small phones */
+@media (max-width: 420px){
+  .ticker-pill{font-size:10px; padding:3px 6px}
+  #table{font-size:12px}
+  .grid.fit-240{grid-template-columns:1fr}
+
+  /* Hide less-crucial columns to keep rows readable */
   #table thead th:nth-child(2),
   #table tbody td:nth-child(2),
   #table thead th:nth-child(4),
   #table tbody td:nth-child(4){display:none}
 }
-
 </style>
 </head>
 <body>
@@ -218,6 +234,7 @@ input[type="text"] {
           </div>
         </section>
       </div>
+</section>
   </div>
 
   <div class="overlay" id="overlay">
