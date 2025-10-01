@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ARK Trades – Dashboard </title>
+<style>
+@media (prefers-color-scheme: dark) {
+  input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+  }
+}
+td.num{text-align:right;padding-right:10px}
+th.num{text-align:right;}
+  :root {
+    --bg:#0b0d10; --panel:#111418; --ink:#e8eaee; --muted:#98a2b3; --line:#1f242b;
+    --accent:#e8eaee; --green:#22c55e; --red:#f43f5e; --chip:#0f1318; --chip-on:#e8eaee; --chip-on-ink:#0b0d10;
+    --pill-bg:#182028;
+  }
+  [data-theme="light"] {
+    --bg:#f6f7f9; --panel:#ffffff; --ink:#111; --muted:#6b7280; --line:#e5e7eb;
+    --accent:#111; --green:#15803d; --red:#b91c1c; --chip:#fff; --chip-on:#111; --chip-on-ink:#fff;
+    --pill-bg:#eef2f7;
+  }
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Ubuntu,Arial,sans-serif}
+  .container{max-width:1250px;margin:0 auto;padding:24px}
+  h1{font-size:22px;margin:0 0 4px}
+  p.note{color:var(--muted);font-size:13px;margin:6px 0 18px}
+
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:16px;box-shadow:0 1px 2px rgba(0,0,0,.25)}
+  .card.pad{padding:16px}
+
+  .grid{display:grid;gap:12px}
+  .grid.fit-240{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+  .grid.two-col{grid-template-columns:2fr 1fr}
+  @media (max-width:1100px){ .grid.two-col{grid-template-columns:1fr} }
+
+  label{font-size:12px;color:var(--muted);display:block;margin-bottom:6px}
+
+input[type="date"],
+input[type="text"] {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  font-size: 14px;
+  outline: none;
+  background: transparent;
+  color: var(--ink);
+}
+
+/* 👇 aggiungi questi due limiti */
+input[type="date"] {
+  max-width: 235px;
+}
+input[type="text"] {
+  max-width: 235px;
+}
+
+  input::placeholder{color:var(--muted)}
+  input[type="checkbox"]{transform:scale(1.05);margin-right:6px}
+
+  .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .btn{background:transparent;border:1px solid var(--line);border-radius:999px;padding:9px 14px;font-size:14px;cursor:pointer;color:var(--ink)}
+  .btn:hover{box-shadow:0 2px 10px rgba(0,0,0,.25);border-color:#2a313a}
+  .btn.primary{background:var(--accent);border-color:var(--accent);color:var(--chip-on-ink)}
+
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{border:1px solid var(--line);border-radius:999px;padding:6px 12px;font-size:13px;background:var(--chip);color:var(--ink);cursor:pointer}
+  .chip.on{background:var(--chip-on);color:var(--chip-on-ink)}
+
+  table{border-collapse:collapse;width:100%;font-size:14px;table-layout:fixed}
+  thead{background:#0f1216;border-bottom:1px solid var(--line)}
+  [data-theme="light"] thead{background:#f3f4f6}
+  th,td{padding:8px 10px;text-align:left;border-top:1px solid var(--line);vertical-align:middle}
+  td.num{text-align:right;padding-right:10px}
+  .buy{color:var(--green);font-weight:700}
+  .sell{color:var(--red);font-weight:700}
+  .muted{color:var(--muted)}
+  .right{margin-left:auto}
+  .stat .label{font-size:12px;color:var(--muted)}
+  .stat .value{font-size:16px;font-weight:600}
+  .stat{max-width:160px;flex:1}
+
+  .footer{font-size:12px;color:var(--muted);margin-top:16px}
+  .stats-funds-grid{display:grid;grid-template-columns:auto auto 1fr;gap:12px}
+  .chips{flex-wrap:nowrap;overflow-x:auto}
+  .follow-btn{background:transparent;border:none;cursor:pointer;color:var(--muted);font-size:14px;margin-left:4px}
+  .follow-btn:hover{color:var(--accent)}
+  #suggestions div{padding:4px 8px;cursor:pointer}
+  #suggestions div:hover{background:var(--line)}
+
+
+
+  .controls .card{min-width:0}
+  .date-card{max-width:270px}  /* 👀 QUI LE CHIPS DEL PORCO  */
+  .search-card{max-width:390px;position:relative}
+
+  .ticker-pill{display:inline-block;padding:3px 10px;border-radius:999px;font-weight:700;letter-spacing:.2px;background:var(--pill-bg)}
+  .ticker-link{cursor:pointer;text-decoration:none}
+  .ticker-link:hover{opacity:.9}
+
+  .overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;padding:20px}
+  .overlay .panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;max-width:1000px;width:100%;max-height:85vh;overflow:auto}
+  .overlay .panel .hdr{display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid var(--line)}
+  .overlay .panel .body{padding:12px 16px}
+  .close{margin-left:auto}
+
+  .btn.on{background:var(--chip-on);color:var(--chip-on-ink);border-color:var(--chip-on)}
+  #suggestions{box-shadow:0 6px 20px rgba(0,0,0,.35);}
+
+</style>
+</head>
+<body>
+  <div class="container">
+    <div class="row" style="justify-content:space-between;gap:12px">
+      <div>
+        <h1>ARK Trades – Dashboard (Dark, v3.4)</h1>
+        <p class="note">Source: Unofficial API (<code>arkfunds.io</code>).</p>
+      </div>
+      <div class="row"><button class="btn" id="themeBtn" title="Change theme">Theme: Dark</button></div>
+    </div>
+
+    <section class="controls grid fit-240">
+      <div class="card pad date-card">
+        <label>From</label>
+        <input type="date" id="fromDate">
+      </div>
+      <div class="card pad date-card">
+        <label>To</label>
+        <input type="date" id="toDate">
+      </div>
+      <div class="card pad search-card">
+        <label>Search (ticker or fund)</label>
+        <input type="text" id="searchBox" placeholder="e.g. NVDA or ARKK">
+        <div id="suggestions" class="card pad" style="position:absolute;z-index:1000;display:none;max-height:240px;overflow:auto;font-size:13px;pointer-events:auto"></div>
+      </div>
+      <div class="card pad">
+        <label>&nbsp;</label>
+        <div class="row">
+          <button class="btn primary" id="fetchBtn">Refresh</button>
+          <button class="btn" id="csvBtn">Export CSV</button>
+        </div>
+      </div>
+    </section>
+
+<section class="stats-funds-grid" style="margin-top:12px;margin-bottom:12px">
+  <div class="card pad stat">
+    <div class="label">Transactions displayed</div>
+    <div class="value" id="countBox">0</div>
+  </div>
+  <div class="card pad stat">
+    <div class="label">Funds selected</div>
+    <div class="value" id="fundCount">0</div>
+  </div>
+  <div class="card pad">
+    <div class="row" style="gap:12px;align-items:center;justify-content:space-between;flex-wrap:nowrap">
+      <div class="row" style="gap:12px;flex:1 1 auto;overflow-x:auto;white-space:nowrap">
+        <span class="muted">Funds:</span>
+        <div class="chips" id="fundsChips"></div>
+      </div>
+      <label><input type="checkbox" id="onlyMine"> Only my tickers</label>
+    </div>
+  </div>
+</section>
+
+<!-- Full-width results table -->
+
+<section class="card pad">
+          <div class="muted">Results</div>
+          <div style="margin-top:8px" class="muted" id="status">Ready.</div>
+          <div style="margin-top:12px;overflow:auto;">
+            <table id="table">
+              <colgroup>
+                <col style="width:140px">
+                <col style="width:90px">
+                <col style="width:220px">
+                <col style="width:110px">
+                <col style="width:140px">
+              </colgroup>
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Fund</th>
+                  <th>Ticker / Name</th>
+                  <th>Direction</th>
+                  <th class="num">Shares</th>
+                </tr>
+              </thead>
+              <tbody id="tbody"></tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+</section>
+  </div>
+
+  <div class="overlay" id="overlay">
+    <div class="panel">
+      <div class="hdr">
+        <div id="focusTitle" style="font-weight:700">Ticker</div>
+        <button class="btn" id="followBtn" title="Follow / Unfollow">Follow</button>
+        <button class="btn close" id="closeOverlay">Close</button>
+      </div>
+      <div class="body">
+        <div id="focusInfo" class="muted" style="margin-bottom:8px"></div>
+        <div style="overflow:auto">
+          <table>
+            <thead><tr>
+              <th style="width:120px">Date</th>
+              <th style="width:90px">Fund</th>
+              <th style="width:110px">Direction</th>
+              <th style="width:140px" class="num">Shares</th>
+            </tr></thead>
+            <tbody id="focusBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+(function(){
+  const FUNDS = ["ARKK","ARKG","ARKQ","ARKF","ARKX","ARKW"];
+  function getMyTickers(){try{return JSON.parse(localStorage.getItem("MY_TICKERS")||"[]");}catch(e){return []}}
+function setMyTickers(arr){localStorage.setItem("MY_TICKERS",JSON.stringify(arr))}
+
+
+  const NAME_MAP = {
+    "ABSI":"Absci Corporation","AMD":"Advanced Micro Devices","BABA":"Alibaba Group Holding","GOOGL":"Alphabet Inc. (Class A)",
+    "BMNR":"Bitmine Immersion","BBAI":"BigBear.ai","CRSP":"CRISPR Therapeutics","ENI":"Eni SpA","INTC":"Intel Corporation",
+    "NTLA":"Intellia Therapeutics","ISP":"Intesa Sanpaolo","META":"Meta Platforms","MSFT":"Microsoft Corporation",
+    "NVDA":"NVIDIA Corporation","PLUG":"Plug Power","TEM":"Tempus AI","TSLA":"Tesla Inc.","UNH":"UnitedHealth Group",
+    "PATH":"UiPath","HIVE":"Hive Digital Technologies","ORCL":"Oracle Corporation","SNPS":"Synopsys Inc.",
+    "BIDU":"Baidu Inc.","KTOS":"Kratos Defense & Security","LHX":"L3Harris Technologies","RBLX":"Roblox Corporation",
+    "ROKU":"Roku Inc.", "HON":"Honeywell International Inc.",
+"DE":"Deere & Company",
+"KDK":"Kodiak AI, Inc.",
+"ARCT":"Arcturus Therapeutics Holdings, Inc.",
+"PONY":"Pony.ai, Inc.",
+"AACT":"Ares Acquisition Corporation II","OKLO":"Oklo Inc.",
+"SHOP":"Shopify Inc.",
+"BREA":"Brea HOLDINGS PLC",
+"AVAV":"AeroVironment, Inc.",
+"ATAI":"Atai Life Sciences, Inc.",
+"BLSH":"Bullish Holdings, Inc.",
+"HOOD":"Robinhood Markets, Inc.",
+"BEAM":"Beam Therapeutics, Inc.",
+"FIG":"Figma Inc.",
+"ABNB":"Airbnb, Inc.",
+"TOST":"Toast, Inc.",
+"ETOR":"eToro Group Ltd.",
+"KLAR":"Klarna",
+"RKLB":"Rocket Lab USA, Inc.",
+"RBRK":"Rubrik, Inc.",
+"PRME":"Prime Medicine, Inc.",
+"TWST":"Twist Bioscience Corporation",
+"TER":"Teradyne, Inc.",
+"DKNG":"DraftKings Inc.",
+"FUTU":"Futu Holdings Limited",
+"GENI":"Genius Brands International, Inc.",
+"TXG":"10x Genomics, Inc.",
+"COIN":"Coinbase Global, Inc.",
+"GH":"Guardant Health, Inc.",
+"PD":"PagerDuty, Inc.",
+"WGS":"WGS (dipende contesto; può essere una società mineraria) ‒ da verificare",
+"PACB":"Pacific Biosciences of California, Inc.",
+"2618":"JD Logistics Inc.",
+"HO":"Thales SA",
+
+
+  };
+
+  // Theme
+  const themeBtn = document.getElementById('themeBtn');
+  function setTheme(mode){ document.documentElement.setAttribute('data-theme', mode); themeBtn.textContent = "Theme: " + (mode === "dark" ? "Dark" : "Light"); }
+  themeBtn.onclick = () => { const cur = document.documentElement.getAttribute('data-theme') || 'dark'; setTheme(cur === 'dark' ? 'light' : 'dark'); };
+  setTheme('dark');
+
+  // DOM refs
+  const fromDate = document.getElementById('fromDate');
+  const toDate = document.getElementById('toDate');
+  const searchBox = document.getElementById('searchBox');
+  const fetchBtn = document.getElementById('fetchBtn');
+  const csvBtn = document.getElementById('csvBtn');
+  const fundsChips = document.getElementById('fundsChips');
+  const onlyMine = document.getElementById('onlyMine');
+  const status = document.getElementById('status');
+  const tbody = document.getElementById('tbody');
+  const countBox = document.getElementById('countBox');
+  const fundCount = document.getElementById('fundCount');
+  const overlay = document.getElementById('overlay');
+  const closeOverlay = document.getElementById('closeOverlay');
+  const followBtn = document.getElementById('followBtn');
+  let focusTicker = '';
+  const focusTitle = document.getElementById('focusTitle');
+  const focusInfo  = document.getElementById('focusInfo');
+  const focusBody  = document.getElementById('focusBody');
+  closeOverlay.onclick = ()=> overlay.style.display='none';
+  
+  followBtn.onclick = ()=>{
+    if(!focusTicker) return;
+    let mine = getMyTickers();
+    if(mine.includes(focusTicker)){
+      mine = mine.filter(t=>t!==focusTicker);
+    } else {
+      mine.push(focusTicker);
+    }
+    setMyTickers(mine);
+    refreshFollowBtn();
+    render();
+  };
+  searchBox.addEventListener('keydown', (e)=>{
+    if(e.key==='Escape'){ searchBox.value=''; hideSuggestions(); render(); return; }
+    if(e.key==='Enter'){
+      const qraw = (searchBox.value||'');
+      const q = qraw.toLowerCase().trim();
+      if(!q){ hideSuggestions(); render(); return; }
+      const exactTicker = Object.keys(NAME_MAP).find(t => t.toLowerCase() === q);
+      const exactName = Object.entries(NAME_MAP).find(([t,n]) => (n||'').toLowerCase() === q);
+      if (exactTicker){ applySuggestion(exactTicker); e.preventDefault(); return; }
+      if (exactName){ applySuggestion(exactName[0]); e.preventDefault(); return; }
+      const suggestions = Object.entries(NAME_MAP)
+        .filter(([t,n]) => t.toLowerCase().startsWith(q) || ((n||'').toLowerCase().startsWith(q)))
+        .slice(0,10);
+      if (suggestions.length){ applySuggestion(suggestions[0][0]); e.preventDefault(); return; }
+      hideSuggestions(); render();
+    }
+  });
+
+
+  // Default range: ultimi 7 giorni fino ad oggi
+  (function setDefaultDates(){
+  const today = new Date();
+  const yyyy = today.getFullYear();
+  const mm = String(today.getMonth()+1).padStart(2,'0');
+  const dd = String(today.getDate()).padStart(2,'0');
+  toDate.value = `${yyyy}-${mm}-${dd}`;
+
+  const d2 = new Date(today);
+  d2.setMonth(d2.getMonth() - 1);
+
+  // If date overflowed into same month, adjust backwards to last valid day
+  while (d2.getMonth() === today.getMonth()) {
+    d2.setDate(d2.getDate() - 1);
+  }
+
+  const yyyy2 = d2.getFullYear();
+  const mm2 = String(d2.getMonth()+1).padStart(2,'0');
+  const dd2 = String(d2.getDate()).padStart(2,'0');
+  fromDate.value = `${yyyy2}-${mm2}-${dd2}`;
+})();
+
+  // Chips fondi (sempre visibili, indipendenti dal fetch)
+  const selected = new Set(FUNDS);
+  function renderChips(){
+    fundsChips.innerHTML = "";
+    FUNDS.forEach(f => {
+      const chip = document.createElement('button');
+      chip.className = 'chip ' + (selected.has(f) ? 'on' : '');
+      chip.textContent = f;
+      chip.onclick = () => { selected.has(f) ? selected.delete(f) : selected.add(f); renderChips(); updateFundCount(); fetchAll(); };
+      fundsChips.appendChild(chip);
+    });
+  }
+  function updateFundCount(){ fundCount.textContent = selected.size; }
+  renderChips(); updateFundCount();
+
+  function fmtNum(n){ if(n==null || isNaN(n)) return ""; return Number(n).toLocaleString('it-IT'); }
+
+  function coerceArray(json){
+    if (Array.isArray(json)) return json;
+    if (!json || typeof json !== 'object') return [];
+    if (Array.isArray(json.data)) return json.data;
+    if (Array.isArray(json.results)) return json.results;
+    if (Array.isArray(json.items)) return json.items;
+    if (Array.isArray(json.trades)) return json.trades;
+    return [];
+  }
+
+  async function fetchFund(fund, from, to){
+    const url = new URL('https://arkfunds.io/api/v2/etf/trades');
+    url.searchParams.set('symbol', fund);
+    url.searchParams.set('date_from', from);
+    url.searchParams.set('date_to', to);
+    url.searchParams.set('limit', '2000');
+    const res = await fetch(url);
+    if(!res.ok){ throw new Error(`Data not available (${res.status}) per ${fund}`); }
+    const arr = coerceArray(await res.json());
+    return arr.map(x => ({...x, fund}));
+  }function hashHue(str){ let h=0; for (let i=0;i<str.length;i++){ h=(h*31 + str.charCodeAt(i))%360; } return h; }
+  function tickerStyles(t){ const h=hashHue(t||''); return {bg:`hsl(${h},60%,20%)`, fg:`hsl(${h},85%,85%)`}; }
+
+
+  // --- Yahoo Finance price fetch helpers ---
+  function chunk(arr, size){ const out=[]; for(let i=0;i<arr.length;i+=size){ out.push(arr.slice(i,i+size)); } return out; }
+
+  async function fetchPricesYahoo(tickers){
+    const priceMap = {};
+    const batches = chunk(tickers, 50); // avoid URL too long
+    for (const part of batches){
+      const url = 'https://query1.finance.yahoo.com/v7/finance/quote?symbols=' + encodeURIComponent(part.join(','));
+      try{
+        const res = await fetch(url, {mode:'cors'});
+        if(!res.ok) continue;
+        const data = await res.json();
+        const list = (data && data.quoteResponse && Array.isArray(data.quoteResponse.result)) ? data.quoteResponse.result : [];
+        for (const q of list){
+          const sym = q.symbol;
+          const px  = Number(q.regularMarketPrice || q.postMarketPrice || q.bid || 0) || 0;
+          if (sym && px>0) priceMap[sym] = px;
+        }
+      }catch(e){
+        // ignore this batch
+      }
+    }
+    return priceMap;
+  }
+
+  let allRows=[];
+
+  async function fetchAll(){
+    try{
+      status.textContent = 'Loading…'; tbody.innerHTML=''; allRows=[];
+      const from = fromDate.value, to = toDate.value, funds = Array.from(selected);
+      const errors=[];
+      for (const f of funds){
+        try{ const part = await fetchFund(f, from, to); allRows.push(...part); }
+        catch(e){ errors.push(e.message||String(e)); }
+      }
+      render();
+      status.textContent = errors.length ? ('Partial: ' + errors.join(' | ')) : `Ready. Caricate ${allRows.length} operazioni.`;
+    }catch(e){ console.error(e); status.textContent='Error: '+(e.message||e); }
+  }
+
+  function getFiltered(){
+    const q=(searchBox.value||'').trim().toLowerCase(); const mine=onlyMine.checked;
+    return allRows.filter(r=>{
+      if (mine && !getMyTickers().includes(r.ticker)) return false;
+      if (q && !(String(r.ticker).toLowerCase().includes(q) || String(r.fund).toLowerCase().includes(q))) return false;
+      return true;
+    }).sort((a,b)=> (a.date<b.date?1:-1));
+  }
+
+  function render(){
+    const filtered = getFiltered();
+    tbody.innerHTML='';
+    if (!filtered.length){
+      const tr=document.createElement('tr'); const td=document.createElement('td'); td.colSpan=5; td.className='muted'; td.textContent='No results for current filters.'; tr.appendChild(td); tbody.appendChild(tr);
+    } else {
+      for (const r of filtered){
+        const dir=String(r.direction||'').toUpperCase();
+        const name=NAME_MAP[r.ticker]||'';
+        const s=tickerStyles(r.ticker||'');
+        const tr=document.createElement('tr');
+        tr.innerHTML = `
+          <td>${r.date||''}</td>
+          <td>${r.fund||''}</td>
+          <td>
+            <a class="ticker-link" data-ticker="${r.ticker||''}" title="View all trades for ${r.ticker||''}">
+              <span class="ticker-pill" style="background:${s.bg};color:${s.fg}">${r.ticker||''}</span>
+              ${name?`<span class="muted" style="font-size:12px;margin-left:6px">${name}</span>`:''}
+            </a>
+          </td>
+          <td class="${dir==='BUY'?'buy':'sell'}">${dir==='BUY'?'Buy':'Sell'}</td>
+          <td class="num">${fmtNum(r.shares)}</td>
+        `;
+        tbody.appendChild(tr);
+      }
+    }
+    countBox.textContent = filtered.length.toLocaleString('it-IT');
+    document.querySelectorAll('.ticker-link').forEach(a=>{
+      a.addEventListener('click', ()=> openFocus(a.getAttribute('data-ticker')||''));
+    });
+  }
+
+  
+  function isFollowed(t){ return getMyTickers().includes(t); }
+  function refreshFollowBtn(){
+    if(!focusTicker) return;
+    const on = isFollowed(focusTicker);
+    followBtn.textContent = on ? 'Following ✓' : 'Follow';
+    followBtn.classList.toggle('on', on);
+  }
+
+  function openFocus(ticker){
+    const rows = getFiltered().filter(r=>r.ticker===ticker);
+    focusTicker = ticker;
+    focusTitle.textContent = ticker + (NAME_MAP[ticker] ? (" – " + NAME_MAP[ticker]) : "");
+    refreshFollowBtn();
+    focusInfo.textContent = `${rows.length} transactions displayed for ${ticker}.`;
+    focusBody.innerHTML='';
+    rows.forEach(r=>{
+      const dir=String(r.direction||'').toUpperCase();
+      const tr=document.createElement('tr');
+      tr.innerHTML = `
+        <td>${r.date||''}</td>
+        <td>${r.fund||''}</td>
+        <td class="${dir==='BUY'?'buy':'sell'}">${dir==='BUY'?'Buy':'Sell'}</td>
+        <td class="num">${fmtNum(r.shares)}</td>
+      `;
+      focusBody.appendChild(tr);
+    });
+    overlay.style.display='flex';
+  }
+
+  
+  function toggleMyTicker(ticker){
+    let mine = getMyTickers();
+    if(mine.includes(ticker)){
+      mine = mine.filter(t=>t!==ticker);
+    } else {
+      mine.push(ticker);
+    }
+    setMyTickers(mine);
+    render();
+  }
+
+  // Event handlers
+  fetchBtn.onclick = fetchAll;
+  
+  const suggestionsBox = document.getElementById('suggestions');
+  function hideSuggestions(){ suggestionsBox.style.display='none'; }
+  function renderSuggestions(list){
+    if(!list.length){ suggestionsBox.style.display='none'; return; }
+    suggestionsBox.innerHTML = list.map(function(pair){
+      var t = pair[0], n = pair[1] || '';
+      var s = tickerStyles(t||'');
+      return '<div class="sg" data-ticker="'+t+'">'
+           +   '<span class="ticker-pill" style="background:'+s.bg+';color:'+s.fg+'">'+t+'</span>'
+           +   '<span class="muted">'+n+'</span>'
+           + '</div>';
+    }).join('');
+    var parent = searchBox.closest('.search-card');
+    var pr = parent.getBoundingClientRect();
+    var ir = searchBox.getBoundingClientRect();
+    suggestionsBox.style.position = 'absolute';
+    suggestionsBox.style.left = (ir.left - pr.left) + 'px';
+    suggestionsBox.style.top = (searchBox.offsetTop + searchBox.offsetHeight + 6) + 'px';
+    suggestionsBox.style.minWidth = (searchBox.offsetWidth) + 'px';
+    suggestionsBox.style.display='block';
+  }
+  function applySuggestion(t){
+    searchBox.value = t;
+    hideSuggestions();
+    render();
+  }
+  // input handler
+  searchBox.oninput = ()=>{
+    const q = (searchBox.value||'').toLowerCase();
+    if(!q){ hideSuggestions(); render(); return; }
+    const suggestions = Object.entries(NAME_MAP)
+      .filter(([t,n])=> t.toLowerCase().startsWith(q) || (n && n.toLowerCase().startsWith(q)))
+      .slice(0,10);
+    renderSuggestions(suggestions);
+    render();
+  };
+  searchBox.addEventListener('keydown', (e)=>{
+    if(e.key==='Escape'){ searchBox.value=''; hideSuggestions(); render(); return; }
+    if(e.key==='Enter'){
+      const qraw = (searchBox.value||'');
+      const q = qraw.toLowerCase().trim();
+      if(!q){ hideSuggestions(); render(); return; }
+      const exactTicker = Object.keys(NAME_MAP).find(t => t.toLowerCase() === q);
+      const exactName = Object.entries(NAME_MAP).find(([t,n]) => (n||'').toLowerCase() === q);
+      if (exactTicker){ applySuggestion(exactTicker); e.preventDefault(); return; }
+      if (exactName){ applySuggestion(exactName[0]); e.preventDefault(); return; }
+      const suggestions = Object.entries(NAME_MAP)
+        .filter(([t,n]) => t.toLowerCase().startsWith(q) || ((n||'').toLowerCase().startsWith(q)))
+        .slice(0,10);
+      if (suggestions.length){ applySuggestion(suggestions[0][0]); e.preventDefault(); return; }
+      hideSuggestions(); render();
+    }
+  });
+  // hide on Escape
+  searchBox.addEventListener('keydown', (e)=>{ if(e.key==='Escape'){ searchBox.value=''; hideSuggestions(); render(); } });
+  // hide on blur (with small delay to allow click on suggestion)
+  searchBox.addEventListener('blur', ()=> setTimeout(hideSuggestions, 250));
+  // hide on outside click
+  suggestionsBox.addEventListener('mousedown', (e)=>{ var el = e.target.closest('[data-ticker]'); if(el){ applySuggestion(el.dataset.ticker); }});
+  document.addEventListener('click', (e)=>{
+    const sc = searchBox.closest('.search-card');
+    if (!sc.contains(e.target)) hideSuggestions();
+  });
+
+
+  onlyMine.onchange = ()=>render();
+  document.addEventListener('keydown', e=>{ if(e.key==='Escape') overlay.style.display='none'; });
+
+  // Auto-caricamento all'apertura
+  window.addEventListener('DOMContentLoaded', fetchAll);
+
+  // Ticker color helper (placed last so it's defined when sidebar uses it)
+  function tickerColorExample(){ return null; }
+})();
+</script>
+</body>
+</html>
