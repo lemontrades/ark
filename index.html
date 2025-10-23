@@ -157,6 +157,14 @@ input[type="date"], input[type="text"], select, button{
   #table thead th:nth-child(4),
   #table tbody td:nth-child(4){display:none}
 }
+
+.icon-link{
+  display:inline-flex;align-items:center;justify-content:center;
+  margin-left:6px;padding:2px 4px;border:none;background:transparent;cursor:pointer;
+  color:var(--text-secondary);
+}
+.icon-link:hover{color:var(--text);}
+
 </style>
 </head>
 <body>
@@ -248,6 +256,7 @@ input[type="date"], input[type="text"], select, button{
       <div class="hdr">
         <div id="focusTitle" style="font-weight:700">Ticker</div>
         <button class="btn" id="followBtn" title="Follow / Unfollow">Follow</button>
+        <button class="btn" id="goGFBtn" title="Apri su Google Finance">Go to stock 📈</button>
         <button class="btn close" id="closeOverlay">Close</button>
       </div>
       <div class="body">
@@ -375,6 +384,7 @@ function setMyTickers(arr){localStorage.setItem("MY_TICKERS",JSON.stringify(arr)
 "ISRG": "Intuitive Surgical Inc",
 "QSI": "Quantum-Si Incorporated",
 "TDY": "Teledyne Technologies Inc",
+"NFLX": "Netflix",
 
 
   };
@@ -401,6 +411,91 @@ function setMyTickers(arr){localStorage.setItem("MY_TICKERS",JSON.stringify(arr)
   const closeOverlay = document.getElementById('closeOverlay');
   const followBtn = document.getElementById('followBtn');
   let focusTicker = '';
+ // --- Google Finance: exchange mapping (corretto al 23 Oct 2025) ---
+const EXCHANGE_MAP = {
+  // NASDAQ
+  "ABNB":"NASDAQ","ABSI":"NASDAQ","ACHR":"NASDAQ","ADPT":"NASDAQ","AMGN":"NASDAQ",
+  "AMD":"NASDAQ","AMZN":"NASDAQ","CMPS":"NASDAQ","CDNA":"NASDAQ","COIN":"NASDAQ",
+  "CRSP":"NASDAQ","DDOG":"NASDAQ","EXAS":"NASDAQ","GOOG":"NASDAQ","GOOGL":"NASDAQ",
+  "HIVE":"NASDAQ","ILMN":"NASDAQ","INTC":"NASDAQ","IONS":"NASDAQ","IRDM":"NASDAQ",
+  "ISRG":"NASDAQ","MASS":"NASDAQ","META":"NASDAQ","MSFT":"NASDAQ","NFLX":"NASDAQ",
+  "NVDA":"NASDAQ","PACB":"NASDAQ","PLTR":"NASDAQ",   // dal 26 Nov 2024 è su Nasdaq
+  "PLUG":"NASDAQ","QCOM":"NASDAQ","QSI":"NASDAQ","RKLB":"NASDAQ","REKR":"NASDAQ",
+  "SNPS":"NASDAQ","SYM":"NASDAQ","TRMB":"NASDAQ","TSLA":"NASDAQ","TTD":"NASDAQ",
+  "TXG":"NASDAQ","U":"NYSE",   // Unity è NYSE (vedi sotto, lasciato qui come memo)
+  "VCYT":"NASDAQ","VRTX":"NASDAQ",
+
+  // NYSE
+  "ARCT":"NASDAQ","AVAV":"NYSE","AVDX":"NASDAQ", // AvidXchange è NASDAQ
+  "BABA":"NYSE","BLDE":"NYSE","BWXT":"NYSE","CCJ":"NYSE","DE":"NYSE",
+  "DASH":"NYSE","ENI":"NYSE","GENI":"NYSE","HON":"NASDAQ","JOBY":"NYSE",
+  "KIND":"NYSE","LHX":"NYSE","MELI":"NASDAQ", // MELI è NASDAQ (memo)
+  "OKLO":"NYSE","ORCL":"NYSE","PATH":"NYSE","PD":"NYSE","PINS":"NYSE",
+  "PSTG":"NYSE","RBLX":"NYSE","RBRK":"NYSE","ROKU":"NASDAQ",
+  "SHOP":"NASDAQ",   // trasferita da NYSE a NASDAQ (Mar 2025)
+  "TDY":"NYSE","UNH":"NYSE","VEEV":"NYSE",
+
+  // ETF / altri USA
+  "ARKB":"BATS",     // Cboe BZX (Google Finance usa “BATS”)
+  "ARKB.US":"BATS",
+
+ // --- ADR / OTC US (Google Finance usa "OTCMKTS")
+"BYDDY":"OTCMKTS",
+"KMTUY":"OTCMKTS",
+"BMNR":"OTCMKTS",
+
+// --- Estero (codici Google Finance)
+"2618":"HKG",   // JD Logistics (Hong Kong)
+"6301":"TYO",   // Komatsu (Tokyo)
+"4689":"TYO",   // LY / Yahoo Japan (Tokyo)
+"HO":"EPA",     // Thales (Euronext Paris)
+
+// --- Italia (se vuoi la nativa di Borsa Italiana per ISP)
+"ISP":"BIT",
+
+  // NB: per ticker non mappati resta il fallback alla ricerca GF
+};
+
+  function googleFinanceURL(ticker){
+    if(!ticker) return 'https://www.google.com/finance';
+    const sym = String(ticker).trim().toUpperCase();
+    const ex  = EXCHANGE_MAP[sym];
+    if (ex){ return `https://www.google.com/finance/quote/${encodeURIComponent(sym)}:${encodeURIComponent(ex)}`; }
+    // Default to NASDAQ if unknown
+    return `https://www.google.com/finance?q=${encodeURIComponent(sym)}`;
+  }
+  const goGFBtn = document.getElementById('goGFBtn');
+  if (goGFBtn){
+    goGFBtn.onclick = (e)=>{
+      if(!focusTicker) return;
+      const sym = String(focusTicker).trim().toUpperCase();
+      const mapEx = EXCHANGE_MAP[sym];
+      const urlPrimary = mapEx ? `https://www.google.com/finance/quote/${encodeURIComponent(sym)}:${encodeURIComponent(mapEx)}`
+                               : null;
+      const urlAlt = (mapEx === 'NASDAQ') ? `https://www.google.com/finance/quote/${encodeURIComponent(sym)}:NYSE`
+                    : (mapEx === 'NYSE') ? `https://www.google.com/finance/quote/${encodeURIComponent(sym)}:NASDAQ`
+                    : `https://www.google.com/finance/quote/${encodeURIComponent(sym)}:NASDAQ`;
+      const urlSearch = `https://www.google.com/finance?q=${encodeURIComponent(sym)}`;
+      
+      // Shift-click: apri entrambe (power user); Alt-click: forza exchange opposto
+      if (e && e.shiftKey){
+        if (urlPrimary) window.open(urlPrimary, '_blank', 'noopener');
+        window.open(urlAlt, '_blank', 'noopener');
+        return;
+      }
+      if (e && e.altKey){
+        window.open(urlAlt, '_blank', 'noopener');
+        return;
+      }
+      // Normale: se abbiamo exchange mappato, usa quello; altrimenti vai su ricerca
+      if (urlPrimary){
+        window.open(urlPrimary, '_blank', 'noopener');
+      } else {
+        window.open(urlSearch, '_blank', 'noopener');
+      }
+    };
+  }
+
   const focusTitle = document.getElementById('focusTitle');
   const focusInfo  = document.getElementById('focusInfo');
   const focusBody  = document.getElementById('focusBody');
@@ -457,6 +552,34 @@ function setMyTickers(arr){localStorage.setItem("MY_TICKERS",JSON.stringify(arr)
   const mm2 = String(d2.getMonth()+1).padStart(2,'0');
   const dd2 = String(d2.getDate()).padStart(2,'0');
   fromDate.value = `${yyyy2}-${mm2}-${dd2}`;
+
+// === Export CSV Fix ===
+function escapeCSV(v){
+  if (v == null) return '';
+  const s = String(v).replace(/"/g, '""');
+  return /[",\n;]/.test(s) ? `"${s}"` : s;
+}
+function downloadCSV(){
+  const rows = getFiltered ? getFiltered() : [];
+  const header = ['Date','Fund','Ticker','Name','Direction','Shares'];
+  const lines = [header.join(',')];
+  rows.forEach(r => {
+    const name = NAME_MAP[r.ticker] || '';
+    const direction = String(r.direction||'').toUpperCase();
+    const shares = (r.shares==null ? '' : String(r.shares));
+    lines.push([r.date, r.fund, r.ticker, name, direction, shares].map(escapeCSV).join(','));
+  });
+  const csv = '\ufeff' + lines.join('\n');
+  const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'ark_trades.csv';
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); }, 0);
+}
+if (typeof csvBtn !== 'undefined' && csvBtn) csvBtn.onclick = downloadCSV;
+
 })();
 
   // Chips fondi (sempre visibili, indipendenti dal fetch)
@@ -573,6 +696,19 @@ function setMyTickers(arr){localStorage.setItem("MY_TICKERS",JSON.stringify(arr)
           <td class="${dir==='BUY'?'buy':'sell'}">${dir==='BUY'?'Buy':'Sell'}</td>
           <td class="num">${fmtNum(r.shares)}</td>
         `;
+    // Add link icon beside ticker cell
+    try {
+      const icon = document.createElement('button');
+      icon.className = 'icon-link';
+      icon.title = 'Open on Google Finance';
+      icon.textContent = '🔘';
+      icon.onclick = () => {
+        if (!r.ticker) return;
+        const url = googleFinanceURL(r.ticker);
+        window.open(url, '_blank', 'noopener');
+      };
+      if (tr.children && tr.children[2]) tr.children[2].prepend(icon);
+    } catch(e){}
         tbody.appendChild(tr);
       }
     }
@@ -587,13 +723,13 @@ function setMyTickers(arr){localStorage.setItem("MY_TICKERS",JSON.stringify(arr)
   function refreshFollowBtn(){
     if(!focusTicker) return;
     const on = isFollowed(focusTicker);
-    followBtn.textContent = on ? 'Following ✓' : 'Follow';
+    followBtn.textContent = on ? 'Following ✅' : 'Follow 🏷️';
     followBtn.classList.toggle('on', on);
   }
 
   function openFocus(ticker){
     const rows = getFiltered().filter(r=>r.ticker===ticker);
-    focusTicker = ticker;
+    focusTicker = ticker; window.focusTicker = ticker;
     focusTitle.textContent = ticker + (NAME_MAP[ticker] ? (" – " + NAME_MAP[ticker]) : "");
     refreshFollowBtn();
     focusInfo.textContent = `${rows.length} transactions displayed for ${ticker}.`;
