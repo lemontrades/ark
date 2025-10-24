@@ -1,143 +1,214 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+
+<html data-theme="dark" lang="en">
 <head>
-  <link rel="icon" type="image/png" href="favicon.png">
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="favicon.png" rel="icon" type="image/png"/>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
 <title>ARK Trades – Dashboard </title>
 <style>
 @media (prefers-color-scheme: dark) {
-  input[type="date"]::-webkit-calendar-picker-indicator {
-    filter: invert(1);
-  }
+  input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); }
 }
-td.num{text-align:right;padding-right:10px}
-th.num{text-align:right;}
-  :root {
-    --bg:#0b0d10; --panel:#111418; --ink:#e8eaee; --muted:#98a2b3; --line:#1f242b;
-    --accent:#e8eaee; --green:#22c55e; --red:#f43f5e; --chip:#0f1318; --chip-on:#e8eaee; --chip-on-ink:#0b0d10;
-    --pill-bg:#182028;
-  }
-  [data-theme="light"] {
-    --bg:#f6f7f9; --panel:#ffffff; --ink:#111; --muted:#6b7280; --line:#e5e7eb;
-    --accent:#111; --green:#15803d; --red:#b91c1c; --chip:#fff; --chip-on:#111; --chip-on-ink:#fff;
-    --pill-bg:#eef2f7;
-  }
-  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Ubuntu,Arial,sans-serif}
-  .container{max-width:1250px;margin:0 auto;padding:24px}
-  h1{font-size:22px;margin:0 0 4px}
-  p.note{color:var(--muted);font-size:13px;margin:6px 0 18px}
 
-  .card{background:var(--panel);border:1px solid var(--line);border-radius:16px;box-shadow:0 1px 2px rgba(0,0,0,.25)}
-  .card.pad{padding:16px}
+/* ===== Modern theme tokens ===== */
+:root {
+  --bg: #090812; /* SFONDO DARK PROFONDO 🟪 */ /* SFONDO DARK NEUTRO 🟪 */
+  --bg-grad: radial-gradient(150vmax 80vmax at -10% -20%, rgba(124,58,237,0.14), transparent 60%),
+             radial-gradient(120vmax 70vmax at 110% -25%, rgba(88,28,135,0.10), transparent 65%),
+             #090812; /* GRADIENTE VIOLA ARK SCURO 🟪 */
+  --panel: rgba(14,11,22,0.94); /* PANNELLO DARK VIOLA INTENSO 🟪 */ /* PANNELLO DARK VIOLA 🟪 */ /* PANNELLO VIOLA SCURO 🟪 */
+  --ink: #e8eaee;
+  --muted: #b5bfd3; /* TESTO SECONDARIO PIÙ CHIARO 🟪 */
+  --line: rgba(198,138,255,0.38); /* brighter line violet */ /* LINEA/CONFINI VIOLA SCURO 🟪 */ /* LINEA/CONFINI VIOLA 🟪 */
+  --accent: #7c3aed; /* VIOLA ARK SCURO 🟪 */ /* VIOLA ARK PIÙ LUMINOSO 🟪 */ /* VIOLA ARK 🟪 */
+  --accent-ink: #0d0716; /* TESTO SU VIOLA SCURO 🟪 */ /* TESTO SU VIOLA LUMINOSO 🟪 */ /* TESTO SU VIOLA ARK 🟪 */
+  --green:#22c55e;
+  --red:#f43f5e;
+  --chip: #0f0a17; /* CHIP VIOLA SCURO 🟪 */ /* CHIP VIOLA 🟪 */
+  --chip-on:#e8eaee;
+  --chip-on-ink:#0b0d10;
+  --pill-bg: #110b1b; /* PILL BACKGROUND VIOLA SCURO 🟪 */ /* PILL BACKGROUND VIOLA 🟪 */
+  --shadow: 0 12px 32px rgba(0,0,0,.35);
+  --radius: 16px;
+}
+[data-theme="light"] {
+  --bg: #090812; /* SFONDO DARK PROFONDO 🟪 */ /* SFONDO DARK NEUTRO 🟪 */
+  --bg-grad: radial-gradient(150vmax 80vmax at -10% -20%, rgba(124,58,237,0.14), transparent 60%),
+             radial-gradient(120vmax 70vmax at 110% -25%, rgba(88,28,135,0.10), transparent 65%),
+             #090812; /* GRADIENTE VIOLA ARK SCURO 🟪 */
+  --panel: rgba(14,11,22,0.94); /* PANNELLO DARK VIOLA INTENSO 🟪 */ /* PANNELLO DARK VIOLA 🟪 */ /* PANNELLO VIOLA SCURO 🟪 */
+  --ink:#0c1220;
+  --muted: #b5bfd3; /* TESTO SECONDARIO PIÙ CHIARO 🟪 */
+  --line: rgba(124,58,237,0.22); /* LINEA/CONFINI VIOLA SCURO 🟪 */ /* LINEA/CONFINI VIOLA 🟪 */
+  --accent:#111;
+  --accent-ink:#fff;
+  --chip: #0f0a17; /* CHIP VIOLA SCURO 🟪 */ /* CHIP VIOLA 🟪 */
+  --chip-on:#111;
+  --chip-on-ink:#fff;
+  --pill-bg: #110b1b; /* PILL BACKGROUND VIOLA SCURO 🟪 */ /* PILL BACKGROUND VIOLA 🟪 */
+  --shadow: 0 10px 24px rgba(0,0,0,.08);
+}
 
-  .grid{display:grid;gap:12px}
-  .grid.fit-240{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
-  .grid.two-col{grid-template-columns:2fr 1fr}
-  @media (max-width:1100px){ .grid.two-col{grid-template-columns:1fr} }
+/* ===== Base ===== */
+html,body{
+  margin:0;padding:0;
+  background: var(--bg-grad);
+  color:var(--ink);
+  font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Arial, sans-serif;
+}
+.container{max-width:1250px;margin:0 auto;padding:24px}
+h1{font-size:22px;margin:0 0 4px; letter-spacing:.2px}
+p.note{color:var(--muted);font-size:13px;margin:6px 0 18px}
 
-  label{font-size:12px;color:var(--muted);display:block;margin-bottom:6px}
+/* ===== Cards ===== */
+.card{
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(10px);
+}
+.card.pad{padding:16px}
+
+/* ===== Grid ===== */
+.grid{display:grid;gap:8px}
+.grid.fit-240{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.grid.two-col{grid-template-columns:2fr 1fr}
+@media (max-width:1100px){ .grid.two-col{grid-template-columns:1fr} }
+
+/* ===== Labels / Inputs ===== */
+label{font-size:12px;color:var(--muted);display:block;margin-bottom:6px}
 
 input[type="date"],
 input[type="text"] {
-  width: 100%;
-  padding: 10px 12px;
+  width: 80%;
+  padding: 12px 12px;
   border: 1px solid var(--line);
-  border-radius: 10px;
+  border-radius: 12px;
   font-size: 14px;
   outline: none;
-  background: transparent;
+  background: rgba(124,58,237,0.08); /* subtle violet tint */
   color: var(--ink);
+  transition: box-shadow .2s, border-color .2s;
+}
+input[type="date"]:focus, input[type="text"]:focus { border-color: rgba(139,92,246,0.6); box-shadow: 0 0 0 4px rgba(139,92,246,0.15); } /* FOCUS VIOLA ARK 🟪 */
+input::placeholder{color:var(--muted)}
+
+/* 👇 limiti confermati */
+input[type="date"] { max-width: 235px; }
+input[type="text"] { max-width: 235px; }
+
+input[type="checkbox"]{transform:scale(1.05);margin-right:6px}
+
+/* ===== Buttons ===== */
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.btn{
+  background:transparent;
+  border:1px solid var(--line);
+  border-radius:999px;
+  padding:10px 14px;
+  font-size:14px;
+  cursor:pointer;
+  color:var(--ink);
+  transition: border-color .2s, box-shadow .2s, transform .05s;
+}
+.btn:hover{box-shadow:0 6px 18px rgba(0,0,0,.25);border-color:#2a313a}
+.btn:active{transform: translateY(1px)}
+.btn.primary{
+  background:var(--accent);
+  border-color:var(--accent);
+  color:var(--accent-ink);
+   /* OMBRA BOTTONE VIOLA ARK LUMINOSO 🟪 */
 }
 
-/* 👇 aggiungi questi due limiti */
-input[type="date"] {
-  max-width: 235px;
+/* ===== Chips ===== */
+.chips{display:flex;flex-wrap:nowrap;gap:8px;overflow-x:auto}
+.chip{
+  border:1px solid var(--line);
+  border-radius:999px;
+  padding:7px 12px;
+  font-size:13px;
+  background:var(--chip);
+  color:var(--ink);
+  cursor:pointer;
+  transition: background .2s, color .2s, border-color .2s;
+  white-space:nowrap;
 }
-input[type="text"] {
-  max-width: 235px;
+.chip.on{
+  background: var(--accent);
+  color: var(--accent-ink);
+  border-color: transparent;
+  position: relative;
+  z-index: 1;
+  background-clip: padding-box;
+  /* glow più naturale e non "stirato": blur con spread negativo */
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.06) inset,
+    0 8px 16px -6px rgba(124,58,237,0.55);
+} /* CHIP ATTIVO VIOLA GLOW (TIGHT) 🟪 */ /* CHIP ATTIVO VIOLA GLOW 🟪 */ /* CHIP ATTIVO VIOLA 🟪 */
+
+/* ===== Table ===== */
+table{border-collapse:collapse;width:100%;font-size:14px;table-layout:fixed}
+thead{background:linear-gradient(180deg, rgba(124,58,237,.10), rgba(124,58,237,.03));
+  border-bottom:1px solid var(--line)
 }
+[data-theme="light"] thead{background:linear-gradient(180deg, rgba(124,58,237,.10), rgba(124,58,237,.03));text-align:left;border-top:1px solid var(--line);vertical-align:middle}
+td.num{text-align:right;padding-right:10px}
+tr:hover{background:rgba(255,255,255,.03)}
+.buy{color:var(--green);font-weight:700}
+.sell{color:var(--red);font-weight:700}
+.muted{color:var(--muted)}
+.right{margin-left:auto}
+.stat .label{font-size:12px;color:var(--muted)}
+.stat .value{font-size:16px;font-weight:600}
+.stat{max-width:160px;flex:1}
 
-  input::placeholder{color:var(--muted)}
-  input[type="checkbox"]{transform:scale(1.05);margin-right:6px}
+/* ===== Footer / misc ===== */
+.footer{font-size:12px;color:var(--muted);margin-top:16px}
+.stats-funds-grid{display:grid;grid-template-columns:auto auto 1fr;gap:12px}
+.follow-btn{background:transparent;border:none;cursor:pointer;color:var(--muted);font-size:14px;margin-left:4px}
+.follow-btn:hover{color:var(--accent)}
+#suggestions div{padding:4px 8px;cursor:pointer}
+#suggestions div:hover{background:var(--line)}
 
-  .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-  .btn{background:transparent;border:1px solid var(--line);border-radius:999px;padding:9px 14px;font-size:14px;cursor:pointer;color:var(--ink)}
-  .btn:hover{box-shadow:0 2px 10px rgba(0,0,0,.25);border-color:#2a313a}
-  .btn.primary{background:var(--accent);border-color:var(--accent);color:var(--chip-on-ink)}
+.controls .card{min-width:0}
+.date-card{max-width:190px}
+.search-card{max-width:none;position:relative;width:100%;min-width:0}
 
-  .chips{display:flex;flex-wrap:wrap;gap:8px}
-  .chip{border:1px solid var(--line);border-radius:999px;padding:6px 12px;font-size:13px;background:var(--chip);color:var(--ink);cursor:pointer}
-  .chip.on{background:var(--chip-on);color:var(--chip-on-ink)}
+.ticker-pill{
+  display:inline-block;padding:4px 10px;border-radius:999px;font-weight:700;letter-spacing:.2px;
+  background:var(--pill-bg);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.04);
+}
+.ticker-link{cursor:pointer;text-decoration:none}
+.ticker-link:hover{opacity:.95}
 
-  table{border-collapse:collapse;width:100%;font-size:14px;table-layout:fixed}
-  thead{background:#0f1216;border-bottom:1px solid var(--line)}
-  [data-theme="light"] thead{background:#f3f4f6}
-  th,td{padding:8px 10px;text-align:left;border-top:1px solid var(--line);vertical-align:middle}
-  td.num{text-align:right;padding-right:10px}
-  .buy{color:var(--green);font-weight:700}
-  .sell{color:var(--red);font-weight:700}
-  .muted{color:var(--muted)}
-  .right{margin-left:auto}
-  .stat .label{font-size:12px;color:var(--muted)}
-  .stat .value{font-size:16px;font-weight:600}
-  .stat{max-width:160px;flex:1}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;padding:20px}
+.overlay .panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;max-width:1000px;width:100%;max-height:85vh;overflow:auto;box-shadow:var(--shadow)}
+.overlay .panel .hdr{display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid var(--line)}
+.overlay .panel .body{padding:12px 16px}
+.close{margin-left:auto}
 
-  .footer{font-size:12px;color:var(--muted);margin-top:16px}
-  .stats-funds-grid{display:grid;grid-template-columns:auto auto 1fr;gap:12px}
-  .chips{flex-wrap:nowrap;overflow-x:auto}
-  .follow-btn{background:transparent;border:none;cursor:pointer;color:var(--muted);font-size:14px;margin-left:4px}
-  .follow-btn:hover{color:var(--accent)}
-  #suggestions div{padding:4px 8px;cursor:pointer}
-  #suggestions div:hover{background:var(--line)}
-
-
-
-  .controls .card{min-width:0}
-  .date-card{max-width:270px}  /* 👀 QUI LE CHIPS DEL PORCO  */
-  .search-card{max-width:390px;position:relative}
-
-  .ticker-pill{display:inline-block;padding:3px 10px;border-radius:999px;font-weight:700;letter-spacing:.2px;background:var(--pill-bg)}
-  .ticker-link{cursor:pointer;text-decoration:none}
-  .ticker-link:hover{opacity:.9}
-
-  .overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;padding:20px}
-  .overlay .panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;max-width:1000px;width:100%;max-height:85vh;overflow:auto}
-  .overlay .panel .hdr{display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid var(--line)}
-  .overlay .panel .body{padding:12px 16px}
-  .close{margin-left:auto}
-
-  .btn.on{background:var(--chip-on);color:var(--chip-on-ink);border-color:var(--chip-on)}
-  #suggestions{box-shadow:0 6px 20px rgba(0,0,0,.35);}
-
+.btn.on{background:var(--ink);color:var(--chip-on-ink);border-color:var(--ink)}
+#suggestions{box-shadow:0 10px 30px rgba(0,0,0,.45)}
 
 /* ===== Mobile polish (v2) ===== */
 @media (max-width: 600px){
-  /* Layout spacing & typography */
   .container{padding:12px}
   section{margin-bottom:14px}
   h1{font-size:18px;line-height:1.2}
   h2{font-size:16px;line-height:1.2}
   label{font-size:13px}
-
- /* Controls: stack nicely, no overflow */
-.controls.grid{gap:10px}
-.controls.grid.fit-240{grid-template-columns:1fr}
-.card.pad{padding:12px}
-
-.date-card, .search-card{max-width:100%; width:100%}
-input[type="date"], input[type="text"], select, button{
-  width:100%;
-  max-width:100%;
-  font-size:14px;
-  box-sizing:border-box; /* fondamentale per evitare overflow col padding */
-}
-
-  /* Chips block: allow wrapping */
+  .controls.grid{gap:10px}
+  .controls.grid.fit-240{grid-template-columns:1fr}
+  .card.pad{padding:12px}
+  .date-card, .search-card{max-width:100%; width:100%}
+  input[type="date"], input[type="text"], select, button{
+    width:100%; max-width:100%; font-size:14px; box-sizing:border-box;
+  }
   .chips{flex-wrap:wrap; overflow:visible; gap:8px}
 }
-
-/* Results table: make it denser and avoid overflow */
 @media (max-width: 600px){
   #table{table-layout:auto; font-size:13px}
   #table th, #table td{padding:8px 10px}
@@ -145,138 +216,532 @@ input[type="date"], input[type="text"], select, button{
   #table td a .muted, #table td, #table th{white-space:normal; word-break:break-word}
   .ticker-pill{font-size:11px; padding:4px 8px}
 }
-
-/* Extra-compact on very small phones */
 @media (max-width: 420px){
   .ticker-pill{font-size:10px; padding:3px 6px}
   #table{font-size:12px}
   .grid.fit-240{grid-template-columns:1fr}
-
-  /* Hide less-crucial columns to keep rows readable */
   #table thead th:nth-child(2),
   #table tbody td:nth-child(2),
   #table thead th:nth-child(4),
   #table tbody td:nth-child(4){display:none}
 }
 
+/* Link icon beside ticker */
+.ticker-pill.gf-open{cursor:pointer} .name-open{cursor:pointer}
 .icon-link{
   display:inline-flex;align-items:center;justify-content:center;
   margin-left:6px;padding:2px 4px;border:none;background:transparent;cursor:pointer;
-  color:var(--text-secondary);
+  color:var(--muted); opacity:.9;
+  transition: opacity .2s, transform .05s;
 }
-.icon-link:hover{color:var(--text);}
+.icon-link:hover{opacity:1; transform: translateY(-1px);}
+
+/* === Patches v3.7 === */
+.overlay{background:rgba(0,0,0,.65)!important}
+.overlay .panel{background:#111418!important; backdrop-filter:none!important}
+/* Right-align Shares header */
+th.num{ text-align:right !important; }
+/* Slightly tighter table cell spacing */
+th,td{ padding:10px 12px; }
+
+/* === v3.8 patches === */
+.overlay .panel table th, 
+.overlay .panel table td {
+  padding: 8px 10px !important;
+}
+.overlay .panel table colgroup col:nth-child(4) {
+  width: 70px !important;
+}
+.buy .arrow { color: var(--green); }
+.sell .arrow { color: var(--red); }
+
+/* === v3.9 patches === */
+/* Make the search card host the buttons nicely on one line when space allows */
+@media (min-width: 721px){
+  .search-card .row { justify-content: flex-start; }
+}
+/* Overlay table tighter and defined column widths */
+.overlay .panel table{ table-layout: fixed; width: 100%; }
+.overlay .panel table th, .overlay .panel table td{ padding: 6px 8px !important; }
+
+.buy .arrow { color: var(--green); } .sell .arrow { color: var(--red); }
+
+/* === v3.10 patches === */
+.overlay .panel table{ table-layout: fixed; width: 100%; }
+.overlay .panel table th, .overlay .panel table td{ padding: 6px 6px !important; } /* tighter */
+
+/* === v3.11 patches === */
+/* Merge UI: if any empty control cards remain, hide them */
+.controls > .card.pad:empty { display:none; }
+.search-card{ position:relative; z-index: 20; }
+#suggestions{ position:absolute !important; z-index: 10000 !important; }
+
+/* === v3.11b patches === */
+/* Suggestions popup: solid background (no transparency/blur) and strong stacking */
+#suggestions {
+  background: #111418 !important;
+  border: 1px solid var(--line) !important;
+  backdrop-filter: none !important;
+  z-index: 10000 !important;
+}
+.search-card { position: relative; z-index: 2000; }
+
+/* Inline layout: search input + buttons on the same row */
+.search-inline {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: nowrap;
+}
+.search-inline input[type="text"] {
+  flex: 1 1 auto;
+  max-width: 100% !important;
+}
+@media (max-width: 800px){
+  .search-inline { flex-wrap: wrap; }
+  .search-inline button { width: auto; }
+}
+
+
+/* === Controls row fix (v3.11b → v3.11b-fixed) === */
+section.controls{
+  display:grid !important;
+  grid-template-columns: 250px 250px 1fr !important; /* From | To | Search */
+  column-gap: 10px !important;
+  row-gap: 0 !important;
+}
+@media (max-width: 900px){
+  section.controls{ grid-template-columns: 1fr !important; row-gap: 10px !important; }
+}
+
+/* Keep search input + buttons inline and wide */
+.search-inline{ display:flex; gap:12px; align-items:center; flex-wrap:nowrap; }
+.search-inline input[type="text"]{ flex:1 1 auto !important; max-width:100% !important; width:100% !important; min-width:0 !important; }
+
+/* Suggestions solid and on top */
+#suggestions{ position:absolute !important; z-index: 30000 !important; background:#111418 !important; border:1px solid var(--line) !important; backdrop-filter:none !important; box-shadow:0 14px 40px rgba(0,0,0,.5); }
+
+/* === v3.11b-fixed.1: tighten gaps + prevent right overflow === */
+section.controls{
+  box-sizing: border-box !important;
+  width: 100% !important;
+  display: grid !important;
+  grid-template-columns: 250px 250px minmax(0, 1fr) !important; /* dates wider + search fills leftover safely */
+  column-gap: 6px !important;  /* close the gap a bit more */
+  row-gap: 0 !important;
+  align-items: stretch !important;
+}
+.search-card{ max-width: none !important; width: 100% !important; min-width: 0 !important; overflow: hidden; }
+.search-inline{ display:flex !important; gap:12px; align-items:center; flex-wrap:nowrap; min-width:0 !important; }
+.search-inline input[type="text"]{ flex:1 1 auto !important; min-width:0 !important; width:100% !important; }
+.search-inline .btn{ white-space:nowrap; }
+
+/* Defensive: cards should not exceed grid cell */
+section.controls > .card.pad{ overflow: hidden; }
+
+/* === v3.11b-fixed.2: no-overflow & balanced columns === */
+.wrap{ overflow-x: hidden; } /* safety net, but columns below should remove the need */
+
+section.controls{
+  display: grid !important;
+  /* responsive, never overflow: two min widths for dates, search fills leftover */
+  grid-template-columns: minmax(240px, 1fr) minmax(240px, 1fr) minmax(0, 1.6fr) !important;
+  column-gap: 8px !important;
+  row-gap: 0 !important;
+  box-sizing: border-box !important;
+  width: 100% !important;
+}
+/* remove any margins that could push the last card */
+section.controls > .card.pad{ margin: 0 !important; max-width: 100% !important; overflow: hidden; }
+.search-card{ max-width: 100% !important; width: 100% !important; min-width: 0 !important; }
+.search-inline{ display:flex !important; gap:12px; align-items:center; flex-wrap:nowrap; min-width:0; }
+.search-inline input[type="text"]{ flex:1 1 auto !important; width:100% !important; min-width:0 !important; }
+
+/* === v3.11b-fixed.3: eliminate right overflow for search chip === */
+section.controls {
+  padding-right: 0 !important;
+  margin-right: 0 !important;
+  overflow: hidden !important;
+}
+.search-card {
+  width: calc(100% - 8px) !important;
+  box-sizing: border-box !important;
+  overflow: hidden !important;
+}
+
+/* === BG FIX: persistent non-repeating gradient layer (v3.11b-fixed.4) === */
+/* Evita duplicazioni quando la pagina è corta e “perdita” del gradiente quando è lunga. */
+html, body { background: none !important; } /* disattiva il background su html/body */
+body::before{
+  content:"";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: var(--bg-grad);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center;
+  /* v* units garantiscono copertura oltre i bordi anche su schermi ultrawide */
+  background-size: cover;
+}
+
+
+/* === OVERLAY THEME + Z-INDEX FIX (v3.11b-fixed.7) === */
+/* Porta il pop-up sopra a tutto (chips/search incluse) e uniforma i colori al tema viola. */
+.overlay{ 
+  position: fixed; inset: 0; 
+  background: rgba(0,0,0,.72) !important; 
+  z-index: 50000 !important;  /* sopra a suggestions (30k) e search-card (2k) */
+}
+.overlay .panel{ 
+  background: var(--panel) !important; 
+  border: 1px solid var(--line) !important; 
+  border-radius: 16px; 
+  box-shadow: 0 20px 60px rgba(0,0,0,.45); 
+  backdrop-filter: none !important;
+  color: var(--ink);
+}
+.overlay .panel .hdr{ 
+  border-bottom: 1px solid var(--line) !important; 
+}
+/* Pulsanti nell'overlay: coerenti con il viola */
+.overlay .panel .btn.primary{ 
+  background: var(--accent); 
+  border-color: var(--accent); 
+  color: var(--accent-ink);
+  
+}
+.overlay .panel .btn.on{ 
+  background: var(--accent); color: var(--accent-ink); border-color: var(--accent);
+}
+/* Tabella nel pop-up: bordi e hover coerenti */
+.overlay .panel table thead{
+  background: linear-gradient(180deg, rgba(124,58,237,.10), rgba(124,58,237,.03)) !important;
+  border-bottom: 1px solid var(--line) !important;
+}
+.overlay .panel table th, 
+.overlay .panel table td{ 
+  border-top: 1px solid var(--line) !important;
+}
+
+
+/* === SUGGESTIONS FIX (v3.11b-fixed.8) === */
+.search-card{ overflow: visible !important; } /* evita che il menu suggerimenti venga clippato */
+#suggestions{ z-index: 40000 !important; background: var(--panel) !important; border: 1px solid var(--line) !important; }
+/* arrotonda e aggiunge leggera ombra per coerenza */
+#suggestions{ border-radius: 12px; box-shadow: 0 14px 40px rgba(0,0,0,.5); }
+
+
+/* === SUGGESTIONS CLIP FIX v2 === */
+/* Alcuni container avevano overflow:hidden; forziamo visibilità solo per la search-card. */
+section.controls > .card.pad.search-card{ overflow: visible !important; }
+.search-card{ overflow: visible !important; }
+#suggestions{ z-index: 40000 !important; border-radius: 12px; box-shadow: 0 14px 40px rgba(0,0,0,.5); }
+
+
+/* === SUGGESTIONS BODY-LEVEL DROPDOWN === */
+#suggestions{ z-index: 60000 !important; pointer-events: auto !important; }
+
+
+/* === TESTO CHIARO E GRASSETTO PER CHIP + REFRESH === */
+.btn.primary,
+.chip.on {
+  color: #ffffff !important;       /* testo bianco */
+  font-weight: 600 !important;     /* grassetto medio-forte */
+}
+
+
+/* === v4.1 UI polish === */
+#csvBtn strong,
+#goGFBtn strong,
+#followBtn strong,
+#closeOverlay strong { font-weight: 600; }
+#followBtn.on { color: #fff !important; }
+
+
+/* === v4.2 UI polish — ensure bold even when textContent changes === */
+#csvBtn,
+#goGFBtn,
+#followBtn,
+#closeOverlay { font-weight: 700 !important; }
+#followBtn.on { color: #fff !important; }
+
+
+/* === Checkbox styling — Only my tickers === */
+#onlyMine {
+  transform: scale(1.6);
+  accent-color: var(--accent);
+  cursor: pointer;
+  margin-right: 8px;
+}
+label[for="onlyMine"],
+label:has(#onlyMine) {
+  font-weight: 600;
+  color: var(--ink);
+}
+
+
+/* === v4.4 visuals — chip border pop + active field glow === */
+
+/* Chips: brighter border, NO blur glow */
+.chip {
+  border-color: #c68aff !important; /* vivid purple */
+  box-shadow: none !important;
+}
+.chip:hover {
+  border-color: #d5aaff !important;
+  box-shadow: none !important;
+}
+
+/* Active chips: keep very subtle depth without blur */
+.chip.on {
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.06) inset,
+    0 8px 16px -10px rgba(124,58,237,0.55);
+}
+
+/* Inputs (date/search) focus: brighter ring + soft glow (kept) */
+ (date/search) focus: brighter ring + soft blur glow */
+input[type="date"]:focus,
+input[type="text"]:focus,
+select:focus,
+textarea:focus{
+  border-color:#e1c0ff !important;
+  box-shadow:
+    0 0 0 2px rgba(198,138,255,0.40),
+    0 0 22px rgba(198,138,255,0.55);
+  backdrop-filter: blur(2px);
+  outline:none;
+  transition: box-shadow .2s ease, border-color .2s ease;
+}
+
+
+/* === v4.6 — Restore neon effect for buttons (not chips) === */
+.btn {
+  position: relative;
+}
+.btn:hover,
+.btn:focus,
+.btn:focus-visible {
+  border-color: #d5aaff !important;
+  box-shadow:
+    0 0 0 2px rgba(198,138,255,0.35),
+    0 0 18px rgba(198,138,255,0.45) !important;
+  outline: none;
+}
+/* Keep primary buttons readable with same neon ring */
+.btn.primary:hover,
+.btn.primary:focus,
+.btn.primary:focus-visible {
+  border-color: #d5aaff !important;
+  box-shadow:
+    0 0 0 2px rgba(198,138,255,0.40),
+    0 0 22px rgba(198,138,255,0.55) !important;
+}
+/* Overlay buttons share the same interaction effect */
+.overlay .panel .btn:hover,
+.overlay .panel .btn:focus,
+.overlay .panel .btn:focus-visible {
+  border-color: #d5aaff !important;
+  box-shadow:
+    0 0 0 2px rgba(198,138,255,0.35),
+    0 0 18px rgba(198,138,255,0.50) !important;
+}
+/* Explicitly ensure chips DO NOT inherit button neon */
+.chip, .chip:hover, .chip:focus { box-shadow: none !important; }
+
+
+/* Fund chips: add soft neon on hover/focus and stronger when active */
+.chips .chip {
+  transition: border-color .2s ease, box-shadow .2s ease, transform .06s ease;
+}
+.chips .chip:hover,
+.chips .chip:focus {
+  border-color: #d5aaff !important;
+  box-shadow:
+    0 0 0 2px rgba(198,138,255,0.30),
+    0 0 18px rgba(198,138,255,0.38) !important;
+}
+.chips .chip.on {
+  border-color: #e1c0ff !important;
+  box-shadow:
+    0 0 0 2px rgba(198,138,255,0.36),
+    0 0 22px rgba(198,138,255,0.48) !important;
+}
+
+/* Inputs: restore/strengthen neon on focus (date + search) */
+input[type="date"]:focus,
+input[type="text"]:focus,
+select:focus,
+textarea:focus {
+  border-color:#e6caff !important;
+  box-shadow:
+    0 0 0 2px rgba(198,138,255,0.42),
+    0 0 26px rgba(198,138,255,0.58) !important;
+  outline:none;
+}
+
+
+/* === v4.8 — Fix fund chip glow (only on hover/focus; subtle when active) === */
+.chips .chip{
+  box-shadow: none !important;            /* default: NO glow */
+  border-color: #c68aff !important;       /* bright border */
+  transition: border-color .2s ease, box-shadow .2s ease, transform .06s ease;
+}
+.chips .chip:hover,
+.chips .chip:focus-visible{
+  border-color: #e1c0ff !important;
+  box-shadow:
+    0 0 0 2px rgba(198,138,255,0.26),
+    0 0 16px rgba(198,138,255,0.34) !important;
+  outline: none;
+}
+/* Active chip: keep it clean (no outer glow), just a crisp ring */
+.chips .chip.on{
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,0.06),
+    0 0 0 1px rgba(198,138,255,0.30) !important;
+  border-color: #e1c0ff !important;
+}
+/* Active + hover/focus: allow the full glow */
+.chips .chip.on:hover,
+.chips .chip.on:focus-visible{
+  box-shadow:
+    0 0 0 2px rgba(198,138,255,0.34),
+    0 0 22px rgba(198,138,255,0.46) !important;
+  outline: none;
+}
+
+
+/* === v4.9 — Row-level click to open overlay (cursor hint) === */
+#table tbody tr { cursor: pointer; }
+#table tbody tr .gf-open { cursor: pointer; } /* ticker chip keeps its behavior */
+
+
+/* === v4.11 — Fix chip glow clipping + arrow colors === */
+
+/* Make sure the scroll row that contains #fundsChips does not clip shadows */
+.row:has(#fundsChips){
+  overflow: visible !important;
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+/* Give the chips wrapper a bit of breathing room */
+#fundsChips{
+  overflow: visible !important;
+  padding: 2px 0;
+}
+
+/* Arrow colors aligned with Buy/Sell */
+.buy .arrow { color: #16E8A5 !important; }
+.sell .arrow { color: #EC6C51 !important; }
 
 </style>
-</head>
+<link crossorigin="True" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/></head>
 <body>
-  <div class="container">
-    <div class="row" style="justify-content:space-between;gap:12px">
-      <div>
-        <h1>ARK Trades – Dashboard (Dark, v3.4)</h1>
-        <p class="note">Source: Unofficial API (<code>arkfunds.io</code>).</p>
-      </div>
-      <div class="row"><button class="btn" id="themeBtn" title="Change theme">Theme: Dark</button></div>
-    </div>
+<div class="container">
+<div class="row" style="justify-content:space-between;gap:12px">
+<div>
+<h1>ARK Trades – Dashboard (Dark, v4)</h1>
+<p class="note">Source: Unofficial API (<code>arkfunds.io</code>).</p>
+</div>
 
-    <section class="controls grid fit-240">
-      <div class="card pad date-card">
-        <label>From</label>
-        <input type="date" id="fromDate">
-      </div>
-      <div class="card pad date-card">
-        <label>To</label>
-        <input type="date" id="toDate">
-      </div>
-      <div class="card pad search-card">
-        <label>Search (ticker or fund)</label>
-        <input type="text" id="searchBox" placeholder="e.g. NVDA or ARKK">
-        <div id="suggestions" class="card pad" style="position:absolute;z-index:1000;display:none;max-height:240px;overflow:auto;font-size:13px;pointer-events:auto"></div>
-      </div>
-      <div class="card pad">
-        <label>&nbsp;</label>
-        <div class="row">
-          <button class="btn primary" id="fetchBtn">Refresh</button>
-          <button class="btn" id="csvBtn">Export CSV</button>
-        </div>
-      </div>
-    </section>
-
+</div>
+<section class="controls grid fit-240">
+<div class="card pad date-card">
+<label>From</label>
+<input id="fromDate" type="date"/>
+</div>
+<div class="card pad date-card">
+<label>To</label>
+<input id="toDate" type="date"/>
+</div>
+<div class="card pad search-card">
+<label>Search (ticker or fund)</label><div class="search-inline"><input id="searchBox" placeholder="e.g. NVDA or ARKK" type="text"/><button class="btn primary" id="fetchBtn">Refresh</button><button class="btn" id="csvBtn"><strong>Export CSV</strong></button></div><div class="card pad" id="suggestions" style="position:absolute;z-index:1000;display:none;max-height:240px;overflow:auto;font-size:13px;pointer-events:auto"></div>
+</div>
+</section>
 <section class="stats-funds-grid" style="margin-top:12px;margin-bottom:12px">
-  <div class="card pad stat">
-    <div class="label">Transactions displayed</div>
-    <div class="value" id="countBox">0</div>
-  </div>
-  <div class="card pad stat">
-    <div class="label">Funds selected</div>
-    <div class="value" id="fundCount">0</div>
-  </div>
-  <div class="card pad">
-    <div class="row" style="gap:12px;align-items:center;justify-content:space-between;flex-wrap:nowrap">
-      <div class="row" style="gap:12px;flex:1 1 auto;overflow-x:auto;white-space:nowrap">
-        <span class="muted">Funds:</span>
-        <div class="chips" id="fundsChips"></div>
-      </div>
-      <label><input type="checkbox" id="onlyMine"> Only my tickers</label>
-    </div>
-  </div>
+<div class="card pad stat">
+<div class="label">Transactions displayed</div>
+<div class="value" id="countBox">0</div>
+</div>
+<div class="card pad stat">
+<div class="label">Funds selected</div>
+<div class="value" id="fundCount">0</div>
+</div>
+<div class="card pad">
+<div class="row" style="gap:12px;align-items:center;justify-content:space-between;flex-wrap:nowrap">
+<div class="row" style="gap:12px;flex:1 1 auto;overflow-x:auto;white-space:nowrap">
+<span class="muted">Funds:</span>
+<div class="chips" id="fundsChips"></div>
+</div>
+<label><input id="onlyMine" type="checkbox"/> Only my tickers</label>
+</div>
+</div>
 </section>
-
 <!-- Full-width results table -->
-
 <section class="card pad">
-          <div class="muted">Results</div>
-          <div style="margin-top:8px" class="muted" id="status">Ready.</div>
-          <div style="margin-top:12px;overflow:auto;">
-            <table id="table">
-              <colgroup>
-                <col style="width:140px">
-                <col style="width:90px">
-                <col style="width:220px">
-                <col style="width:110px">
-                <col style="width:140px">
-              </colgroup>
-              <thead>
-                <tr>
-                  <th>Date</th>
-                  <th>Fund</th>
-                  <th>Ticker / Name</th>
-                  <th>Direction</th>
-                  <th class="num">Shares</th>
-                </tr>
-              </thead>
-              <tbody id="tbody"></tbody>
-            </table>
-          </div>
-        </section>
-      </div>
+<div class="muted">Results</div>
+<div class="muted" id="status" style="margin-top:8px">Ready.</div>
+<div style="margin-top:12px;overflow:auto;">
+<table id="table">
+<colgroup>
+<col style="width:110px"/>
+<col style="width:80px"/>
+<col style="width:300px"/>
+<col style="width:100px"/>
+<col style="width:110px"/>
+<col style="width:110px"/>
+</colgroup>
+<thead>
+<tr>
+<th>Date</th>
+<th>Fund</th>
+<th>Ticker / Name</th>
+<th>Direction</th>
+<th class="num">Shares</th>
+<th class="num">% Weight</th>
+</tr>
+</thead>
+<tbody id="tbody"></tbody>
+</table>
+</div>
 </section>
-  </div>
-
-  <div class="overlay" id="overlay">
-    <div class="panel">
-      <div class="hdr">
-        <div id="focusTitle" style="font-weight:700">Ticker</div>
-        <button class="btn" id="followBtn" title="Follow / Unfollow">Follow</button>
-        <button class="btn" id="goGFBtn" title="Apri su Google Finance">Go to stock 📈</button>
-        <button class="btn close" id="closeOverlay">Close</button>
-      </div>
-      <div class="body">
-        <div id="focusInfo" class="muted" style="margin-bottom:8px"></div>
-        <div style="overflow:auto">
-          <table>
-            <thead><tr>
-              <th style="width:120px">Date</th>
-              <th style="width:90px">Fund</th>
-              <th style="width:110px">Direction</th>
-              <th style="width:140px" class="num">Shares</th>
-            </tr></thead>
-            <tbody id="focusBody"></tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  </div>
-
+</div>
+<div class="overlay" id="overlay">
+<div class="panel">
+<div class="hdr">
+<div id="focusTitle" style="font-weight:700">Ticker</div>
+<button class="btn" id="followBtn" title="Follow / Unfollow"><strong>Follow</strong></button>
+<button class="btn" id="goGFBtn" title="Apri su Google Finance"><strong>Go to stock 📈</strong></button>
+<button class="btn close" id="closeOverlay"><strong>Close</strong></button>
+</div>
+<div class="body">
+<div class="muted" id="focusInfo" style="margin-bottom:8px"></div>
+<div style="overflow:auto">
+<table>
+<colgroup>
+<col style="width:88px"/>
+<col style="width:66px"/>
+<col style="width:90px"/>
+<col style="width:90px"/>
+<col style="width:90px"/>
+</colgroup>
+<thead><tr>
+<th style="width:120px">Date</th>
+<th style="width:90px">Fund</th>
+<th style="width:110px">Direction</th>
+<th class="num" style="width:90px">Shares</th>
+<th class="num" style="width:90px">% Weight</th>
+</tr></thead>
+<tbody id="focusBody"></tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
 <script>
 (function(){
   const FUNDS = ["ARKK","ARKG","ARKQ","ARKF","ARKX","ARKW"];
@@ -391,10 +856,7 @@ function setMyTickers(arr){localStorage.setItem("MY_TICKERS",JSON.stringify(arr)
   };
 
   // Theme
-  const themeBtn = document.getElementById('themeBtn');
-  function setTheme(mode){ document.documentElement.setAttribute('data-theme', mode); themeBtn.textContent = "Theme: " + (mode === "dark" ? "Dark" : "Light"); }
-  themeBtn.onclick = () => { const cur = document.documentElement.getAttribute('data-theme') || 'dark'; setTheme(cur === 'dark' ? 'light' : 'dark'); };
-  setTheme('dark');
+  /* Tema fisso dark: rimosso toggle */
 
   // DOM refs
   const fromDate = document.getElementById('fromDate');
@@ -562,13 +1024,14 @@ function escapeCSV(v){
 }
 function downloadCSV(){
   const rows = getFiltered ? getFiltered() : [];
-  const header = ['Date','Fund','Ticker','Name','Direction','Shares'];
+  const header = ['Date','Fund','Ticker','Name','Direction','Shares','Weight %'];
   const lines = [header.join(',')];
   rows.forEach(r => {
     const name = NAME_MAP[r.ticker] || '';
     const direction = String(r.direction||'').toUpperCase();
     const shares = (r.shares==null ? '' : String(r.shares));
-    lines.push([r.date, r.fund, r.ticker, name, direction, shares].map(escapeCSV).join(','));
+    const weight = (r.etf_percent==null ? '' : String(r.etf_percent));
+    lines.push([r.date, r.fund, r.ticker, name, direction, shares, weight].map(escapeCSV).join(','));
   });
   const csv = '\ufeff' + lines.join('\n');
   const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
@@ -599,6 +1062,13 @@ if (typeof csvBtn !== 'undefined' && csvBtn) csvBtn.onclick = downloadCSV;
   renderChips(); updateFundCount();
 
   function fmtNum(n){ if(n==null || isNaN(n)) return ""; return Number(n).toLocaleString('it-IT'); }
+function fmtPct(n){ if(n==null || n===undefined || isNaN(n)) return ""; return Number(n).toFixed(4).replace(/\.0+$/,''); }
+function fmtSignShares(dir, n){ if(n==null || isNaN(n)) return ""; var s = fmtNum(Math.abs(Number(n))); return (String(dir).toUpperCase()==='BUY' ? '+' : '-') + s; }
+function fmtDateDMY(ymd){ // expects 'YYYY-MM-DD' -> 'DD/MM/YY'
+  if(!ymd) return '';
+  var p = String(ymd).split('-'); if(p.length!==3) return ymd;
+  var yy = p[0].slice(2); return p[2] + '/' + p[1] + '/' + yy;
+}
 
   function coerceArray(json){
     if (Array.isArray(json)) return json;
@@ -622,6 +1092,39 @@ if (typeof csvBtn !== 'undefined' && csvBtn) csvBtn.onclick = downloadCSV;
     return arr.map(x => ({...x, fund}));
   }function hashHue(str){ let h=0; for (let i=0;i<str.length;i++){ h=(h*31 + str.charCodeAt(i))%360; } return h; }
   function tickerStyles(t){ const h=hashHue(t||''); return {bg:`hsl(${h},60%,20%)`, fg:`hsl(${h},85%,85%)`}; }
+
+
+  
+  // === Weight enrichment via /v2/stock/trades ===
+  const weightMap = new Map(); // key: date|fund|ticker -> etf_percent
+
+  function wkey(r){ return [r.date||'', r.fund||'', r.ticker||''].join('|'); }
+
+  async function fetchWeightsForTicker(ticker, from, to){
+    if(!ticker) return;
+    try{
+      const url = new URL('https://arkfunds.io/api/v2/stock/trades');
+      url.searchParams.set('symbol', ticker);
+      if(from) url.searchParams.set('date_from', from);
+      if(to) url.searchParams.set('date_to', to);
+      url.searchParams.set('limit', '2000');
+      const res = await fetch(url);
+      if(!res.ok) return;
+      const data = await res.json();
+      const trades = (data && (data.trades || data.data || data.results || data.items)) || [];
+      for(const t of trades){
+        const key = [t.date||'', t.fund||'', (t.symbol||t.ticker||ticker)].join('|');
+        if(t.etf_percent!=null) weightMap.set(key, Number(t.etf_percent));
+      }
+    }catch(e){ /* silent */ }
+  }
+
+  function mergeWeights(rows){
+    for(const r of rows){
+      const pct = weightMap.get(wkey(r));
+      if(pct!=null){ r.etf_percent = pct; }
+    }
+  }
 
 
   // --- Yahoo Finance price fetch helpers ---
@@ -651,6 +1154,7 @@ if (typeof csvBtn !== 'undefined' && csvBtn) csvBtn.onclick = downloadCSV;
 
   let allRows=[];
 
+  
   async function fetchAll(){
     try{
       status.textContent = 'Loading…'; tbody.innerHTML=''; allRows=[];
@@ -660,10 +1164,19 @@ if (typeof csvBtn !== 'undefined' && csvBtn) csvBtn.onclick = downloadCSV;
         try{ const part = await fetchFund(f, from, to); allRows.push(...part); }
         catch(e){ errors.push(e.message||String(e)); }
       }
+      // If search is an exact TICKER, enrich with weights
+      const qraw = (searchBox.value||'').trim();
+      const q = qraw.toUpperCase();
+      const exactTicker = q && /^[A-Z0-9\.\-]+$/.test(q) ? q : null;
+      if (exactTicker){
+        await fetchWeightsForTicker(exactTicker, from, to);
+        mergeWeights(allRows);
+      }
       render();
-      status.textContent = errors.length ? ('Partial: ' + errors.join(' | ')) : `Ready. Caricate ${allRows.length} operazioni.`;
+      status.textContent = errors.length ? ('Partial: ' + errors.join(' | ')) : `Loaded ${allRows.length} operations.`;
     }catch(e){ console.error(e); status.textContent='Error: '+(e.message||e); }
   }
+
 
   function getFiltered(){
     const q=(searchBox.value||'').trim().toLowerCase(); const mine=onlyMine.checked;
@@ -685,38 +1198,47 @@ if (typeof csvBtn !== 'undefined' && csvBtn) csvBtn.onclick = downloadCSV;
         const name=NAME_MAP[r.ticker]||'';
         const s=tickerStyles(r.ticker||'');
         const tr=document.createElement('tr');
+        tr.setAttribute("data-ticker", r.ticker||"");
         tr.innerHTML = `
-          <td>${r.date||''}</td>
-          <td>${r.fund||''}</td>
-          <td>
-            <a class="ticker-link" data-ticker="${r.ticker||''}" title="View all trades for ${r.ticker||''}">
-              <span class="ticker-pill" style="background:${s.bg};color:${s.fg}">${r.ticker||''}</span>
-              ${name?`<span class="muted" style="font-size:12px;margin-left:6px">${name}</span>`:''}
-            </a>
-          </td>
-          <td class="${dir==='BUY'?'buy':'sell'}">${dir==='BUY'?'Buy':'Sell'}</td>
-          <td class="num">${fmtNum(r.shares)}</td>
-        `;
-    // Add link icon beside ticker cell
-    try {
-      const icon = document.createElement('button');
-      icon.className = 'icon-link';
-      icon.title = 'Open on Google Finance';
-      icon.textContent = '🔘';
-      icon.onclick = () => {
-        if (!r.ticker) return;
-        const url = googleFinanceURL(r.ticker);
-        window.open(url, '_blank', 'noopener');
-      };
-      if (tr.children && tr.children[2]) tr.children[2].prepend(icon);
-    } catch(e){}
+<td>${fmtDateDMY(r.date||'')}</td>
+<td>${r.fund||''}</td>
+<td>
+  <span class="ticker-pill gf-open" data-ticker="${r.ticker||''}" style="background:${s.bg};color:${s.fg}">${r.ticker||''}</span>
+  ${name?`<a class="name-open muted" data-ticker="${r.ticker||''}" style="font-size:12px;margin-left:6px;cursor:pointer">${name}</a>`:''}
+</td>
+<td class="${dir==='BUY'?'buy':'sell'}">${dir==='BUY'?'<span class="arrow">▲</span> Buy':'<span class="arrow">▼</span> Sell'}</td>
+<td class="num">${fmtNum(r.shares)}</td>
+<td class="num">${fmtPct(r.etf_percent)}</td>
+`;
         tbody.appendChild(tr);
       }
     }
     countBox.textContent = filtered.length.toLocaleString('it-IT');
-    document.querySelectorAll('.ticker-link').forEach(a=>{
-      a.addEventListener('click', ()=> openFocus(a.getAttribute('data-ticker')||''));
-    });
+    // Attach fresh listeners after render
+
+// Row-level open: click anywhere on the row opens the overlay, except on the ticker chip (gf-open)
+tbody.addEventListener('click', (e)=>{
+  if (e.target.closest('.gf-open')) return; // let the ticker chip open Google Finance
+  const tr = e.target.closest('tr');
+  const t = tr && tr.getAttribute('data-ticker');
+  if (!t) return;
+  openFocus(t);
+}, false);
+
+document.querySelectorAll('.name-open').forEach(el=>{
+  el.addEventListener('click', (e)=>{
+    e.preventDefault(); e.stopPropagation();
+    openFocus(el.getAttribute('data-ticker')||'');
+  });
+});
+document.querySelectorAll('.gf-open').forEach(el=>{
+  el.addEventListener('click', (e)=>{
+    e.preventDefault(); e.stopPropagation();
+    const t = el.getAttribute('data-ticker')||'';
+    const url = googleFinanceURL ? googleFinanceURL(t) : `https://www.google.com/finance/quote/${t}:NASDAQ`;
+    window.open(url, '_blank', 'noopener');
+  });
+});
   }
 
   
@@ -728,7 +1250,10 @@ if (typeof csvBtn !== 'undefined' && csvBtn) csvBtn.onclick = downloadCSV;
     followBtn.classList.toggle('on', on);
   }
 
-  function openFocus(ticker){
+  async function openFocus(ticker){
+    // ensure weights for this ticker
+    await fetchWeightsForTicker(ticker, fromDate.value, toDate.value);
+    mergeWeights(allRows);
     const rows = getFiltered().filter(r=>r.ticker===ticker);
     focusTicker = ticker; window.focusTicker = ticker;
     focusTitle.textContent = ticker + (NAME_MAP[ticker] ? (" – " + NAME_MAP[ticker]) : "");
@@ -739,10 +1264,11 @@ if (typeof csvBtn !== 'undefined' && csvBtn) csvBtn.onclick = downloadCSV;
       const dir=String(r.direction||'').toUpperCase();
       const tr=document.createElement('tr');
       tr.innerHTML = `
-        <td>${r.date||''}</td>
-        <td>${r.fund||''}</td>
-        <td class="${dir==='BUY'?'buy':'sell'}">${dir==='BUY'?'Buy':'Sell'}</td>
+          <td>${fmtDateDMY(r.date||'')}</td>
+          <td>${r.fund||''}</td>
+        <td class="${dir==='BUY'?'buy':'sell'}">${dir==='BUY'?'<span class="arrow">▲</span> Buy':'<span class="arrow">▼</span> Sell'}</td>
         <td class="num">${fmtNum(r.shares)}</td>
+        <td class="num">${fmtPct(r.etf_percent)}</td>
       `;
       focusBody.appendChild(tr);
     });
@@ -776,13 +1302,15 @@ if (typeof csvBtn !== 'undefined' && csvBtn) csvBtn.onclick = downloadCSV;
            +   '<span class="muted">'+n+'</span>'
            + '</div>';
     }).join('');
-    var parent = searchBox.closest('.search-card');
-    var pr = parent.getBoundingClientRect();
-    var ir = searchBox.getBoundingClientRect();
-    suggestionsBox.style.position = 'absolute';
-    suggestionsBox.style.left = (ir.left - pr.left) + 'px';
-    suggestionsBox.style.top = (searchBox.offsetTop + searchBox.offsetHeight + 6) + 'px';
-    suggestionsBox.style.minWidth = (searchBox.offsetWidth) + 'px';
+    // Attach to body to avoid any parent overflow clipping
+    if (suggestionsBox.parentElement !== document.body){
+      document.body.appendChild(suggestionsBox);
+    }
+    var r = searchBox.getBoundingClientRect();
+    suggestionsBox.style.position = 'fixed';
+    suggestionsBox.style.left = r.left + 'px';
+    suggestionsBox.style.top = (r.bottom + 6) + 'px';
+    suggestionsBox.style.minWidth = r.width + 'px';
     suggestionsBox.style.display='block';
   }
   function applySuggestion(t){
@@ -823,6 +1351,28 @@ if (typeof csvBtn !== 'undefined' && csvBtn) csvBtn.onclick = downloadCSV;
   searchBox.addEventListener('blur', ()=> setTimeout(hideSuggestions, 250));
   // hide on outside click
   suggestionsBox.addEventListener('mousedown', (e)=>{ var el = e.target.closest('[data-ticker]'); if(el){ applySuggestion(el.dataset.ticker); }});
+  
+  // === Suggestions: reposition on scroll/resize & robust close ===
+  function repositionSuggestions(){
+    if (!suggestionsBox || suggestionsBox.style.display === 'none') return;
+    try{
+      var r = searchBox.getBoundingClientRect();
+      suggestionsBox.style.left = r.left + 'px';
+      suggestionsBox.style.top = (r.bottom + 6) + 'px';
+      suggestionsBox.style.minWidth = r.width + 'px';
+    }catch(e){}
+  }
+  window.addEventListener('scroll', repositionSuggestions, true);
+  window.addEventListener('resize', repositionSuggestions);
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape') hideSuggestions(); });
+  // Click outside to close
+  document.addEventListener('mousedown', function(e){
+    if (suggestionsBox && suggestionsBox.style.display !== 'none'){
+      const inside = e.target === suggestionsBox || suggestionsBox.contains(e.target) || e.target === searchBox;
+      if(!inside) hideSuggestions();
+    }
+  });
+
   document.addEventListener('click', (e)=>{
     const sc = searchBox.closest('.search-card');
     if (!sc.contains(e.target)) hideSuggestions();
@@ -838,6 +1388,106 @@ if (typeof csvBtn !== 'undefined' && csvBtn) csvBtn.onclick = downloadCSV;
   // Ticker color helper (placed last so it's defined when sidebar uses it)
   function tickerColorExample(){ return null; }
 })();
+
 </script>
+
+<script>
+// === Auto-resolve exchange with persistent overrides ===
+(function(){
+  // Hardcoded seeds (best-effort) for first-run guesses
+  const SEED = {
+    // Likely NASDAQ
+    AMD:'NASDAQ', GOOGL:'NASDAQ', GOOG:'NASDAQ', AMZN:'NASDAQ', META:'NASDAQ',
+    NVDA:'NASDAQ', INTC:'NASDAQ', ROKU:'NASDAQ', CRSP:'NASDAQ', NTLA:'NASDAQ',
+    SNPS:'NASDAQ', MSFT:'NASDAQ', TSLA:'NASDAQ', PLUG:'NASDAQ', ABSI:'NASDAQ',
+    TEM:'NASDAQ', REKR:'NASDAQ', HYMC:'NASDAQ', QSI:'NASDAQ', ISRG:'NASDAQ',
+    ARCT:'NASDAQ', PACB:'NASDAQ', FCEL:'NASDAQ', AAPL:'NASDAQ', NFLX:'NASDAQ',
+    // Known NYSE from your list
+    PATH:'NYSE', ORCL:'NYSE', PLTR:'NYSE', UNH:'NYSE', TDY:'NYSE',
+    // Specific fixes
+    LHX:'NYSE', BABA:'NYSE', RBLX:'NYSE', SHOP:'NASDAQ', ENI:'NYSE'
+  };
+  const KEY = 'exchange_overrides_v1';
+
+  function loadMap(){
+    try{ return JSON.parse(localStorage.getItem(KEY) || '{}'); }catch(_){ return {}; }
+  }
+  function saveMap(m){ localStorage.setItem(KEY, JSON.stringify(m)); }
+  function setExchange(t, ex){
+    const T = (t||'').toUpperCase();
+    const m = loadMap();
+    m[T] = ex;
+    saveMap(m);
+  }
+  window.__setExchangeOverride = setExchange;
+
+  function resolveExchange(t){
+    const T = (t||'').toUpperCase();
+    const m = loadMap();
+    if (m[T]) return m[T];
+    if (SEED[T]) return SEED[T];
+    return 'NASDAQ'; // fallback
+  }
+  // Patch/define googleFinanceURL to use the resolver
+  const _oldGF = (typeof googleFinanceURL === 'function') ? googleFinanceURL : null;
+  window.googleFinanceURL = function(t){
+    const T = (t||'').toUpperCase();
+    const exch = resolveExchange(T);
+    const enc = encodeURIComponent(T);
+    return `https://www.google.com/finance/quote/${enc}:${exch}`;
+  };
+
+  // Add a small dropdown in the overlay header next to "Go to stock" to change exchange quickly
+  function enhanceOverlay(){
+    const hdr = document.querySelector('#focusHeader') || document.querySelector('.focus-header') || document.querySelector('#focus .header, #focus header');
+    if (!hdr || hdr.__exchEnhanced) return;
+    hdr.__exchEnhanced = true;
+
+    const wrap = document.createElement('span');
+    wrap.style.marginLeft = '8px';
+    wrap.innerHTML = `
+      <select id="exchSelect" style="background:transparent;border:1px solid rgba(255,255,255,.15);border-radius:10px;padding:6px 8px;color:#ddd;outline:none">
+        <option value="NASDAQ">NASDAQ</option>
+        <option value="NYSE">NYSE</option>
+        <option value="AMEX">AMEX</option>
+        <option value="OTC">OTC</option>
+      </select>`;
+    hdr.appendChild(wrap);
+
+    // When overlay opens, set select to current ticker's exch
+    const setForTicker = (t)=>{
+      const sel = document.getElementById('exchSelect'); if (!sel) return;
+      sel.value = resolveExchange(t);
+      sel.onchange = ()=>{
+        __setExchangeOverride(t, sel.value);
+      };
+    };
+
+    // Hook into openFocus to update dropdown
+    if (!window.__openFocusPatched){
+      window.__openFocusPatched = true;
+      const __oldOpen = window.openFocus;
+      window.openFocus = function(t){
+        const res = __oldOpen ? __oldOpen.apply(this, arguments) : undefined;
+        setTimeout(()=> setForTicker(t), 0);
+        return res;
+      };
+    }
+  }
+
+  // Try now and observe DOM changes
+  function run(){
+    enhanceOverlay();
+  }
+  if (document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', run);
+  } else {
+    run();
+  }
+  const mo = new MutationObserver(run);
+  mo.observe(document.documentElement, {childList:true, subtree:true});
+})();
+</script>
+
 </body>
 </html>
