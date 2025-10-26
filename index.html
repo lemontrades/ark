@@ -185,7 +185,7 @@ tr:hover{background:rgba(255,255,255,.03)}
 .ticker-link:hover{opacity:.95}
 
 .overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;padding:20px}
-.overlay .panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;max-width:1000px;width:100%;max-height:85vh;overflow:auto;box-shadow:var(--shadow)}
+.overlay .panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;max-width:600px;width:100%;max-height:85vh;overflow:auto;box-shadow:var(--shadow)}
 .overlay .panel .hdr{display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid var(--line)}
 .overlay .panel .body{padding:12px 16px}
 .close{margin-left:auto}
@@ -638,18 +638,545 @@ textarea:focus {
 .buy .arrow { color: #16E8A5 !important; }
 .sell .arrow { color: #EC6C51 !important; }
 
+
+/* === v4.12 — Ticker avatars (local + online fallback) === */
+.avatar{
+  width:28px;height:28px;min-width:28px;border-radius:50%;
+  display:inline-flex;align-items:center;justify-content:center;
+  overflow:hidden;background:rgba(124,58,237,.18);
+  border:1px solid rgba(198,138,255,.45);
+  box-shadow:0 0 0 2px rgba(124,58,237,.12),0 2px 8px rgba(0,0,0,.35);
+  margin-right:8px;
+}
+.avatar img{width:100%;height:100%;object-fit:cover;display:block}
+.avatar .mono{font-size:12px;font-weight:700;letter-spacing:.3px;color:#fff;opacity:.9;text-transform:uppercase}
+.td-name{display:flex;align-items:center}
+.td-name .ticker-wrap{display:inline-flex;align-items:center;gap:6px}
+
+
+/* === v4.13 — Header alignment & unified buy/sell colors === */
+
+/* 1) Header alignment: left for text columns, right only for numeric */
+#table thead th { text-align: left !important; }
+#table thead th.num, #table tbody td.num { text-align: right !important; }
+
+/* Popup table too */
+.overlay .panel table thead th { text-align: left !important; }
+.overlay .panel table thead th.num,
+.overlay .panel table tbody td.num { text-align: right !important; }
+
+/* 2) Unify BUY/SELL color: same for text and arrow */
+td.num.buy, td.num.sell { font-weight: 700; }
+td.num.buy  { color: #16E8A5 !important; }  /* green (buy) */
+td.num.sell { color: #EC6C51 !important; }  /* red (sell) */
+td.num .arrow { color: currentColor !important; } /* arrow matches text color */
+
+
+/* === v4.14 — Overlay polish (solid, compact, header info) === */
+
+/* Solid panel (no transparency) + narrower width */
+.overlay { background: rgba(0,0,0,.78) !important; }
+.overlay .panel{
+  background: #14111c !important;   /* solid dark violet-ish */
+  max-width: 600px !important;      /* narrower */
+  width: 100% !important;
+}
+
+/* Header: align items and allow our badge row */
+.overlay .panel .hdr{
+  gap: 10px !important;
+  align-items: center !important;
+}
+
+/* Compact table spacing + slightly smaller font */
+.overlay .panel table{ table-layout: fixed; width: 100%; font-size: 14px; }
+.overlay .panel table th, .overlay .panel table td{ padding: 6px 8px !important; }
+
+/* Name row visuals inside header */
+#focusTitle .td-name{ display:flex; align-items:center; gap:8px; }
+#focusTitle .avatar{ width:28px; height:28px; min-width:28px; }
+#focusTitle .ticker-pill{ font-size:12px; padding:4px 8px; }
+#focusTitle .company{ color: var(--ink); opacity:.9; }
+
+
+/* === V6-from-backup — Popup header tweaks === */
+/* Smaller Follow button */
+.overlay .panel .hdr #followBtn{
+  padding: 6px 10px !important;
+  font-size: 13px !important;
+  border-radius: 999px !important;
+  line-height: 1.1 !important;
+}
+/* Close as circular X */
+.overlay .panel .hdr #closeOverlay{
+  width: 32px; height: 32px;
+  padding: 0 !important;
+  display:flex; align-items:center; justify-content:center;
+  border-radius: 999px !important;
+  font-size: 18px !important;
+  font-weight: 700 !important;
+}
+
+
+/* === V8 — Follow → Bookmark icon toggle === */
+#followBtn{
+  width: 36px; height: 36px;
+  padding: 0 !important;
+  display: inline-flex; align-items: center; justify-content: center;
+  border-radius: 999px;
+  line-height: 1;
+}
+#followBtn svg{ width: 18px; height: 18px; display:block; }
+#followBtn svg path{ stroke: currentColor; fill: none; stroke-width: 2; }
+#followBtn.on{
+  background: var(--accent) !important;
+  border-color: var(--accent) !important;
+  color: var(--accent-ink) !important;
+}
+/* subtle hover ring like chips/buttons */
+#followBtn:hover{
+  border-color: #d5aaff !important;
+  box-shadow:
+    0 0 0 2px rgba(198,138,255,0.35),
+    0 0 18px rgba(198,138,255,0.45) !important;
+}
+
+
+/* === V9-fix — External link icon button (before Save) === */
+#openGFBtn{
+  width: 36px; height: 36px;
+  padding: 0 !important;
+  display: inline-flex; align-items:center; justify-content:center;
+  border-radius: 999px;
+  line-height:1;
+  margin-right: 4px; /* before the save button */
+}
+#openGFBtn svg{ width:18px; height:18px; display:block; }
+#openGFBtn svg path{ stroke: currentColor; fill: currentColor; }
+#openGFBtn:hover{
+  border-color: #d5aaff !important;
+  box-shadow:
+    0 0 0 2px rgba(198,138,255,0.35),
+    0 0 18px rgba(198,138,255,0.45) !important;
+}
+
+
+/* === V15 layout styles === */
+.stat-card{ border:1px solid rgba(255,255,255,.08); }
+.stat-card .big-num{ font-size:38px; font-weight:800; letter-spacing:.2px; }
+.stat-card .badge{ background:rgba(255,255,255,.06); padding:8px 10px; border-radius:10px; }
+#layoutTwoCol .card.pad label{ display:block; margin-bottom:4px; font-weight:600; }
+@media (max-width: 980px){ #layoutTwoCol{ grid-template-columns: 1fr; } }
+
+
+/* === V16 fixes === */
+.results-head{ display:flex; align-items:center; justify-content:space-between; gap:12px; }
+.results-actions{ display:flex; align-items:center; gap:8px; }
+
+#toggleMineBtn{
+  width: 36px; height: 36px;
+  padding: 0 !important;
+  display: inline-flex; align-items:center; justify-content:center;
+  border-radius: 999px; line-height:1;
+}
+#toggleMineBtn svg{ width:18px; height:18px; display:block; }
+#toggleMineBtn svg path{ stroke: currentColor; fill: none; stroke-width: 2; }
+#toggleMineBtn.on{
+  background: var(--accent) !important;
+  border-color: var(--accent) !important;
+  color: var(--accent-ink) !important;
+}
+#toggleMineBtn:hover{
+  border-color: #d5aaff !important;
+  box-shadow: 0 0 0 2px rgba(198,138,255,0.35), 0 0 18px rgba(198,138,255,0.45) !important;
+}
+
+/* wrap chips to multiple lines */
+#fundsChips .chips, #slot-fundsChips .chips{ display:flex; flex-wrap:wrap; gap:8px; }
+
+
+/* === V25: strict two-column layout === */
+#twoCol {
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  gap: 16px;
+  align-items: start;
+  margin-top: 12px;
+}
+#leftCol > .card.pad { margin-bottom: 12px; }
+#statsRow { display: grid; grid-template-columns: 1fr; gap: 12px; }
+#statsRow .card.pad { box-shadow: inset 0 0 0 1px rgba(198,138,255,.35); border-radius: 16px; min-height: 96px; display: flex; }
+#filterHeader{ min-height: 96px; padding: 6px 0; margin-bottom: 8px; display:flex; align-items:center; }
+.stats-funds-grid{ display:none !important; } /* hide legacy summary */
+#slot-fundsChips .chips, #fundsChips .chips { display:flex; flex-wrap:wrap; gap:8px; }
+
+/* Results header actions (bookmark) */
+.results-head{ display:flex; align-items:center; justify-content:space-between; gap:12px; }
+.results-actions{ display:flex; align-items:center; gap:8px; }
+#toggleMineBtn{
+  width:36px; height:36px; padding:0 !important; display:inline-flex; align-items:center; justify-content:center;
+  border-radius:999px; line-height:1;
+}
+#toggleMineBtn svg{ width:18px; height:18px; display:block; }
+#toggleMineBtn svg path{ stroke: currentColor; fill: none; stroke-width: 2; }
+#toggleMineBtn.on{ color:#fff !important; background: var(--accent) !important; border-color: var(--accent) !important; }
+
+@media (max-width: 980px){
+  #twoCol{ grid-template-columns: 1fr; }
+}
+
+
+/* === V26 fixes === */
+/* Popup bookmark active: white icon/text */
+.overlay .panel .hdr #followBtn.on{
+  color:#fff !important;
+  background: var(--accent) !important;
+  border-color: var(--accent) !important;
+}
+.overlay .panel .hdr #followBtn svg path{ stroke: currentColor; fill: none; stroke-width: 2; }
+
+
+/* Tighten Search Filters header vertical spacing */
+#filterHeader{ padding-top:0px !important; padding-bottom:0px !important; margin-bottom:8px !important; align-items:center; }
+
+/* Compatta l’header dei filtri */
+#filterHeader h3{
+  margin: 0 !important;        /* elimina i 1em dell'user agent */
+  line-height: 1.1;
+}
+
+/* facoltativo: ancora più stretto sopra/sotto */
+#filterHeader{
+  padding-top: 0px !important;
+  padding-bottom: 0px !important;
+}
+
+/* solo se vedi ancora aria: può venire dal padding della card */
+#filterCard > .row:first-child{
+  margin-bottom: 0px !important;  /* da 10px a 6px o 4px */
+}
+
+
+
+/* === V27 — Slim Search Filters: big chip header + flat fields === */
+#filterCard{ padding:14px 14px 16px; }
+#filterHeader{
+  background: rgba(124, 58, 237, 0.1);
+  box-shadow: inset 0 0 0 1px rgba(198,138,255,.35);
+  border-radius: 999px;
+  padding: 10px 14px !important;
+  margin-bottom: 12px !important;
+  align-items: center;
+}
+#filterHeader h3{ margin:0 !important; line-height:1.15; }
+
+/* Remove nested card look for inner blocks */
+#filterCard > .row,
+#filterCard > .card.pad{
+  background: transparent !important;
+  box-shadow: none !important;
+  border: 0 !important;
+  padding: 0 !important;
+  margin: 10px 0 0 0 !important;
+  border-radius: 0 !important;
+}
+
+/* Inner "field cards" in the two-column row (Start/End) */
+#filterCard > .row > .card.pad{
+  background: transparent !important;
+  box-shadow: none !important;
+  border: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* Space between label and input */
+#filterCard label{ display:block; margin: 0 0 6px 0; font-weight:600; }
+
+/* Keep inputs full width */
+#filterCard .input, #filterCard input[type="date"]{ width:100%; }
+
+/* Funds chips area: keep wrapping and reduce extra margin */
+#slot-fundsChips .chips{ display:flex; flex-wrap:wrap; gap:8px; }
+
+
+/* === V28 — Filters chip simplified, funds removed, stat icons larger === */
+
+/* Filter card: compact padding */
+#filterCard{ padding:12px 14px 14px !important; }
+/* Header as a single "chip" */
+#filterHeader{
+  background: rgba(124,58,237,0.10);
+  box-shadow: inset 0 0 0 1px rgba(198,138,255,.35);
+  border-radius: 999px;
+  padding: 8px 12px !important;
+  margin: 4px 0 10px 0 !important;
+  display:flex; align-items:center; gap:10px;
+}
+#filterHeader h3{ margin:0 !important; line-height:1.1; font-weight:700; }
+#filterHeader .icon svg{ width:18px; height:18px; stroke:currentColor; fill:none; stroke-width:2; }
+
+/* Flatten inner groups: remove nested "card" look entirely */
+#filterCard > .row, #filterCard > .card.pad{ background:transparent !important; border:0 !important; box-shadow:none !important; padding:0 !important; margin:10px 0 0 0 !important; border-radius:0 !important; }
+#filterCard > .row > .card.pad{ margin:0 !important; }
+#filterCard label{ display:block; margin:0 0 6px 0; font-weight:600; }
+#filterCard .input, #filterCard input[type="date"]{ width:100%; }
+
+/* Hide the Funds chips area entirely (UI) */
+#slot-fundsChips, #fundsChips{ display:none !important; }
+#filterCard .funds-block, #filterCard label[for="funds"]{ display:none !important; }
+
+/* Stat cards: larger icon button on the right */
+.stat-card{ position:relative; }
+.stat-card .badge{
+  margin-left:auto;
+  width:36px; height:36px; border-radius:10px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:18px;
+}
+
+
+/* === V29: remove Search Filters title + reposition stat icons === */
+
+/* Remove header block of filters */
+#filterHeader { display:none !important; }
+
+/* Stat icons pinned to right edge */
+.stat-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.stat-card .badge {
+  position: absolute;
+  right: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  font-size: 20px;
+  border-radius: 12px;
+  background: rgba(124,58,237,0.15);
+  color: #a882ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 6px rgba(167,139,250,0.5);
+}
+
+
+/* === V30: stat icons padding + color swap, re-add compact Search Filters title === */
+
+/* Stat icons to the right with more padding and color swap */
+.stat-card .badge {
+  right: 28px; /* more spacing from border */
+  background: #a882ff; /* violet background */
+  color: #1b0f3f; /* dark violet icon */
+  box-shadow: 0 0 6px rgba(167,139,250,0.5);
+}
+
+/* Compact Search Filters title above inputs */
+#filterTitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+#filterTitle svg {
+  width: 18px;
+  height: 18px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+}
+
+
+/* === V31: stat chips hover glow + white text + thick mono icons === */
+.stat-card{
+  color: #ffffff;
+  transition: box-shadow .2s ease, transform .2s ease;
+}
+.stat-card:hover{
+  box-shadow: 0 0 0 2px rgba(168,130,255,0.25), 0 0 24px rgba(168,130,255,0.35);
+  transform: translateY(-1px);
+}
+.stat-card .badge{
+  right: 28px;
+  background: #a882ff;   /* neon violet bg */
+  color: #1b0f3f;        /* dark violet icon */
+  box-shadow: 0 0 6px rgba(167,139,250,0.5);
+}
+/* Keep titles/subtexts readable on dark */
+.stat-card .muted{ color: rgba(255,255,255,0.7); }
+
+
+/* === V32: force white filled icons in stat badges === */
+.stat-card .badge{
+  right: 28px;
+  width: 42px; height: 42px;
+  border-radius: 12px;
+  background: #a882ff; /* neon violet */
+  box-shadow: 0 0 6px rgba(167,139,250,0.5);
+}
+.stat-card .badge svg{ width:24px; height:24px; display:block; }
+.stat-card .badge svg path,
+.stat-card .badge svg rect,
+.stat-card .badge svg polygon{
+  fill: #fff !important;
+  stroke: none !important;
+}
+
+
+/* === V34: white filled SVGs in stat badges === */
+.stat-card .badge {
+  position: absolute;
+  right: 28px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: #a882ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 6px rgba(167,139,250,0.5);
+}
+.stat-card .badge svg *{
+  fill: #fff !important;
+  stroke: none !important;
+}
+
+
+/* === V35: centered vertical arrows white-filled === */
+.stat-card .badge svg * { fill: #fff !important; stroke: none !important; }
+
+
+/* === icons pipeline: load external SVGs from /icons === */
+.stat-card .badge{
+  position: absolute;
+  right: 28px; top: 50%; transform: translateY(-50%);
+  width: 42px; height: 42px; border-radius: 12px;
+  background: #a882ff; display:flex; align-items:center; justify-content:center;
+  box-shadow: 0 0 6px rgba(167,139,250,0.5);
+}
+.stat-card .badge .stat-icon{ width:24px; height:24px; display:block; }
+
+
+/* === v5: uniform search width (Search Ticker/Fund = 235px like dates) === */
+#slot-search input[type="text"]{
+  max-width: 235px !important;   /* identical to date inputs */
+  width: 100%;
+  display: block;
+  margin: 0 auto;
+  flex: none !important;          /* override any flex:1 rules */
+}
+#slot-search{
+  display: flex;
+  justify-content: center;
+}
+
+
+/* === v5.1: exact equal widths for filters (dates + search) === */
+#filterCard input[type="date"],
+#filterCard #slot-search input[type="text"]{
+  width: 235px !important;
+  max-width: 235px !important;
+  box-sizing: border-box !important;
+  padding: 12px 12px !important;   /* align box model */
+  border-width: 1px !important;
+}
+/* Center the three inputs inside their slots so outer edges align */
+#slot-fromDate, #slot-toDate, #slot-search{
+  display: flex !important;
+  justify-content: center !important;
+}
+
+
+/* === v5.2: left-align filter inputs (no centering) === */
+#slot-fromDate, #slot-toDate, #slot-search{
+  display: flex !important;
+  justify-content: flex-start !important;  /* align to the left */
+}
+#slot-search input[type="text"]{
+  margin: 0 !important;   /* remove auto-centering */
+}
+
+
+/* === v6: slimmer filter column (260px) === */
+#layoutTwoCol {
+  grid-template-columns: 260px 1fr !important;
+}
+#filterCard {
+  max-width: 260px !important;
+}
+
+
+/* v6.4: violet neon button link for Source note */
+.api-status-btn {
+  display:inline-block;
+  background:#7c3aed;
+  color:#0d0716 !important;
+  font-weight:600;
+  border-radius:999px;
+  padding:2px 10px;
+  text-decoration:none;
+  box-shadow:0 0 12px rgba(124,58,237,.6);
+  transition:all .2s ease;
+  border:1px solid rgba(167,139,250,.35);
+}
+.api-status-btn:hover {
+  box-shadow:0 0 18px rgba(167,139,250,.9);
+  transform:translateY(-1px);
+}
+
+
+/* v6.5: violet neon style + larger text for title and source */
+.api-status-btn {
+  background:#3f3160;
+  color:#fff !important;
+  font-weight:700;
+  border-radius:999px;
+  padding:2px 16px;
+  text-decoration:none;
+  box-shadow:0 0 8px rgba(223, 95, 255, 0.6);
+  transition:all .2s ease;
+  border:1px solid #a882ff;
+  font-size:12px;
+}
+.api-status-btn:hover {
+  box-shadow:0 0 5px violet;
+  transform:translateY(-1px);
+}
+
+/* Larger Source note */
+p.note {
+  font-size:11px !important;
+  font-weight:600;
+}
+
+/* Larger ARK Trades title */
+h1, #mainTitle, #titleARK {
+  font-size:34px !important;
+  letter-spacing:0px;
+}
+
 </style>
 <link crossorigin="True" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/></head>
 <body>
 <div class="container">
 <div class="row" style="justify-content:space-between;gap:12px">
 <div>
-<h1>ARK Trades – Dashboard (Dark, v4)</h1>
-<p class="note">Source: Unofficial API (<code>arkfunds.io</code>).</p>
+<h1>ARK Trades – Dashboard (Dark v4)</h1>
+<p class="note">Source: Unofficial API <a href="https://status.arkfunds.io/status/arkfunds" target="_blank" rel="noopener" class="api-status-btn">arkfunds.io ↗</a></p>
 </div>
-
+  
 </div>
-<section class="controls grid fit-240">
+<section class="controls grid fit-240" style="display:none!important">
 <div class="card pad date-card">
 <label>From</label>
 <input id="fromDate" type="date"/>
@@ -682,27 +1209,99 @@ textarea:focus {
 </div>
 </section>
 <!-- Full-width results table -->
+
+<!-- === V15: Stats + Two-Column Layout === -->
+<section id="statsRow" class="grid" style="grid-template-columns: repeat(3, minmax(0,1fr)); gap:12px; margin-top:12px;">
+  <div class="card pad stat-card">
+    <div class="row" style="justify-content:space-between;align-items:center">
+      <div>
+        <div class="muted">Total Transactions</div>
+        <div class="big-num" id="statTotalN">0</div>
+        <div class="muted">All ARK operations</div>
+      </div>
+      <div class="badge mono"><img class="stat-icon" src="icons/total_bars.svg" alt="total"></div>
+    </div>
+  </div>
+  <div class="card pad stat-card">
+    <div class="row" style="justify-content:space-between;align-items:center">
+      <div>
+        <div class="muted">Buys</div>
+        <div class="big-num" id="statBuyN" style="color:#16E8A5">0</div>
+        <div class="muted"><span id="statBuyPct">0%</span> of total</div>
+      </div>
+      <div class="badge mono"><img class="stat-icon" src="icons/buy_stairs.svg" alt="buy"></div>
+    </div>
+  </div>
+  <div class="card pad stat-card">
+    <div class="row" style="justify-content:space-between;align-items:center">
+      <div>
+        <div class="muted">Sells</div>
+        <div class="big-num" id="statSellN" style="color:#EC6C51">0</div>
+        <div class="muted"><span id="statSellPct">0%</span> of total</div>
+      </div>
+      <div class="badge mono"><img class="stat-icon" src="icons/sell_stairs.svg" alt="sell"></div>
+    </div>
+  </div>
+</section>
+
+<section id="layoutTwoCol" class="grid" style="grid-template-columns: 320px 1fr; gap:16px; align-items:start; margin-top:12px;">
+  <div id="filterCard" class="card pad">
+  <div id="filterTitle">
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M3 5h18l-7 8v5l-4 2v-7L3 5z"/>
+    </svg>
+    <span>Search Filters</span>
+  </div>
+
+    <div id="filterHeader" class="row" style="align-items:center;gap:10px;margin-bottom:10px">
+      <div class="icon" style="opacity:.85"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h18l-7 8v5l-4 2v-7L3 5z" stroke="currentColor" fill="none" stroke-width="2"/></svg></div>
+      <h3 style="margin:0">Search Filters</h3>
+    </div>
+    <div class="row" style="gap:12px">
+      <div class="card pad" style="flex:1">
+        <label>Start Date</label>
+        <div id="slot-fromDate"></div>
+      </div>
+      <div class="card pad" style="flex:1">
+        <label>End Date</label>
+        <div id="slot-toDate"></div>
+      </div>
+    </div>
+    <div class="card pad" style="margin-top:12px">
+      <label>Search Ticker / Fund</label>
+      <div id="slot-search"></div>
+    </div>
+    <div class="card pad" style="margin-top:12px">
+      <label>ARK Funds</label>
+      <div id="slot-fundsChips"></div>
+      
+    </div>
+    <div class="row" style="gap:10px;margin-top:12px">
+      <div id="slot-fetchBtn"></div>
+      <div id="slot-csvBtn"></div>
+    </div>
+  </div>
+
+  <div id="resultsSlot"></div>
+</section>
+
 <section class="card pad">
-<div class="muted">Results</div>
+<div class="results-head"><div class="muted">Results</div><div class="results-actions"><button class="btn" id="toggleMineBtn" title="Only my tickers" aria-label="Only my tickers"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12a1 1 0 0 1 1 1v15l-7-4-7 4V5a1 1 0 0 1 1-1z"/></svg></button></div></div>
 <div class="muted" id="status" style="margin-top:8px">Ready.</div>
 <div style="margin-top:12px;overflow:auto;">
 <table id="table">
 <colgroup>
-<col style="width:110px"/>
-<col style="width:80px"/>
+<col style="width:48px"/>
+<col style="width:39px"/>
 <col style="width:300px"/>
-<col style="width:100px"/>
-<col style="width:110px"/>
-<col style="width:110px"/>
+<col style="width:112px"/>
 </colgroup>
 <thead>
 <tr>
 <th>Date</th>
 <th>Fund</th>
 <th>Ticker / Name</th>
-<th>Direction</th>
-<th class="num">Shares</th>
-<th class="num">% Weight</th>
+<th class="num">Shares | %</th>
 </tr>
 </thead>
 <tbody id="tbody"></tbody>
@@ -714,27 +1313,22 @@ textarea:focus {
 <div class="panel">
 <div class="hdr">
 <div id="focusTitle" style="font-weight:700">Ticker</div>
-<button class="btn" id="followBtn" title="Follow / Unfollow"><strong>Follow</strong></button>
-<button class="btn" id="goGFBtn" title="Apri su Google Finance"><strong>Go to stock 📈</strong></button>
-<button class="btn close" id="closeOverlay"><strong>Close</strong></button>
+<button class="btn" id="openGFBtn" title="Open on Google Finance" aria-label="Open on Google Finance"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" stroke="currentColor" fill="none" stroke-width="2"/><path d="M8 16L16 8M9 8h7v7" stroke="currentColor" stroke-width="2" fill="none"/></svg></button><button class="btn" id="followBtn" title="Follow / Unfollow"><strong>Follow</strong></button>
+<button class="btn close" id="closeOverlay"><strong>×</strong></button>
 </div>
 <div class="body">
 <div class="muted" id="focusInfo" style="margin-bottom:8px"></div>
 <div style="overflow:auto">
 <table>
 <colgroup>
-<col style="width:88px"/>
-<col style="width:66px"/>
-<col style="width:90px"/>
-<col style="width:90px"/>
-<col style="width:90px"/>
+<col style="width:100px"/>
+<col style="width:80px"/>
+<col style="width:130px"/>
 </colgroup>
 <thead><tr>
 <th style="width:120px">Date</th>
 <th style="width:90px">Fund</th>
-<th style="width:110px">Direction</th>
-<th class="num" style="width:90px">Shares</th>
-<th class="num" style="width:90px">% Weight</th>
+<th class="num" style="width:140px">Shares | %</th>
 </tr></thead>
 <tbody id="focusBody"></tbody>
 </table>
@@ -874,6 +1468,7 @@ function setMyTickers(arr){localStorage.setItem("MY_TICKERS",JSON.stringify(arr)
   const closeOverlay = document.getElementById('closeOverlay');
   const followBtn = document.getElementById('followBtn');
   let focusTicker = '';
+try{ refreshFollowBtn(); }catch(e){}
  // --- Google Finance: exchange mapping (corretto al 23 Oct 2025) ---
 const EXCHANGE_MAP = {
   // NASDAQ
@@ -1191,7 +1786,7 @@ function fmtDateDMY(ymd){ // expects 'YYYY-MM-DD' -> 'DD/MM/YY'
     const filtered = getFiltered();
     tbody.innerHTML='';
     if (!filtered.length){
-      const tr=document.createElement('tr'); const td=document.createElement('td'); td.colSpan=5; td.className='muted'; td.textContent='No results for current filters.'; tr.appendChild(td); tbody.appendChild(tr);
+      const tr=document.createElement('tr'); const td=document.createElement('td'); td.colSpan=4; td.className='muted'; td.textContent='No results for current filters.'; tr.appendChild(td); tbody.appendChild(tr);
     } else {
       for (const r of filtered){
         const dir=String(r.direction||'').toUpperCase();
@@ -1206,9 +1801,7 @@ function fmtDateDMY(ymd){ // expects 'YYYY-MM-DD' -> 'DD/MM/YY'
   <span class="ticker-pill gf-open" data-ticker="${r.ticker||''}" style="background:${s.bg};color:${s.fg}">${r.ticker||''}</span>
   ${name?`<a class="name-open muted" data-ticker="${r.ticker||''}" style="font-size:12px;margin-left:6px;cursor:pointer">${name}</a>`:''}
 </td>
-<td class="${dir==='BUY'?'buy':'sell'}">${dir==='BUY'?'<span class="arrow">▲</span> Buy':'<span class="arrow">▼</span> Sell'}</td>
-<td class="num">${fmtNum(r.shares)}</td>
-<td class="num">${fmtPct(r.etf_percent)}</td>
+<td class="num ${dir==='BUY'?'buy':'sell'}">${fmtNum(r.shares)} | ${fmtPct(r.etf_percent)} <span class="arrow">${dir==='BUY'?'▲':'▼'}</span></td>
 `;
         tbody.appendChild(tr);
       }
@@ -1244,11 +1837,16 @@ document.querySelectorAll('.gf-open').forEach(el=>{
   
   function isFollowed(t){ return getMyTickers().includes(t); }
   function refreshFollowBtn(){
-    if(!focusTicker) return;
-    const on = isFollowed(focusTicker);
-    followBtn.textContent = on ? 'Following ✅' : 'Follow 🏷️';
-    followBtn.classList.toggle('on', on);
-  }
+  if(!focusTicker) return;
+  const on = isFollowed(focusTicker);
+  // Minimal bookmark icon (outline). When active, button bg turns violet.
+  followBtn.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">'
+    + '<path d="M6 4h12a1 1 0 0 1 1 1v15l-7-4-7 4V5a1 1 0 0 1 1-1z" />'
+    + '</svg>';
+  followBtn.setAttribute('aria-pressed', on ? 'true' : 'false');
+  followBtn.title = on ? 'Saved' : 'Save';
+  followBtn.classList.toggle('on', on);
+}
 
   async function openFocus(ticker){
     // ensure weights for this ticker
@@ -1256,7 +1854,18 @@ document.querySelectorAll('.gf-open').forEach(el=>{
     mergeWeights(allRows);
     const rows = getFiltered().filter(r=>r.ticker===ticker);
     focusTicker = ticker; window.focusTicker = ticker;
-    focusTitle.textContent = ticker + (NAME_MAP[ticker] ? (" – " + NAME_MAP[ticker]) : "");
+    focusTitle.innerHTML = (function(){
+  var nm = (NAME_MAP && NAME_MAP[ticker]) ? NAME_MAP[ticker] : '';
+  var s  = tickerStyles(ticker||'');
+  var T  = (ticker||'').toUpperCase();
+  var initials = T.slice(0,2);
+  return `
+    <div class="td-name">
+      <span class="avatar" data-ticker="${T}"><span class="mono">${initials}</span></span>
+      <span class="ticker-pill gf-open" data-ticker="${T}" style="background:${s.bg};color:${s.fg}">${T}</span>
+      ${nm ? `<span class="company">${nm}</span>` : ''}
+    </div>`;
+})();
     refreshFollowBtn();
     focusInfo.textContent = `${rows.length} transactions displayed for ${ticker}.`;
     focusBody.innerHTML='';
@@ -1266,13 +1875,17 @@ document.querySelectorAll('.gf-open').forEach(el=>{
       tr.innerHTML = `
           <td>${fmtDateDMY(r.date||'')}</td>
           <td>${r.fund||''}</td>
-        <td class="${dir==='BUY'?'buy':'sell'}">${dir==='BUY'?'<span class="arrow">▲</span> Buy':'<span class="arrow">▼</span> Sell'}</td>
-        <td class="num">${fmtNum(r.shares)}</td>
-        <td class="num">${fmtPct(r.etf_percent)}</td>
+        <td class="num ${dir==='BUY'?'buy':'sell'}">${fmtNum(r.shares)} | ${fmtPct(r.etf_percent)} <span class="arrow">${dir==='BUY'?'▲':'▼'}</span></td>
       `;
       focusBody.appendChild(tr);
     });
     overlay.style.display='flex';
+    try{
+      __logoResolver.hydrateAvatar('.hdr .avatar[data-ticker="'+ticker.toUpperCase()+'"]', ticker);
+      setTimeout(()=>__logoResolver.hydrateAvatar('.hdr .avatar[data-ticker="'+ticker.toUpperCase()+'"]', ticker), 250);
+      setTimeout(()=>__logoResolver.hydrateAvatar('.hdr .avatar[data-ticker="'+ticker.toUpperCase()+'"]', ticker), 800);
+    }catch(e){}
+
   }
 
   
@@ -1382,6 +1995,388 @@ document.querySelectorAll('.gf-open').forEach(el=>{
   onlyMine.onchange = ()=>render();
   document.addEventListener('keydown', e=>{ if(e.key==='Escape') overlay.style.display='none'; });
 
+  
+// Delegated handler: open Google Finance when clicking any .gf-open (including in popup header)
+document.addEventListener('click', function(e){
+  var el = e.target.closest && e.target.closest('.gf-open');
+  if(!el) return;
+  var t = el.getAttribute('data-ticker') || el.textContent || '';
+  if(!t) return;
+  e.preventDefault(); e.stopPropagation();
+  var url = (typeof googleFinanceURL==='function') ? googleFinanceURL(t) : ('https://www.google.com/finance/quote/'+t+':NASDAQ');
+  window.open(url, '_blank', 'noopener');
+}, true);
+
+
+async function hydrateLogoInHeader(ticker){
+  try{
+    const T = (ticker||'').toUpperCase();
+    const slot = document.querySelector('.hdr .avatar[data-ticker="'+T+'"]');
+    if(!slot) return;
+    const sources = [
+      'logos/'+T+'.png',
+      'https://static.finnhub.io/logo/'+T+'.png',
+      'https://storage.googleapis.com/iex/api/logos/'+T+'.png'
+    ];
+    for (const src of sources){
+      const ok = await new Promise((resolve)=>{ const img=new Image(); img.onload=()=>resolve(img.width>0); img.onerror=()=>resolve(false); img.src=src; });
+      if (ok){ const imgEl=document.createElement('img'); imgEl.src=src; imgEl.alt=T; imgEl.style.width='100%'; imgEl.style.height='100%'; imgEl.style.objectFit='cover'; slot.innerHTML=''; slot.appendChild(imgEl); return; }
+    }
+  }catch(_){}
+}
+
+
+// === V7 — Shared logo resolver (home + popup) ===
+(function(){
+  const DOMAIN_MAP = {
+    // Known tricky ones
+    TEM: 'tempus.com',
+    RBLX: 'roblox.com',
+    SHOP: 'shopify.com',
+    PLUG: 'plugpower.com',
+    NVDA: 'nvidia.com',
+    AMD: 'amd.com',
+    TSLA: 'tesla.com',
+    META: 'about.facebook.com',
+    GOOGL: 'abc.xyz',
+    GOOG: 'abc.xyz',
+    MSFT: 'microsoft.com',
+    ENI: 'eni.com'
+  };
+
+  const logoCache = new Map(); // TICKER -> resolved URL or null if none
+
+  function fileCandidates(t){
+    const T = (t||'').toUpperCase();
+    const l = (t||'').toLowerCase();
+    return [
+      `logos/${T}.png`, `logos/${T}.svg`,
+      `logos/${l}.png`, `logos/${l}.svg`
+    ];
+  }
+
+  function cdnCandidates(t){
+    const T = (t||'').toUpperCase();
+    return [
+      `https://static.finnhub.io/logo/${T}.png`,
+      `https://storage.googleapis.com/iex/api/logos/${T}.png`
+    ];
+  }
+
+  function faviconCandidates(t){
+    const T = (t||'').toUpperCase();
+    const dom = DOMAIN_MAP[T];
+    if (!dom) return [];
+    // Google s2 favicons (fast, reliable)
+    return [
+      `https://www.google.com/s2/favicons?domain=${dom}&sz=64`
+    ];
+  }
+
+  async function probe(url){
+    // Try to load image; resolve true on success, false on error
+    try{
+      const ok = await new Promise((resolve)=>{
+        const img = new Image();
+        img.onload = ()=>resolve(img.width>0);
+        img.onerror = ()=>resolve(false);
+        img.src = url;
+      });
+      return !!ok;
+    }catch(_){ return false; }
+  }
+
+  async function resolveLogoFor(ticker){
+    const T = (ticker||'').toUpperCase();
+    if (logoCache.has(T)) return logoCache.get(T);
+    const sources = [
+      ...fileCandidates(T),
+      ...cdnCandidates(T),
+      ...faviconCandidates(T)
+    ];
+    for (const src of sources){
+      const ok = await probe(src);
+      if (ok){ logoCache.set(T, src); return src; }
+    }
+    logoCache.set(T, null);
+    return null;
+  }
+
+  async function hydrateAvatar(selector, ticker){
+    const T = (ticker||'').toUpperCase();
+    const slot = document.querySelector(selector);
+    if (!slot) return;
+    const found = await resolveLogoFor(T);
+    if (!found) return; // keep initials
+    const img = document.createElement('img');
+    img.src = found;
+    img.alt = T;
+    img.style.width = '100%';
+    img.style.height = '100%';
+    img.style.objectFit = 'cover';
+    slot.innerHTML = '';
+    slot.appendChild(img);
+  }
+
+  // Expose minimal API
+  window.__logoResolver = { resolveLogoFor, hydrateAvatar };
+})();
+
+  
+// Bind click for Open Google Finance icon (robust)
+(function(){
+  function bindGF(){
+    var btn = document.getElementById('openGFBtn');
+    if(!btn) return;
+    btn.onclick = function(){
+      if(!window.focusTicker) return;
+      var url = (typeof googleFinanceURL==='function')
+        ? googleFinanceURL(focusTicker)
+        : ('https://www.google.com/finance/quote/'+focusTicker+':NASDAQ');
+      window.open(url, '_blank', 'noopener');
+    };
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', bindGF);
+  } else {
+    bindGF();
+  }
+})();
+  
+// === V15 mount & stats ===
+(function(){
+  function move(id, slotId){
+    const el = document.getElementById(id);
+    const slot = document.getElementById(slotId);
+    if (el && slot) slot.appendChild(el);
+  }
+  move('fromDate','slot-fromDate');
+  move('toDate','slot-toDate');
+  const sb = document.getElementById('searchBox');
+  if (sb){
+    const wrap = sb.closest('.search-inline') || sb;
+    const slot = document.getElementById('slot-search'); if (wrap && slot) slot.appendChild(wrap);
+  }
+  move('fundsChips','slot-fundsChips');
+  move('fetchBtn','slot-fetchBtn');
+  move('csvBtn','slot-csvBtn');
+
+  // Move Results section into resultsSlot
+  const resultsSlot = document.getElementById('resultsSlot');
+  const tbl = document.getElementById('table');
+  if (tbl && resultsSlot){
+    const section = tbl.closest('section.card.pad') || tbl.closest('section') || tbl.parentElement;
+    if (section) resultsSlot.appendChild(section);
+  }
+
+  // Stats update: wrap render()
+  if (typeof render === 'function'){
+    const _render = render;
+    window.render = function(){
+      _render();
+      try{
+        const list = (typeof getFiltered==='function') ? getFiltered() : [];
+        const total = list.length;
+        const buys  = list.filter(r => String(r.direction||'').toUpperCase()==='BUY').length;
+        const sells = list.filter(r => String(r.direction||'').toUpperCase()==='SELL').length;
+        const pct = (n)=> total? Math.round((n/total)*1000)/10 : 0;
+        const $ = (id)=> document.getElementById(id);
+        if($('statTotalN')) $('statTotalN').textContent = (total||0).toLocaleString('it-IT');
+        if($('statBuyN'))   $('statBuyN').textContent   = (buys||0).toLocaleString('it-IT');
+        if($('statSellN'))  $('statSellN').textContent  = (sells||0).toLocaleString('it-IT');
+        if($('statBuyPct'))  $('statBuyPct').textContent  = (pct(buys)).toFixed(1).replace('.0','') + '%';
+        if($('statSellPct')) $('statSellPct').textContent = (pct(sells)).toFixed(1).replace('.0','') + '%';
+      }catch(e){}
+    };
+    try{ render(); }catch(e){}
+  }
+})();
+
+  
+// === V16: bookmark toggle + robust stats updater ===
+(function(){
+  // Recreate hidden onlyMine checkbox if missing (keeps existing filtering logic)
+  var onlyMine = document.getElementById('onlyMine');
+  if (!onlyMine){
+    onlyMine = document.createElement('input');
+    onlyMine.type='checkbox'; onlyMine.id='onlyMine'; onlyMine.style.display='none';
+    document.body.appendChild(onlyMine);
+  }
+
+  // Wire bookmark toggle
+  var toggleBtn = document.getElementById('toggleMineBtn');
+  function syncToggleUI(){
+    if(!toggleBtn) return;
+    var on = !!onlyMine.checked;
+    toggleBtn.classList.toggle('on', on);
+    toggleBtn.title = on ? 'Showing only my tickers' : 'Only my tickers';
+  }
+  if (toggleBtn){
+    toggleBtn.addEventListener('click', function(){
+      onlyMine.checked = !onlyMine.checked;
+      syncToggleUI();
+      try{ render(); }catch(e){}
+    });
+    syncToggleUI();
+  }
+
+  // Stats updater
+  function updateStats(){
+    try{
+      var list = (typeof getFiltered==='function') ? getFiltered() : (window.allRows || []);
+      var total = list.length;
+      var buys  = list.filter(function(r){ return String(r.direction||'').toUpperCase()==='BUY'; }).length;
+      var sells = list.filter(function(r){ return String(r.direction||'').toUpperCase()==='SELL'; }).length;
+      var pct = function(n){ return total ? Math.round((n/total)*1000)/10 : 0; };
+      var $ = function(id){ return document.getElementById(id); };
+      if($('statTotalN')) $('statTotalN').textContent = (total||0).toLocaleString('it-IT');
+      if($('statBuyN'))   $('statBuyN').textContent   = (buys||0).toLocaleString('it-IT');
+      if($('statSellN'))  $('statSellN').textContent  = (sells||0).toLocaleString('it-IT');
+      if($('statBuyPct'))  $('statBuyPct').textContent  = (pct(buys)).toFixed(1).replace('.0','') + '%';
+      if($('statSellPct')) $('statSellPct').textContent = (pct(sells)).toFixed(1).replace('.0','') + '%';
+    }catch(e){}
+  }
+
+  // Wrap render() so every change updates stats
+  if (typeof render === 'function'){
+    var _render = render;
+    window.render = function(){
+      _render();
+      updateStats();
+    };
+  }
+
+  // Also observe table body changes to refresh stats when data loads
+  var tbody = document.querySelector('#table tbody');
+  if (tbody && 'MutationObserver' in window){
+    var obs = new MutationObserver(updateStats);
+    obs.observe(tbody, {childList:true, subtree:false});
+  }
+
+  // Initial attempt (in case data is already there)
+  setTimeout(updateStats, 50);
+  setTimeout(updateStats, 400);
+  setTimeout(updateStats, 1200);
+})();
+
+  
+// === V25: mount into two fixed columns (left: filters+stats, right: results) ===
+document.addEventListener('DOMContentLoaded', function(){
+  function byId(id){ return document.getElementById(id); }
+  var twoCol   = byId('twoCol');
+  var leftCol  = byId('leftCol');
+  var rightCol = byId('rightCol');
+  if (!twoCol || !leftCol || !rightCol) return;
+
+  // Move Search Filters card into leftCol
+  var filterCard = byId('filterCard');
+  if (!filterCard){
+    // If it's still inside the hidden controls section, move that first
+    var controls = document.querySelector('section.controls.grid.fit-240');
+    if (controls){
+      // try to find filter card inside; fallback: build a new left card from existing slots
+      filterCard = controls.querySelector('#filterCard') || null;
+    }
+  }
+  if (filterCard){ leftCol.appendChild(filterCard); }
+
+  // Move stats row under filters (left column)
+  var stats = byId('statsRow');
+  if (stats){ leftCol.appendChild(stats); }
+
+  // Move the Results section into rightCol
+  var tbl = byId('table');
+  var resultsSection = tbl ? (tbl.closest('section.card.pad') || tbl.closest('section') || tbl.parentElement) : null;
+  if (resultsSection){ rightCol.appendChild(resultsSection); }
+
+  // Bookmark toggle -> hidden checkbox
+  var only = byId('onlyMine');
+  if(!only){ only = document.createElement('input'); only.type='checkbox'; only.id='onlyMine'; only.style.display='none'; document.body.appendChild(only); }
+  var btn = byId('toggleMineBtn');
+  function sync(){ if(btn) btn.classList.toggle('on', !!only.checked); }
+  if (btn){
+    btn.addEventListener('click', function(){ only.checked = !only.checked; sync(); try{ render(); }catch(e){}; });
+    sync();
+  }
+
+  // Funds "Selected: N" mirror from chip states
+  function updateFundMirror(){
+    try{
+      var root = byId('slot-fundsChips') || byId('fundsChips');
+      var mirror = byId('fundCountMirror');
+      if (!root || !mirror) return;
+      var n = root.querySelectorAll('.chip.on').length;
+      mirror.textContent = String(n);
+    }catch(e){}
+  }
+  updateFundMirror();
+  document.body.addEventListener('click', function(ev){
+    var t = ev.target;
+    if (t && t.closest && (t.closest('#slot-fundsChips') || t.closest('#fundsChips'))){
+      setTimeout(updateFundMirror, 10);
+    }
+  });
+  if (typeof render === 'function'){
+    var _render = render;
+    window.render = function(){
+      _render();
+      updateFundMirror();
+      try{
+        var list = (typeof getFiltered==='function') ? getFiltered() : [];
+        var total = list.length;
+        var buys  = list.filter(r => String(r.direction||'').toUpperCase()==='BUY').length;
+        var sells = list.filter(r => String(r.direction||'').toUpperCase()==='SELL').length;
+        var pct   = function(n){ return total? Math.round((n/total)*1000)/10 : 0; };
+        var $ = function(id){ return document.getElementById(id); };
+        if($('statTotalN')) $('statTotalN').textContent = (total||0).toLocaleString('it-IT');
+        if($('statBuyN'))   $('statBuyN').textContent   = (buys||0).toLocaleString('it-IT');
+        if($('statSellN'))  $('statSellN').textContent  = (sells||0).toLocaleString('it-IT');
+        if($('statBuyPct'))  $('statBuyPct').textContent  = (pct(buys)).toFixed(1).replace('.0','') + '%';
+        if($('statSellPct')) $('statSellPct').textContent = (pct(sells)).toFixed(1).replace('.0','') + '%';
+      }catch(e){}
+    };
+  }
+});
+
+  
+// === V28 runtime: disable funds filtering & keep everything else working ===
+document.addEventListener('DOMContentLoaded', function(){
+  // If there's any funds chips container, remove it from DOM
+  var fc = document.getElementById('fundsChips') || document.getElementById('slot-fundsChips');
+  if (fc){ var parent = fc.closest('.card') || fc.parentElement; if (parent) parent.remove(); else fc.remove(); }
+
+  // Create/override a helper that always returns ALL funds present in data
+  window.getEnabledFunds = function(){
+    try{
+      var all = (window.allRows||[]).map(r=>r.fund);
+      return Array.from(new Set(all));
+    }catch(e){ return []; }
+  };
+
+  // Monkey-patch getFiltered to ignore any fund selection it might use
+  if (typeof getFiltered === 'function'){
+    const _getFiltered = getFiltered;
+    window.getFiltered = function(){
+      // call original
+      const out = _getFiltered();
+      // If the original already ignores funds, return as-is.
+      // Otherwise, if it filtered by a subset of funds, we can't easily detect here;
+      // but we can ensure that a global set isn't restricting future renders by resetting it if present.
+      try{
+        if (window.selectedFunds && typeof window.selectedFunds.clear === 'function'){
+          // rebuild as "all funds"
+          window.selectedFunds.clear();
+          (window.allRows||[]).forEach(r => window.selectedFunds.add(r.fund));
+        }
+      }catch(_){}
+      return out;
+    };
+  }
+
+  // Also ensure chip count/mirror is gone
+  var mirror = document.getElementById('fundCountMirror'); if (mirror) mirror.parentElement && mirror.parentElement.remove();
+});
+
   // Auto-caricamento all'apertura
   window.addEventListener('DOMContentLoaded', fetchAll);
 
@@ -1489,5 +2484,102 @@ document.querySelectorAll('.gf-open').forEach(el=>{
 })();
 </script>
 
+<script>
+
+// === v4.12 — Ticker avatar helpers (hybrid: local -> clearbit -> monogram) ===
+(function(){
+  const DOMAIN_MAP = {
+    AMD:'amd.com', NVDA:'nvidia.com', INTC:'intel.com', MSFT:'microsoft.com',
+    META:'meta.com', GOOGL:'abc.xyz', GOOG:'abc.xyz', AMZN:'amazon.com',
+    AAPL:'apple.com', TSLA:'tesla.com', ORCL:'oracle.com', SNPS:'synopsys.com',
+    UNH:'unitedhealthgroup.com', ENI:'eni.com', PLUG:'plugpower.com',
+    RBLX:'roblox.com', ROKU:'roku.com', BABA:'alibaba.com', SHOP:'shopify.com',
+    PLTR:'palantir.com', PATH:'uipath.com', ARCT:'arcturusrx.com',
+    CRSP:'crisprtx.com', NTLA:'intelliatx.com', ABSI:'absci.com',
+    TEM:'tempus.com', BBAI:'bigbear.ai', REKR:'rekor.ai',
+    HIVE:'hivedigitaltechnologies.com', HYMC:'hycroftmining.com',
+    QSI:'quantum-si.com', ISRG:'intuitive.com', TDY:'teledyne.com',
+    FCEL:'fce.com', PACB:'pacb.com'
+  };
+
+  function createAvatar(ticker){
+  const T = (ticker||'').toUpperCase();
+  const span = document.createElement('span');
+  span.className = 'avatar';
+  const img = document.createElement('img');
+
+  // Try multiple local candidates (folder case + extensions)
+  const candidates = [
+    `logos/${T}.svg`, `Logos/${T}.svg`,
+    `logos/${T}.png`, `Logos/${T}.png`,
+    `logos/${T}.jpg`, `Logos/${T}.jpg`,
+    `logos/${T}.jpeg`, `Logos/${T}.jpeg`
+  ];
+
+  // If we have a domain, add Clearbit fallback at the end
+  const clearbitURL = DOMAIN_MAP[T] ? `https://logo.clearbit.com/${DOMAIN_MAP[T]}?size=64` : null;
+  if (clearbitURL) candidates.push(clearbitURL);
+
+  let idx = 0;
+  img.onerror = () => {
+    idx++;
+    if (idx < candidates.length){
+      img.src = candidates[idx];
+    } else {
+      span.innerHTML = `<span class="mono">${T.slice(0,2)}</span>`;
+    }
+  };
+  img.src = candidates[idx];
+  span.appendChild(img);
+  return span;
+}
+
+  function enhanceRow(tr){
+    if (!tr || tr.__avatarEnhanced) return;
+    tr.__avatarEnhanced = true;
+    try{
+      const t = tr.getAttribute('data-ticker') || '';
+      if (!t) return;
+      const tds = tr.querySelectorAll('td');
+      if (tds.length < 3) return;
+      const nameCell = tds[2];
+      nameCell.classList.add('td-name');
+      if (nameCell.querySelector('.avatar')) return;
+      const avatar = createAvatar(t);
+      nameCell.insertBefore(avatar, nameCell.firstChild);
+      if (!nameCell.querySelector('.ticker-wrap')){
+        const wrap = document.createElement('span');
+        wrap.className = 'ticker-wrap';
+        while (avatar.nextSibling) wrap.appendChild(avatar.nextSibling);
+        nameCell.appendChild(wrap);
+      }
+    }catch(e){}
+  }
+
+  function enhanceTable(){
+    const tbody = document.querySelector('#table tbody');
+    if (!tbody) return;
+    tbody.querySelectorAll('tr').forEach(enhanceRow);
+  }
+
+  if (document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', enhanceTable);
+  } else {
+    enhanceTable();
+  }
+  const mo = new MutationObserver(muts=>{
+    for (const m of muts){
+      m.addedNodes && m.addedNodes.forEach(n=>{
+        if (n.nodeType===1 && n.matches && n.matches('#table tbody tr')) enhanceRow(n);
+        if (n.querySelectorAll){
+          n.querySelectorAll('#table tbody tr').forEach(enhanceRow);
+        }
+      });
+    }
+  });
+  mo.observe(document.body, {childList:true, subtree:true});
+})();
+
+</script>
 </body>
 </html>
