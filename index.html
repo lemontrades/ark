@@ -137,7 +137,7 @@ input[type="checkbox"]{transform:scale(1.05);margin-right:6px}
 }
 .chip.on{
   background: var(--accent);
-  color: var(--accent-ink);
+  color: #fff;
   border-color: transparent;
   position: relative;
   z-index: 1;
@@ -409,11 +409,11 @@ body::before{
 .overlay .panel .btn.primary{ 
   background: var(--accent); 
   border-color: var(--accent); 
-  color: var(--accent-ink);
+  color: #fff;
   
 }
 .overlay .panel .btn.on{ 
-  background: var(--accent); color: var(--accent-ink); border-color: var(--accent);
+  background: var(--accent); color: #fff; border-color: var(--accent);
 }
 /* Tabella nel pop-up: bordi e hover coerenti */
 .overlay .panel table thead{
@@ -811,6 +811,86 @@ td.num .arrow { color: currentColor !important; } /* arrow matches text color */
 #slot-fundsChips .chips, #fundsChips .chips { display:flex; flex-wrap:wrap; gap:8px; }
 
 /* Results header actions (bookmark) */
+/* Results icon white and slightly larger */
+.muted svg {
+  fill: #fff !important;
+  width: 20px !important;
+  height: 20px !important;
+}
+/* Icon color & alignment for Refresh / CSV buttons */
+#fetchBtn svg,
+#csvBtn svg {
+  fill: #fff;
+  vertical-align: middle;
+  margin-top: -1px;
+}
+
+#csvBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+#csvBtn strong {
+  color: #fff;
+}
+/* Stat-cards as filter chips */
+.stat-card{ cursor: pointer; transition: box-shadow .15s ease, border-color .15s ease, background .15s ease; }
+.stat-card:hover{
+  border-color: #d5aaff !important;
+  box-shadow: 0 0 0 2px rgba(198,138,255,0.35), 0 0 18px rgba(198,138,255,0.45) !important;
+}
+.stat-card.active{
+  background: rgba(198,138,255,0.12) !important;
+  border-color: var(--accent) !important;
+  box-shadow: 0 0 0 2px rgba(198,138,255,0.45), inset 0 0 0 1px rgba(198,138,255,0.35) !important;
+}
+/* Results header layout */
+.results-head{ display:grid; grid-template-columns: 1fr auto 1fr; align-items:center; gap:12px; }
+.results-left{ display:flex; align-items:center; gap:12px; }
+.results-center{ display:flex; align-items:center; justify-content:center; gap:6px; } /* tighter gap */
+.results-right{ display:flex; align-items:center; justify-content:flex-end; gap:8px; }
+
+/* Compact pager buttons */
+.pager-btn{ width:36px; height:36px; border-radius:999px; display:inline-flex; align-items:center; justify-content:center; }
+
+/* Pill-styled selects (uniform with theme) */
+.pill-select, select#typeFilter{
+  appearance:none; -webkit-appearance:none; -moz-appearance:none;
+  background: var(--accent); color: #fff;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.pill-select:hover, select#typeFilter:hover{
+  border-color: #d5aaff !important;
+  box-shadow: 0 0 0 2px rgba(198,138,255,0.35), 0 0 18px rgba(198,138,255,0.45) !important; /* neon glow */
+}
+.pill-select:focus, select#typeFilter:focus{
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(198,138,255,0.35), 0 0 18px rgba(198,138,255,0.45) !important;
+}
+.results-head{ display:grid; grid-template-columns: 1fr auto 1fr; align-items:center; gap:12px; }
+.results-left{ display:flex; align-items:center; gap:12px; }
+.inline-size{ display:flex; align-items:center; gap:8px; }
+.results-center{ display:flex; align-items:center; justify-content:center; gap:10px; }
+.results-right{ display:flex; align-items:center; justify-content:flex-end; gap:8px; }
+
+/* Pager buttons compact */
+.pager-btn{ width:36px; height:36px; border-radius:999px; display:inline-flex; align-items:center; justify-content:center; }
+
+/* Pill-styled selects (page size + trade type) */
+.pill-select, select#typeFilter{
+  appearance:none; -webkit-appearance:none; -moz-appearance:none;
+  background: var(--accent); color: #fff;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 6px 10px;
+}
+.pill-select:focus, select#typeFilter:focus{ outline: none; box-shadow: 0 0 0 2px rgba(198,138,255,0.35); }
 .results-head{ display:flex; align-items:center; justify-content:space-between; gap:12px; }
 .results-actions{ display:flex; align-items:center; gap:8px; }
 #toggleMineBtn{
@@ -1068,28 +1148,22 @@ td.num .arrow { color: currentColor !important; } /* arrow matches text color */
 
 
 /* === v5: uniform search width (Search Ticker/Fund = 235px like dates) === */
-#slot-search input[type="text"]{
-  max-width: 235px !important;   /* identical to date inputs */
-  width: 100%;
-  display: block;
-  margin: 0 auto;
-  flex: none !important;          /* override any flex:1 rules */
-}
+#slot-search input[type="text"]{ /* reset by v4.21 */ }
 #slot-search{
-  display: flex;
-  justify-content: center;
+  display: inline-flex;
+  justify-content: flex-start;
 }
 
 
 /* === v5.1: exact equal widths for filters (dates + search) === */
-#filterCard input[type="date"],
-#filterCard #slot-search input[type="text"]{
+#filterCard input[type="date"]{
   width: 235px !important;
   max-width: 235px !important;
   box-sizing: border-box !important;
-  padding: 12px 12px !important;   /* align box model */
+  padding: 12px 12px !important;
   border-width: 1px !important;
 }
+#filterCard #slot-search input[type="text"]{ /* reset by v4.21 */ }
 /* Center the three inputs inside their slots so outer edges align */
 #slot-fromDate, #slot-toDate, #slot-search{
   display: flex !important;
@@ -1165,6 +1239,205 @@ h1, #mainTitle, #titleARK {
   letter-spacing:0px;
 }
 
+
+/* === v4.15 — Popup scrollbar violet + sticky header === */
+.overlay .panel {
+  display: flex;
+  flex-direction: column;
+  max-height: 85vh; /* already set above, reaffirm for clarity */
+  overflow: auto;
+}
+
+/* Sticky header (ticker/title + buttons remain visible while scrolling) */
+.overlay .panel .hdr {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: #14111c; /* match panel solid */
+}
+
+/* WebKit scrollbars (Panel + inner body) */
+.overlay .panel::-webkit-scrollbar,
+.overlay .panel .body::-webkit-scrollbar {
+  width: 10px;
+}
+.overlay .panel::-webkit-scrollbar-track,
+.overlay .panel .body::-webkit-scrollbar-track {
+  background: rgba(124,58,237,0.12);
+  border-radius: 10px;
+}
+.overlay .panel::-webkit-scrollbar-thumb,
+.overlay .panel .body::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #a882ff, #7c3aed);
+  border-radius: 10px;
+}
+.overlay .panel::-webkit-scrollbar-thumb:hover,
+.overlay .panel .body::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #d5b8ff, #9b5cf3);
+}
+
+/* Firefox scrollbar colors */
+.overlay .panel,
+.overlay .panel .body {
+  scrollbar-color: #7c3aed rgba(124,58,237,0.12);
+  scrollbar-width: thin;
+}
+
+
+/* === v4.16 — Compact ticker search width + inline controls === */
+#slot-search{
+  display:inline-flex !important;
+  align-items:center !important;
+  gap:8px !important;
+  flex-wrap:nowrap !important;
+}
+#slot-search .btn{ padding:10px 12px; } /* tighter fit */
+#slot-search #clearBtn{ line-height:1; }
+
+
+/* === v4.18 — Search inline order + spacing === */
+#slot-search{ display:inline-flex !important; align-items:center !important; gap:10px !important; }
+#slot-search #searchBox{ min-width: 240px; }
+#slot-search #fetchBtn, #slot-search #clearBtn{ flex: 0 0 auto; }
+
+
+/* === v4.19 — Clear 'X' inside search input + Export align === */
+.search-wrap{
+  position: relative;
+  display: inline-block;
+}
+.search-wrap #searchBox{
+  padding-right: 36px !important; /* room for the X */
+}
+.clear-inside{
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 26px; height: 26px;
+  padding: 0 !important;
+  border-radius: 999px;
+  display: inline-flex; align-items: center; justify-content: center;
+  opacity: .9;
+}
+.clear-inside:hover{ opacity: 1; }
+#slot-csvBtn{
+  display:flex !important; justify-content:flex-start !important; align-items:center !important; }
+#slot-csvBtn .btn{ margin-left: 0 !important; }
+
+
+/* === v4.19.1 — Fix clear button motion and glow === */
+.clear-inside,
+.clear-inside:hover,
+.clear-inside:focus,
+.clear-inside:focus-visible{
+  box-shadow: none !important;
+  border-color: transparent !important;
+  outline: none !important;
+}
+.clear-inside:active{
+  transform: translateY(-50%) !important; /* lock position */
+}
+
+
+/* === v4.19.2 — Circular clear button with neon (no movement) === */
+.clear-inside{
+  position:absolute; right:8px; top:50%;
+  transform: translateY(-50%); /* lock vertical center */
+  width: 26px; height: 26px;
+  padding: 0 !important;
+  border-radius: 999px;
+  border: 1px solid rgba(198,138,255,0.55);
+  background: rgba(124,58,237,0.10);
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.06) inset;
+  display: inline-flex; align-items:center; justify-content:center;
+  transition: box-shadow .15s ease, border-color .15s ease, opacity .15s ease;
+}
+.clear-inside svg{ width:14px; height:14px; display:block; }
+.clear-inside:hover,
+.clear-inside:focus,
+.clear-inside:focus-visible{
+  border-color:#d5aaff;
+  box-shadow:
+    0 0 0 2px rgba(198,138,255,0.32),
+    0 0 16px rgba(198,138,255,0.40);
+  outline:none;
+  opacity:1;
+}
+/* Keep it fixed in place even on :active */
+.clear-inside:active{ transform: translateY(-50%); }
+
+
+/* Hide Export CSV button/slot */
+#csvBtn{ display:none !important; }
+#slot-csvBtn{ display:none !important; }
+
+
+/* === v4.21 — Clean reset: make Search fill available width === */
+#filterCard #slot-search{
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  min-width: 0 !important;
+}
+#filterCard #slot-search .search-inline{ display:flex !important; gap:10px !important; align-items:center !important; flex:1 1 auto !important; min-width:0 !important; }
+#filterCard #slot-search .search-wrap{ position:relative; flex:1 1 auto !important; min-width:0 !important; display:block !important; }
+#filterCard #slot-search input[type="text"]{
+  width: 100% !important;
+  max-width: none !important;
+  min-width: 0 !important;
+  flex: 1 1 auto !important;
+}
+#filterCard #slot-search .btn{ flex: 0 0 auto !important; }
+
+
+/* === v4.22 — Search layout: prevent overlap with Enter === */
+#filterCard #slot-search{
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+}
+#filterCard #slot-search .search-inline{
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+}
+#filterCard #slot-search .search-wrap{
+  position: relative;
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+}
+#filterCard #slot-search #searchBox{
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  flex: 1 1 auto !important;
+  padding-right: 40px !important; /* room for inner X */
+}
+#filterCard #slot-search #fetchBtn{
+  width: 40px !important;
+  height: 40px !important;
+  padding: 0 !important;
+  border-radius: 999px !important;
+  flex: 0 0 40px !important; /* fixed size to avoid overlap */
+}
+
+
+/* === v4.22.1 — Prevent search input from extending under Enter === */
+#filterCard #slot-search{ display:flex !important; align-items:center !important; gap:10px !important; }
+#filterCard #slot-search .search-inline{ display:flex !important; align-items:center !important; gap:10px !important; flex-wrap:nowrap !important; width:100% !important; min-width:0 !important; }
+#filterCard #slot-search .search-wrap{ position:relative; flex:1 1 auto !important; min-width:0 !important; }
+#filterCard #slot-search #fetchBtn{ width:40px !important; height:40px !important; flex:0 0 40px !important; padding:0 !important; border-radius:999px !important; }
+#filterCard #slot-search #searchBox{
+  flex: 0 1 auto !important;
+  width: calc(100% - 50px) !important; /* 40px button + 10px gap */
+  max-width: calc(100% - 50px) !important;
+  min-width: 0 !important;
+  padding-right: 40px !important;  /* room for inner X */
+}
+
 </style>
 <link crossorigin="True" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/></head>
 <body>
@@ -1186,7 +1459,7 @@ h1, #mainTitle, #titleARK {
 <input id="toDate" type="date"/>
 </div>
 <div class="card pad search-card">
-<label>Search (ticker or fund)</label><div class="search-inline"><input id="searchBox" placeholder="e.g. NVDA or ARKK" type="text"/><button class="btn primary" id="fetchBtn">Refresh</button><button class="btn" id="csvBtn"><strong>Export CSV</strong></button></div><div class="card pad" id="suggestions" style="position:absolute;z-index:1000;display:none;max-height:240px;overflow:auto;font-size:13px;pointer-events:auto"></div>
+<label>Search (ticker or fund)</label><div class="search-inline"><div class="search-wrap"><input id="searchBox" placeholder="e.g. NVDA" type="text"/><button class="btn icon clear-inside" id="clearBtn" title="Clear Search" aria-label="Clear Search"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div><button class="btn primary" id="fetchBtn" title="Search / Enter" aria-label="Search / Enter"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M19 7v4a2 2 0 0 1-2 2H5l4 4m0-8-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></button><button class="btn" id="csvBtn" title="Export CSV" aria-label="Export CSV"><svg viewBox="0 0 24 24" aria-hidden="true" style="width:16px;height:16px;margin-right:6px"><path d="M6 2h9l5 5v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zm8 1.5V8h4.5"/></svg><strong>Export CSV</strong></button><button class="btn" id="clearBtn" title="Clear Search" aria-label="Clear Search"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div><div class="card pad" id="suggestions" style="position:absolute;z-index:1000;display:none;max-height:240px;overflow:auto;font-size:13px;pointer-events:auto"></div>
 </div>
 </section>
 <section class="stats-funds-grid" style="margin-top:12px;margin-bottom:12px">
@@ -1276,6 +1549,14 @@ h1, #mainTitle, #titleARK {
       <div id="slot-fundsChips"></div>
       
     </div>
+    <div class="card pad" style="display:none" style="margin-top:12px">
+      <label>Trade Type</label>
+      <select id="typeFilterLeft" class="pill-select">
+        <option value="ALL" selected>All (Buy + Sell)</option>
+        <option value="BUY">Buys only</option>
+        <option value="SELL">Sells only</option>
+      </select>
+    </div>
     <div class="row" style="gap:10px;margin-top:12px">
       <div id="slot-fetchBtn"></div>
       <div id="slot-csvBtn"></div>
@@ -1286,8 +1567,30 @@ h1, #mainTitle, #titleARK {
 </section>
 
 <section class="card pad">
-<div class="results-head"><div class="muted">Results</div><div class="results-actions"><button class="btn" id="toggleMineBtn" title="Only my tickers" aria-label="Only my tickers"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12a1 1 0 0 1 1 1v15l-7-4-7 4V5a1 1 0 0 1 1-1z"/></svg></button></div></div>
-<div class="muted" id="status" style="margin-top:8px">Ready.</div>
+<div class="results-head">
+  <div class="results-left">
+    <div class="muted" style="display:inline-flex;align-items:center"><svg viewBox="0 0 24 24" aria-hidden="true" style="width:16px;height:16px;margin-right:6px;opacity:.85"><path d="M3 5h18v2H3zm0 6h18v2H3zm0 6h12v2H3z"/></svg><span>Results</span></div>
+  </div>
+
+  <div class="results-center">
+    <!-- Trade select removed per UX: controlled by stat-cards -->
+    <select id="typeFilter" class="pill-select" style="display:none">
+      <option value="ALL" selected>All (Buy + Sell)</option>
+      <option value="BUY">Buys only</option>
+      <option value="SELL">Sells only</option>
+    </select>
+
+    <button class="btn pager-btn" id="prevPage" title="Previous page">‹</button>
+    <span id="pageInfo" class="muted" style="min-width:110px;text-align:center">Page 1 / 1</span>
+    <button class="btn pager-btn" id="nextPage" title="Next page">›</button>
+  </div>
+
+  <div class="results-right">
+    <button class="btn" id="toggleMineBtn" title="Only my tickers" aria-label="Only my tickers">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12a1 1 0 0 1 1 1v15l-7-4-7 4V5a1 1 0 0 1 1-1z"/></svg>
+    </button>
+  </div>
+</div><div class="muted" id="status" style="display:none">Ready.</div>
 <div style="margin-top:12px;overflow:auto;">
 <table id="table">
 <colgroup>
@@ -1306,6 +1609,13 @@ h1, #mainTitle, #titleARK {
 </thead>
 <tbody id="tbody"></tbody>
 </table>
+  <div class="results-foot inside">
+    <div class="results-center">
+      <button class="btn pager-btn" id="prevPageBottom" title="Previous page">‹</button>
+      <span id="pageInfoBottom" class="muted" style="min-width:110px;text-align:center">Page 1 / 1</span>
+      <button class="btn pager-btn" id="nextPageBottom" title="Next page">›</button>
+    </div>
+  </div>
 </div>
 </section>
 </div>
@@ -1343,111 +1653,150 @@ h1, #mainTitle, #titleARK {
 function setMyTickers(arr){localStorage.setItem("MY_TICKERS",JSON.stringify(arr))}
 
 
-  const NAME_MAP = {
-    "ABSI":"Absci Corporation","AMD":"Advanced Micro Devices","BABA":"Alibaba Group Holding","GOOGL":"Alphabet Inc. (Class A)",
-    "BMNR":"Bitmine Immersion","BBAI":"BigBear.ai","CRSP":"CRISPR Therapeutics","ENI":"Eni SpA","INTC":"Intel Corporation",
-    "NTLA":"Intellia Therapeutics","ISP":"Intesa Sanpaolo","META":"Meta Platforms","MSFT":"Microsoft Corporation",
-    "NVDA":"NVIDIA Corporation","PLUG":"Plug Power","TEM":"Tempus AI","TSLA":"Tesla Inc.","UNH":"UnitedHealth Group",
-    "PATH":"UiPath","HIVE":"Hive Digital Technologies","ORCL":"Oracle Corporation","SNPS":"Synopsys Inc.",
-    "BIDU":"Baidu Inc.","KTOS":"Kratos Defense & Security","LHX":"L3Harris Technologies","RBLX":"Roblox Corporation",
-    "ROKU":"Roku Inc.", "HON":"Honeywell International Inc.",
-"DE":"Deere & Company",
-"KDK":"Kodiak AI, Inc.",
-"ARCT":"Arcturus Therapeutics Holdings, Inc.",
-"PONY":"Pony.ai, Inc.",
-"AACT":"Ares Acquisition Corporation II","OKLO":"Oklo Inc.",
-"SHOP":"Shopify Inc.",
-"SLMT":"Brea HOLDINGS PLC",
-"AVAV":"AeroVironment, Inc.",
-"ATAI":"Atai Life Sciences, Inc.",
-"BLSH":"Bullish Holdings, Inc.",
-"HOOD":"Robinhood Markets, Inc.",
-"BEAM":"Beam Therapeutics, Inc.",
-"FIG":"Figma Inc.",
-"ABNB":"Airbnb, Inc.",
-"TOST":"Toast, Inc.",
-"ETOR":"eToro Group Ltd.",
-"KLAR":"Klarna",
-"RKLB":"Rocket Lab USA, Inc.",
-"RBRK":"Rubrik, Inc.",
-"PRME":"Prime Medicine, Inc.",
-"TWST":"Twist Bioscience Corporation",
-"TER":"Teradyne, Inc.",
-"DKNG":"DraftKings Inc.",
-"FUTU":"Futu Holdings Limited",
-"GENI":"Genius Brands International, Inc.",
-"TXG":"10x Genomics, Inc.",
-"COIN":"Coinbase Global, Inc.",
-"GH":"Guardant Health, Inc.",
-"PD":"PagerDuty, Inc.",
-"WGS":"GeneDx Holdings Corp",
-"PACB":"Pacific Biosciences of California, Inc.",
-"2618":"JD Logistics Inc.",
-"HO":"Thales SA",
-"AMZN": "Amazon",
-"LUNR": "Intuitive Machines, Inc.",
-"IBTA": "Ibotta, Inc.",
-"XYZ": "XYZ Reality Ltd.",
-"CRWV": "Crown Electrokinetics Corp.",
-"PSNL": "Personalis, Inc.",
-"DDOG": "Datadog, Inc.",
-"ILMN": "Illumina, Inc.",
-"MASS": "908 Devices, Inc.",
-"CDNA": "CareDx, Inc.",
-"ACHR": "Archer Aviation Inc.",
-"CMPS": "COMPASS Pathways plc",
-"VRTX": "Vertex Pharmaceuticals Inc.",
-"EXAS": "Exact Sciences Corporation",
-"CAI": "Cairn Energy plc",
-"NTRA": "Natera, Inc.",
-"PINS": "Pinterest, Inc.",
-"TTD": "The Trade Desk, Inc.",
-"SYM": "Symbotic Inc.",
-"IONIS": "Ionis Pharmaceuticals, Inc.",
-"AUR": "Aurora Innovation, Inc.",
-"ADPT": "Adaptive Biotechnologies Corp.",
-"AMGN": "Amgen Inc.",
-"KSPI": "Kaspien Holdings Inc.",
-"BLDE": "Blade Air Mobility, Inc.",
-"JOBY": "Joby Aviation, Inc.",
-"SOFI": "SoFi Technologies, Inc.",
-"Z": "Zillow Group, Inc.",
-"VEEV": "Veeva Systems Inc.",
-"MELI": "MERCADOLIBRE Inc.",
-"DASH": "DoorDash, Inc.",
-"4689": "LY Corp. (Yahoo Japan Corp.)",
-"6301": "Komatsu Ltd.",
-"ANSS": "Ansys Inc.",
-"ARKB": "ARK 21Shares Bitcoin ETF",
-"AVDX": "AvidXchange Holdings Inc.",
-"BREA": "Brea Holdings PLC",
-"BWXT": "BWX Technologies Inc.",
-"CCJ": "Cameco Corporation",
-"CRCL": "Circle Energy Inc.",
-"DDD": "3D Systems Corporation",
-"ETHQ.U": "Etho Capital Quantum ETF (Unit)",
-"ESLT": "Elbit Systems Ltd.",
-"GOOG": "Alphabet Inc. (Class C)",
-"IONS": "Ionis Pharmaceuticals Inc.",
-"IRDM": "Iridium Communications Inc.",
-"KIND": "Nextdoor Holdings Inc.",
-"KMTUY": "Komatsu Ltd. (ADR)",
-"MGA": "Magna International Inc.",
-"PLTR": "Palantir Technologies Inc.",
-"PSTG": "Pure Storage Inc.",
-"QCOM": "Qualcomm Incorporated",
-"TRMB": "Trimble Inc.",
-"TSM": "TSMC Ltd.",
-"U": "Unity Software Inc.",
-"VCYT": "Veracyte Inc.",
-"BYDDY": "BYD Company Limited",
-"ISRG": "Intuitive Surgical Inc",
-"QSI": "Quantum-Si Incorporated",
-"TDY": "Teledyne Technologies Inc",
-"NFLX": "Netflix",
-
-
-  };
+const NAME_MAP = {
+  "TXG":"10x Genomics, Inc.",
+  "HO":"Thales",
+  "2618":"JD Logistics Inc.",
+  "4689":"LY Corp. (Yahoo Japan Corp.)",
+  "6301":"Komatsu Ltd.",
+  "AACT":"Ares Acquisition Corporation II",
+  "ABNB":"Airbnb, Inc.",
+  "ABSI":"Absci Corporation",
+  "ACHR":"Archer Aviation Inc.",
+  "ADPT":"Adaptive Biotechnologies Corp.",
+  "AMD":"Advanced Micro Devices",
+  "AMGN":"Amgen Inc.",
+  "AMZN":"Amazon.com, Inc.",
+  "ANSS":"Ansys Inc.",
+  "ARCT":"Arcturus Therapeutics Holdings, Inc.",
+  "ARKB":"ARK 21Shares Bitcoin ETF",
+  "ATAI":"Atai Life Sciences, Inc.",
+  "AUR":"Aurora Innovation, Inc.",
+  "AVAV":"AeroVironment, Inc.",
+  "AVDX":"AvidXchange Holdings Inc.",
+  "BABA":"Alibaba Group Holding",
+  "BBAI":"BigBear.ai Holdings, Inc.",
+  "BEAM":"Beam Therapeutics, Inc.",
+  "BIDU":"Baidu Inc.",
+  "BLDE":"Blade Air Mobility, Inc.",
+  "BLSH":"Bullish Holdings, Inc.",
+  "BMNR":"Bitmine Immersion Technologies",
+  "BREA":"Brea Holdings PLC",
+  "BWXT":"BWX Technologies Inc.",
+  "BYDDY":"BYD Company Limited",
+  "CAI":"Cairn Energy plc",
+  "CAT":"Caterpillar Inc.",
+  "CCJ":"Cameco Corporation",
+  "CDNA":"CareDx, Inc.",
+  "CMPS":"COMPASS Pathways plc",
+  "COIN":"Coinbase Global, Inc.",
+  "CRCL":"Circle Energy Inc.",
+  "CRISPR":"CRISPR Therapeutics",
+  "CRSP":"CRISPR Therapeutics",
+  "CRWD":"CrowdStrike Holdings, Inc.",
+  "CRWV":"Crown Electrokinetics Corp.",
+  "DDD":"3D Systems Corporation",
+  "DASH":"DoorDash, Inc.",
+  "DDOG":"Datadog, Inc.",
+  "DE":"Deere & Company",
+  "DKNG":"DraftKings Inc.",
+  "DSY":"Dassault Systèmes SE",
+  "ENI":"Eni SpA",
+  "ESLT":"Elbit Systems Ltd.",
+  "ETOR":"eToro Group Ltd.",
+  "ETHQ.U":"Etho Capital Quantum ETF (Unit)",
+  "EXAS":"Exact Sciences Corporation",
+  "FIG":"Figma Inc.",
+  "FUTU":"Futu Holdings Limited",
+  "GENI":"Genius Sports Limited",
+  "GH":"Guardant Health, Inc.",
+  "GOOG":"Alphabet Inc. (Class C)",
+  "GOOGL":"Alphabet Inc. (Class A)",
+  "GTLB":"GitLab Inc.",
+  "HIVE":"Hive Digital Technologies",
+  "HON":"Honeywell International Inc.",
+  "HOOD":"Robinhood Markets, Inc.",
+  "IBTA":"Ibotta, Inc.",
+  "ILMN":"Illumina, Inc.",
+  "INTC":"Intel Corporation",
+  "INTU":"Intuit Inc.",
+  "IONIS":"Ionis Pharmaceuticals, Inc.",
+  "IONS":"Ionis Pharmaceuticals Inc.",
+  "IRDM":"Iridium Communications Inc.",
+  "ISRG":"Intuitive Surgical Inc.",
+  "ISP":"Intesa Sanpaolo",
+  "JOBY":"Joby Aviation, Inc.",
+  "KDK":"Kodiak AI, Inc.",
+  "KIND":"Nextdoor Holdings Inc.",
+  "KLAR":"Klarna",
+  "KMTUY":"Komatsu Ltd. (ADR)",
+  "KSPI":"Kaspien Holdings Inc.",
+  "KTOS":"Kratos Defense & Security",
+  "LHX":"L3Harris Technologies",
+  "LMT":"Lockheed Martin Corporation",
+  "LUNR":"Intuitive Machines, Inc.",
+  "MASS":"908 Devices, Inc.",
+  "MELI":"MercadoLibre Inc.",
+  "META":"Meta Platforms",
+  "MGA":"Magna International Inc.",
+  "MSFT":"Microsoft Corporation",
+  "NFLX":"Netflix, Inc.",
+  "NET":"Cloudflare, Inc.",
+  "NRIX":"Nurix Therapeutics, Inc.",
+  "NTLA":"Intellia Therapeutics",
+  "NTRA":"Natera, Inc.",
+  "NU":"Nu Holdings Ltd.",
+  "NVDA":"NVIDIA Corporation",
+  "OKLO":"Oklo Inc.",
+  "ORCL":"Oracle Corporation",
+  "PACB":"Pacific Biosciences of California, Inc.",
+  "PATH":"UiPath Inc.",
+  "PD":"PagerDuty, Inc.",
+  "PINS":"Pinterest, Inc.",
+  "PLTR":"Palantir Technologies Inc.",
+  "PLUG":"Plug Power Inc.",
+  "PONY":"Pony.ai, Inc.",
+  "PRME":"Prime Medicine, Inc.",
+  "PRNT":"ARK 3D Printing ETF (PRNT)",
+  "PSNL":"Personalis, Inc.",
+  "PSTG":"Pure Storage Inc.",
+  "PYPL":"PayPal Holdings, Inc.",
+  "QCOM":"Qualcomm Incorporated",
+  "QSI":"Quantum-Si Incorporated",
+  "RBLX":"Roblox Corporation",
+  "RBRK":"Rubrik, Inc.",
+  "RDDT":"Reddit, Inc.",
+  "REKR":"Rekor Systems Inc.",
+  "RKLB":"Rocket Lab USA, Inc.",
+  "ROKU":"Roku Inc.",
+  "RPTX":"Repare Therapeutics Inc.",
+  "RXRX":"Recursion Pharmaceuticals, Inc.",
+  "SDGR":"Schrödinger, Inc.",
+  "SHOP":"Shopify Inc.",
+  "SLMT":"Brea Holdings PLC",
+  "SOFI":"SoFi Technologies, Inc.",
+  "SOLQ.U":"Solidion Technology Inc. (Unit)",
+  "SNPS":"Synopsys Inc.",
+  "SPOT":"Spotify Technology S.A.",
+  "SYM":"Symbotic Inc.",
+  "TDY":"Teledyne Technologies Inc.",
+  "TEM":"Tempus AI Inc.",
+  "TER":"Teradyne, Inc.",
+  "TOST":"Toast, Inc.",
+  "TRMB":"Trimble Inc.",
+  "TSLA":"Tesla Inc.",
+  "TSM":"Taiwan Semiconductor Manufacturing Co. Ltd.",
+  "TTD":"The Trade Desk, Inc.",
+  "TWST":"Twist Bioscience Corporation",
+  "U":"Unity Software Inc.",
+  "UNH":"UnitedHealth Group",
+  "VCYT":"Veracyte Inc.",
+  "VEEV":"Veeva Systems Inc.",
+  "VRTX":"Vertex Pharmaceuticals Inc.",
+  "WGS":"GeneDx Holdings Corp",
+  "XYZ":"XYZ Reality Ltd.",
+  "Z":"Zillow Group, Inc."
+};
 
   // Theme
   /* Tema fisso dark: rimosso toggle */
@@ -1638,6 +1987,24 @@ function downloadCSV(){
   setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); }, 0);
 }
 if (typeof csvBtn !== 'undefined' && csvBtn) csvBtn.onclick = downloadCSV;
+
+
+  // Clear search button logic
+  (function(){
+    const clr = document.getElementById("clearBtn");
+    if (clr) {
+      clr.addEventListener("click", () => {
+        const s = document.getElementById("searchBox");
+        if (s) {
+          s.value = "";
+          s.focus();
+        }
+        // optionally hide suggestions if visible
+        const sug = document.getElementById("suggestions");
+        if (sug) sug.style.display = "none";
+      });
+    }
+  })();
 
 })();
 
@@ -2090,6 +2457,7 @@ async function hydrateLogoInHeader(ticker){
     const T = (ticker||'').toUpperCase();
     if (logoCache.has(T)) return logoCache.get(T);
     const sources = [
+  `logos/${T}.webp`, `Logos/${T}.webp`,
       ...fileCandidates(T),
       ...cdnCandidates(T),
       ...faviconCandidates(T)
@@ -2160,6 +2528,73 @@ async function hydrateLogoInHeader(ticker){
   move('fundsChips','slot-fundsChips');
   move('fetchBtn','slot-fetchBtn');
   move('csvBtn','slot-csvBtn');
+  // === v4.18 — Arrange search actions + Clear behavior ===
+  (function(){
+    const $ = (id)=>document.getElementById(id);
+    const slotSearch = $('slot-search');
+    const slotCSV    = $('slot-csvBtn');
+    const fetchBtn   = $('fetchBtn');
+    const clearBtn   = $('clearBtn');
+    const csvBtn     = $('csvBtn');
+    const searchBox  = $('searchBox');
+
+    // Place input + [Enter][X] inline in slot-search
+    if (slotSearch && searchBox){
+      const wrap = searchBox.closest('.search-inline') || searchBox;
+      if (wrap && !slotSearch.contains(wrap)) slotSearch.appendChild(wrap);
+      // ensure order: input, fetch, clear
+      if (fetchBtn && !slotSearch.contains(fetchBtn)) slotSearch.appendChild(fetchBtn);
+      if (clearBtn && !slotSearch.contains(clearBtn)) { /* already inside search-wrap */ }
+      // if csv accidentally sits here, move it out
+      if (csvBtn && slotSearch.contains(csvBtn) && slotCSV){ slotCSV.appendChild(csvBtn); }
+    }
+    // CSV stays below in its own slot
+    if (csvBtn && slotCSV && !slotCSV.contains(csvBtn)) slotCSV.appendChild(csvBtn);
+
+    // Placeholder simplified
+    if (searchBox) searchBox.placeholder = 'e.g. NVDA';
+
+    // Clear should emulate manual clearing (no refetch): empty + dispatch input
+    if (clearBtn && searchBox){
+      clearBtn.addEventListener('click', ()=>{
+        searchBox.value = '';
+        // Dispatch input event to trigger same filtering/render of key typing
+        try{
+          const evt = new Event('input', { bubbles: true });
+          searchBox.dispatchEvent(evt);
+        }catch(e){
+          // Fallback for older browsers
+          const evt2 = document.createEvent('Event');
+          evt2.initEvent('input', true, true);
+          searchBox.dispatchEvent(evt2);
+        }
+        searchBox.focus();
+      });
+    }
+  })();
+
+
+
+  // v4.19.1 — remove duplicate Clear buttons outside search-wrap (keep only the inside one)
+  (function(){
+    const all = Array.from(document.querySelectorAll('#clearBtn'));
+    if (all.length > 1){
+      all.forEach(btn => {
+        if (!btn.closest('.search-wrap')) {
+          btn.remove();
+        }
+      });
+    }
+  })();
+
+
+  // v4.19.2 — Remove Export CSV button entirely
+  (function(){
+    const csv = document.getElementById('csvBtn');
+    if (csv) csv.remove();
+    const slot = document.getElementById('slot-csvBtn');
+    if (slot) slot.remove();
+  })();
 
   // Move Results section into resultsSlot
   const resultsSlot = document.getElementById('resultsSlot');
@@ -2510,6 +2945,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
   // Try multiple local candidates (folder case + extensions)
   const candidates = [
+    `logos/${T}.webp`, `Logos/${T}.webp`,
     `logos/${T}.svg`, `Logos/${T}.svg`,
     `logos/${T}.png`, `Logos/${T}.png`,
     `logos/${T}.jpg`, `Logos/${T}.jpg`,
@@ -2578,6 +3014,119 @@ document.addEventListener('DOMContentLoaded', function(){
     }
   });
   mo.observe(document.body, {childList:true, subtree:true});
+// === Lightweight DOM-side filter & pagination (non-invasive) ===
+try{
+  const typeFilter = document.getElementById('typeFilter');
+  const pageSizeSel = document.getElementById('pageSize');
+  const prevPageBtn = document.getElementById('prevPage');
+  const nextPageBtn = document.getElementById('nextPage');
+  const pageInfoEl  = document.getElementById('pageInfo');
+  const countBoxEl  = document.getElementById('countBox');
+  const tbodyEl     = document.getElementById('tbody');
+  let currentPage = 1;
+  let pageSize = pageSizeSel ? parseInt(pageSizeSel.value,10) : 100;
+
+  function rowDir(tr){
+    // dir inferred from last cell class (has 'buy' or 'sell')
+    const td = tr.querySelector('td:last-child');
+    if (!td) return 'ALL';
+    return td.classList.contains('buy') ? 'BUY' : (td.classList.contains('sell') ? 'SELL' : 'ALL');
+  }
+
+  function visibleRows(){
+    const tSel = (typeFilter && typeFilter.value) ? typeFilter.value.toUpperCase() : 'ALL';
+    const rows = Array.from(tbodyEl.querySelectorAll('tr'));
+    const filt = rows.filter(tr => {
+      const d = rowDir(tr);
+      return (tSel==='ALL' || d===tSel);
+    });
+    // update count to visible rows
+    if (countBoxEl) countBoxEl.textContent = filt.length.toLocaleString('it-IT');
+    return filt;
+  }
+
+  function applyPager(){
+    if (!tbodyEl) return;
+    const rows = visibleRows();
+    const pages = Math.max(1, Math.ceil(rows.length / pageSize));
+    if (currentPage > pages) currentPage = pages;
+    const start = (currentPage-1)*pageSize;
+    const end   = start + pageSize;
+
+    // First hide all
+    Array.from(tbodyEl.querySelectorAll('tr')).forEach(tr => tr.style.display = 'none');
+    // Then show filtered slice
+    rows.slice(start, end).forEach(tr => tr.style.display = '');
+
+    if (pageInfoEl) pageInfoEl.textContent = `Page ${pages ? currentPage : 1} / ${Math.max(pages,1)}`;
+    if (prevPageBtn) prevPageBtn.disabled = (currentPage<=1);
+    if (nextPageBtn) nextPageBtn.disabled = (currentPage>=pages);
+  }
+
+  if (typeFilter) typeFilter.addEventListener('change', ()=>{ currentPage=1; applyPager(); });
+  if (pageSizeSel) pageSizeSel.addEventListener('change', ()=>{ pageSize=parseInt(pageSizeSel.value,10)||100; currentPage=1; applyPager(); });
+  if (prevPageBtn) prevPageBtn.addEventListener('click', ()=>{ currentPage=Math.max(1,currentPage-1); applyPager(); });
+  if (nextPageBtn) nextPageBtn.addEventListener('click', ()=>{ currentPage=currentPage+1; applyPager(); });
+
+  // Re-apply after any table re-render
+  const mo = new MutationObserver(()=>{ currentPage=1; applyPager(); });
+  if (tbodyEl) mo.observe(tbodyEl, {childList:true, subtree:false});
+
+  // Initial
+  setTimeout(applyPager, 0);
+}catch(e){ console.error('Pager init error', e); }
+// === Bottom pager wiring (duplicate controls) ===
+try{
+  const prevTop = document.getElementById('prevPage');
+  const nextTop = document.getElementById('nextPage');
+  const infoTop = document.getElementById('pageInfo');
+  const prevBottom = document.getElementById('prevPageBottom');
+  const nextBottom = document.getElementById('nextPageBottom');
+  const infoBottom = document.getElementById('pageInfoBottom');
+
+  if (prevBottom && prevTop) prevBottom.addEventListener('click', ()=> prevTop.click());
+  if (nextBottom && nextTop) nextBottom.addEventListener('click', ()=> nextTop.click());
+
+  // Keep bottom info mirrored with top info
+  if (infoTop && infoBottom){
+    const mo = new MutationObserver(()=>{ infoBottom.textContent = infoTop.textContent; });
+    mo.observe(infoTop, {characterData:true, subtree:true, childList:true});
+    // initial sync
+    infoBottom.textContent = infoTop.textContent;
+  }
+}catch(e){ console.error('Bottom pager sync error', e); }
+// === Stat-cards drive Trade filter (Total / Buy / Sell) ===
+try{
+  const typeSel = document.getElementById('typeFilter');
+  const cardTotal = document.getElementById('statTotalN') ? document.getElementById('statTotalN').closest('.stat-card') : null;
+  const cardBuy   = document.getElementById('statBuyN') ? document.getElementById('statBuyN').closest('.stat-card') : null;
+  const cardSell  = document.getElementById('statSellN') ? document.getElementById('statSellN').closest('.stat-card') : null;
+
+  function setActive(mode){
+    [cardTotal, cardBuy, cardSell].forEach(c => c && c.classList.remove('active'));
+    if (mode==='ALL' && cardTotal) cardTotal.classList.add('active');
+    if (mode==='BUY' && cardBuy)   cardBuy.classList.add('active');
+    if (mode==='SELL' && cardSell) cardSell.classList.add('active');
+  }
+  function setMode(mode){
+    if (typeSel){
+      typeSel.value = mode;
+      typeSel.dispatchEvent(new Event('change'));
+    } else {
+      // fallback: force re-render/pager
+      if (typeof applyPager === 'function') applyPager();
+      else if (typeof render === 'function') render();
+    }
+    setActive(mode);
+  }
+
+  if (cardTotal) cardTotal.addEventListener('click', ()=> setMode('ALL'));
+  if (cardBuy)   cardBuy.addEventListener('click',  ()=> setMode('BUY'));
+  if (cardSell)  cardSell.addEventListener('click', ()=> setMode('SELL'));
+
+  // initial: reflect current select value
+  setActive(typeSel && typeSel.value ? typeSel.value.toUpperCase() : 'ALL');
+}catch(e){ console.error('Stat-card filter binding error', e); }
 })();
 
 </script>
