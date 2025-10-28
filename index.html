@@ -1835,7 +1835,7 @@ const EXCHANGE_MAP = {
   // NYSE
   "ARCT":"NASDAQ","AVAV":"NYSE","AVDX":"NASDAQ", // AvidXchange è NASDAQ
   "BABA":"NYSE","BLDE":"NYSE","BWXT":"NYSE","CCJ":"NYSE","DE":"NYSE",
-  "DASH":"NYSE","ENI":"NYSE","GENI":"NYSE","HON":"NASDAQ","JOBY":"NYSE",
+  "DASH":"NASDAQ","ENI":"NYSE","GENI":"NYSE","HON":"NASDAQ","JOBY":"NYSE",
   "KIND":"NYSE","LHX":"NYSE","MELI":"NASDAQ", // MELI è NASDAQ (memo)
   "OKLO":"NYSE","ORCL":"NYSE","PATH":"NYSE","PD":"NYSE","PINS":"NYSE",
   "PSTG":"NYSE","RBLX":"NYSE","RBRK":"NYSE","ROKU":"NASDAQ",
@@ -3129,6 +3129,488 @@ try{
 }catch(e){ console.error('Stat-card filter binding error', e); }
 })();
 
+</script>
+
+
+
+<script>
+/* === Close & Total Column Enhancer v2.2 (stable) ===
+   - Inserisce le colonne Close e Total PRIMA di Shares senza spostare i dati esistenti
+   - Usa mappa INDICI "pre-inserimento" per allineare correttamente le nuove celle
+   - Close 70px con simbolo $, Total 90px con formato compatto (K/M/B/T) e punto decimale
+*/
+(function(){
+  const TABLE_ID = 'table';
+  const TBODY_ID = 'tbody';
+  const MAX_CONCURRENCY = 3;
+
+  // Snapshot degli indici PRIMA di qualsiasi modifica
+  let originalIndexMap = null; // {dateIdx, sharesIdx, tickerIdx, thEls, theadRow}
+
+  // Utils
+  const DAY = 24*60*60*1000;
+  const pad = (n)=> String(n).padStart(2,'0');
+  const toISO = (y,m,d)=> `${y}-${pad(m)}-${pad(d)}`;
+
+  function parseDDMMYY(s){
+    if(!s) return null;
+    const m = s.trim().match(/^(\d{1,2})\/(\d{1,2})\/(\d{2,4})$/);
+    if(!m) return null;
+    let [_, dd, mm, yy] = m;
+    dd = parseInt(dd,10);
+    mm = parseInt(mm,10);
+    yy = parseInt(yy,10);
+    if(yy < 100){ yy += 2000; }
+    return toISO(yy,mm,dd);
+  }
+
+  function parseShares(text){
+    if(!text) return null;
+    let s = text.replace(/[^0-9,\.\-]/g,'');
+    if (s.includes(',') && s.includes('.')) {
+      s = s.replace(/\./g,'').replace(',', '.');
+    } else if (s.includes(',') && !s.includes('.')) {
+      s = s.replace(/,/g, '');
+    }
+    const v = parseFloat(s);
+    return Number.isFinite(v) ? v : null;
+  }
+
+  function formatCompact(n){
+    if(n==null || !Number.isFinite(n)) return '–';
+    const abs = Math.abs(n);
+    const sign = n < 0 ? '-' : '';
+    const units = [
+      {v:1e12, s:'T'},
+      {v:1e9,  s:'B'},
+      {v:1e6,  s:'M'},
+      {v:1e3,  s:'K'}
+    ];
+    for(const u of units){
+      if(abs >= u.v){
+        return sign + (abs/u.v).toFixed(2) + ' ' + u.s;
+      }
+    }
+    return sign + Math.round(abs).toString();
+  }
+
+  // Yahoo helpers
+  function buildYahooURL(symbol, startMs, endMs){
+    const p1 = Math.floor(startMs/1000);
+    const p2 = Math.floor(endMs/1000) + 86400;
+    return `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?period1=${p1}&period2=${p2}&interval=1d&events=history&includeAdjustedClose=true`;
+  }
+  async function fetchWithFallback(rawUrl){
+    const urls = [
+      rawUrl,
+      `https://corsproxy.io/?${encodeURIComponent(rawUrl)}`,
+      `https://api.allorigins.win/raw?url=${encodeURIComponent(rawUrl)}`
+    ];
+    let lastErr;
+    for(const u of urls){
+      try{
+        const res = await fetch(u, {cache:'no-store'});
+        if(!res.ok) throw new Error(`HTTP ${res.status}`);
+        return await res.json();
+      }catch(e){ lastErr = e; }
+    }
+    throw lastErr || new Error('Fetch fallito su tutte le rotte');
+  }
+
+  const priceCache = new Map();
+  const queue = [];
+  let running = 0;
+  function enqueue(task){ queue.push(task); pump(); }
+  async function pump(){
+    while(running < MAX_CONCURRENCY && queue.length){
+      const t = queue.shift();
+      running++;
+      try{ await t(); }finally{ running--; }
+    }
+  }
+
+  async function getClosePrice(symbol, isoDate){
+    const key = `${symbol}|${isoDate}`;
+    if(priceCache.has(key)) return priceCache.get(key);
+    const end = new Date(isoDate);
+    const start = new Date(end.getTime() - 10*DAY);
+    try{
+      const data = await fetchWithFallback(buildYahooURL(symbol, start.getTime(), end.getTime()));
+      const r = data?.chart?.result?.[0];
+      const ts = r?.timestamp || [];
+      const closes = r?.indicators?.adjclose?.[0]?.adjclose || r?.indicators?.quote?.[0]?.close || [];
+      let last = null;
+      for(let i=0;i<ts.length;i++){
+        const t = new Date(ts[i]*1000);
+        if (t <= end && Number.isFinite(closes[i])) last = closes[i];
+      }
+      if(last!=null) priceCache.set(key, last);
+      return last;
+    }catch(e){ return null; }
+  }
+
+  // === Header mapping (snapshot BEFORE insertion) ===
+  function mapHeaderIndices(){
+    const theadRow = document.querySelector('#' + TABLE_ID + ' thead tr');
+    if(!theadRow) return {};
+    const thEls = [...theadRow.querySelectorAll('th')];
+    const labels = thEls.map(th=> (th.textContent||'').trim().toLowerCase());
+    const dateIdx = labels.findIndex(t=> t.startsWith('date'));
+    const sharesIdx = labels.findIndex(t=> t.includes('shares'));
+    let tickerIdx = labels.findIndex(t=> t.includes('ticker'));
+    if (tickerIdx === -1) { tickerIdx = labels.findIndex(t=> t.includes('name') || t.includes('company')); }
+    return { dateIdx, sharesIdx, tickerIdx, thEls, theadRow };
+  }
+
+  // Insert headers BEFORE Shares using ORIGINAL sharesIdx
+  function ensureHeader(){
+    const table = document.getElementById(TABLE_ID);
+    if(!table) return;
+    const colgroup = table.querySelector('colgroup');
+
+    if(!originalIndexMap){
+      originalIndexMap = mapHeaderIndices(); // snapshot
+    }
+    const { sharesIdx, theadRow, thEls } = originalIndexMap;
+    if(!theadRow || sharesIdx === -1) return;
+
+    // Already present?
+    const existsClose = theadRow.querySelector('th.close-col');
+    const existsTotal = theadRow.querySelector('th.total-col');
+    if (existsClose && existsTotal) return;
+
+    const thClose = document.createElement('th');
+    thClose.textContent = 'Close';
+    thClose.className = 'num close-col';
+    const thTotal = document.createElement('th');
+    thTotal.textContent = 'Total';
+    thTotal.className = 'num total-col';
+
+    const refNode = thEls[sharesIdx] || null; // BEFORE original Shares
+    theadRow.insertBefore(thTotal, refNode);
+    theadRow.insertBefore(thClose, thTotal);
+
+    if(colgroup){
+      const cols = [...colgroup.querySelectorAll('col')];
+      const colClose = document.createElement('col'); colClose.setAttribute('style','width:70px');
+      const colTotal = document.createElement('col'); colTotal.setAttribute('style','width:90px');
+      const cgRef = cols[sharesIdx] || null;
+      colgroup.insertBefore(colTotal, cgRef);
+      colgroup.insertBefore(colClose, colTotal);
+    }
+  }
+
+  // Extract info using ORIGINAL indices (robusto a riordino)
+  function extractRowInfo(tr){
+    if(!originalIndexMap){ originalIndexMap = mapHeaderIndices(); }
+    const { dateIdx, sharesIdx, tickerIdx } = originalIndexMap;
+    if(dateIdx === -1) return null;
+    const tds = tr.cells;
+    if(!tds || tds.length === 0) return null;
+
+    const isoDate = parseDDMMYY(tds[dateIdx]?.textContent?.trim() || '');
+    const shares = (sharesIdx !== -1 && tds[sharesIdx]) ? parseShares(tds[sharesIdx].textContent || '') : null;
+
+    // Ticker
+    let ticker = null;
+    const nameCell = (tickerIdx >=0 && tds[tickerIdx]) ? tds[tickerIdx] : tds[Math.min(tds.length-1, 2)];
+    if(nameCell){
+      const pill = nameCell.querySelector('.ticker-pill');
+      if(pill){
+        const txt = (pill.textContent || '').trim();
+        if(txt) ticker = txt.replace(/[^A-Z0-9\.-]/g,'').toUpperCase();
+      }
+      if(!ticker){
+        const txt = (nameCell.textContent || '').trim();
+        const m = txt.match(/\b[A-Z]{1,6}(?:\.[A-Z]{1,2}|-[A-Z]{1,3})?\b/);
+        if(m) ticker = m[0].toUpperCase();
+      }
+    }
+    if(!isoDate || !ticker) return null;
+    return { isoDate, shares, ticker };
+  }
+
+  // Ensure new cells exist BEFORE the ORIGINAL Shares cell
+  function ensureCells(tr){
+    if(tr.querySelector('td.close-cell') && tr.querySelector('td.total-cell')) return;
+    if(!originalIndexMap){ originalIndexMap = mapHeaderIndices(); }
+    const { sharesIdx } = originalIndexMap;
+    const tds = tr.cells;
+    const insertPos = (sharesIdx === -1) ? tds.length : sharesIdx; // before original Shares
+    const refNode = tds[insertPos] || null;
+
+    const tdClose = document.createElement('td');
+    tdClose.className = 'num close-cell';
+    tdClose.textContent = '…';
+    const tdTotal = document.createElement('td');
+    tdTotal.className = 'num total-cell';
+    tdTotal.textContent = '…';
+
+    tr.insertBefore(tdTotal, refNode);
+    tr.insertBefore(tdClose, tdTotal);
+  }
+
+  function populate(tr){
+    ensureCells(tr);
+    const info = extractRowInfo(tr);
+    const tdClose = tr.querySelector('td.close-cell');
+    const tdTotal = tr.querySelector('td.total-cell');
+    if(!info){
+      if(tdClose) tdClose.textContent = '–';
+      if(tdTotal) tdTotal.textContent = '–';
+      return;
+    }
+    enqueue(async () => {
+      const px = await getClosePrice(info.ticker, info.isoDate);
+      if(tdClose) tdClose.textContent = (px!=null) ? ('$' + Number(px).toFixed(2)) : '–';
+      if(tdTotal){
+        if(px!=null && Number.isFinite(info.shares)){
+          tdTotal.textContent = formatCompact(px * info.shares);
+        }else{
+          tdTotal.textContent = '–';
+        }
+      }
+    });
+  }
+
+  function processAll(){
+    ensureHeader();
+    const tbody = document.getElementById(TBODY_ID);
+    if(!tbody) return;
+    [...tbody.querySelectorAll('tr')].forEach(populate);
+  }
+
+  function observe(){
+    const tbody = document.getElementById(TBODY_ID);
+    if(!tbody) return;
+    const obs = new MutationObserver((mutations)=>{
+      for(const m of mutations){
+        if(m.type === 'childList' && m.addedNodes?.length){
+          m.addedNodes.forEach(n=>{
+            if(n.nodeType===1 && n.tagName==='TR') populate(n);
+          });
+        }
+      }
+    });
+    obs.observe(tbody, { childList:true });
+  }
+
+  window.addEventListener('load', function(){
+    try{
+      // snapshot header before touching it
+      originalIndexMap = mapHeaderIndices();
+      ensureHeader();
+      processAll();
+      observe();
+    }catch(e){ /* no-op */ }
+  });
+})();
+</script>
+
+
+<script>
+/* === Totals Calculator v1.1 (x1000) — non‑destructive ===
+   - NON sposta/aggiunge colonne.
+   - Calcola: Total = (Close × Shares) * 1000
+   - Abbreviazione K/M/B/T con punto decimale.
+*/
+(function(){
+  const TABLE_ID = 'table';
+  const TBODY_ID = 'tbody';
+
+  function headerMap(){
+    const thead = document.querySelector('#'+TABLE_ID+' thead');
+    const row = thead ? thead.querySelector('tr') : null;
+    const ths = row ? Array.from(row.children) : [];
+    const labels = ths.map(th => (th.textContent || '').trim().toLowerCase());
+    const idx = {
+      close:  labels.findIndex(t => t === 'close'),
+      total:  labels.findIndex(t => t === 'total'),
+      shares: labels.findIndex(t => t.includes('shares')), // "Shares | %"
+    };
+    return { row, ths, labels, ...idx };
+  }
+
+  function parseClose(text){
+    if(!text) return null;
+    let s = String(text).replace(/\$/g,'').replace(/[ \u00A0,]/g,'');
+    s = s.replace(/[^0-9.\-]/g,'');
+    if(!s || s==='.' || s==='-' || s==='-.') return null;
+    const v = parseFloat(s);
+    return Number.isFinite(v) ? v : null;
+  }
+
+  function parseShares(text){
+    if(!text) return null;
+    // Usa solo la parte a sinistra di '|'
+    let s = String(text).split('|')[0];
+    s = s.replace(/[ \u00A0]/g,''); // spazi
+    s = s.replace(/,/g,'');        // virgole come migliaia
+    s = s.replace(/[^0-9.\-]/g,''); // tieni solo cifre, punto, segno
+    if(!s || s==='.' || s==='-' || s==='-.') return null;
+    const v = parseFloat(s);
+    return Number.isFinite(v) ? v : null;
+  }
+
+  function fmtCompact(n){
+    if(n==null || !Number.isFinite(n)) return '–';
+    const abs = Math.abs(n);
+    const sign = n < 0 ? '-' : '';
+    const units = [{v:1e12,s:'T'},{v:1e9,s:'B'},{v:1e6,s:'M'},{v:1e3,s:'K'}];
+    for(const u of units){
+      if(abs >= u.v) return sign + (abs/u.v).toFixed(2) + ' ' + u.s;
+    }
+    return sign + Math.round(abs).toString();
+  }
+
+  function computeOnce(){
+    const map = headerMap();
+    if(!map.row) return;
+    const {close, total, shares} = map;
+    if(close===-1 || total===-1 || shares===-1) return;
+
+    const tbody = document.getElementById(TBODY_ID);
+    if(!tbody) return;
+    Array.from(tbody.rows).forEach(tr => {
+      const cClose  = tr.children[close];
+      const cTotal  = tr.children[total];
+      const cShares = tr.children[shares];
+      if(!cClose || !cTotal || !cShares) return;
+
+      const vClose  = parseClose(cClose.textContent);
+      const vShares = parseShares(cShares.textContent);
+
+      if(vClose!=null && vShares!=null){
+        const totalVal = (vClose * vShares) * 1000; // <— moltiplicatore x1000
+        cTotal.textContent = fmtCompact(totalVal);
+      } else {
+        cTotal.textContent = '–';
+      }
+    });
+  }
+
+  function boot(){
+    computeOnce();
+    let n=0;
+    const iv = setInterval(() => {
+      computeOnce();
+      if(++n > 30) clearInterval(iv);
+    }, 500);
+
+    const tbody = document.getElementById(TBODY_ID);
+    if(tbody){
+      const obs = new MutationObserver(() => computeOnce());
+      obs.observe(tbody, {childList:true});
+    }
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', boot);
+  } else {
+    boot();
+  }
+})();
+</script>
+
+<script>
+/* === Rate Limit Helper v1.0 (non-invasive) ===
+   - Se esistono funzioni di fetch prezzi (getClosePrice/fetchWithFallback/enqueue) le "avvolge" con:
+     • Limite globale: 1 richiesta ogni 600ms
+     • Retry con backoff (429/503): 300ms, 600ms, 1200ms, 2400ms
+     • Cache localStorage 24h per chiave "closepx:v1:TICK|YYYY-MM-DD"
+   - Non sposta/rompe nulla; se le funzioni non esistono, non fa niente.
+*/
+(function(){
+  const RATE_MS = 600;
+  const MAX_RETRIES = 4;
+  const BACKOFFS = [300, 600, 1200, 2400];
+  const LS_PREFIX = 'closepx:v1:';
+  const TTL_MS = 24*60*60*1000;
+  let lastAt = 0;
+
+  function sleep(ms){ return new Promise(r=>setTimeout(r, ms)); }
+
+  function lsGet(key){
+    try{
+      const raw = localStorage.getItem(LS_PREFIX + key);
+      if(!raw) return null;
+      const obj = JSON.parse(raw);
+      if(!obj || !obj.t || !('v' in obj)) return null;
+      if(Date.now() - obj.t > TTL_MS){ localStorage.removeItem(LS_PREFIX + key); return null; }
+      return obj.v;
+    }catch(e){ return null; }
+  }
+  function lsSet(key, val){
+    try{ localStorage.setItem(LS_PREFIX + key, JSON.stringify({t:Date.now(), v:val})); }catch(e){}
+  }
+
+  function rateGate(){
+    const now = Date.now();
+    const elapsed = now - lastAt;
+    const wait = Math.max(0, RATE_MS - elapsed);
+    return sleep(wait).then(()=>{ lastAt = Date.now(); });
+  }
+
+  // Wrap only if functions exist
+  if(typeof window.getClosePrice === 'function'){
+    const _orig_getClosePrice = window.getClosePrice;
+    window.getClosePrice = async function(symbol, isoDate){
+      const key = `${symbol}|${isoDate}`;
+
+      // localStorage cache first
+      const cached = lsGet(key);
+      if(cached != null) return cached;
+
+      let attempt = 0, lastErr = null;
+      while(attempt <= MAX_RETRIES){
+        try{
+          await rateGate();
+          const val = await _orig_getClosePrice(symbol, isoDate);
+          if(val != null){ lsSet(key, val); }
+          return val;
+        }catch(e){
+          lastErr = e;
+          // Exponential backoff for 429/503 or generic network errors
+          const delay = BACKOFFS[Math.min(attempt, BACKOFFS.length-1)];
+          await sleep(delay);
+          attempt++;
+        }
+      }
+      if(lastErr) throw lastErr;
+      return null;
+    };
+  }
+
+  // Also wrap fetchWithFallback if present to catch HTTP codes
+  if(typeof window.fetchWithFallback === 'function'){
+    const _orig_fetchWithFallback = window.fetchWithFallback;
+    window.fetchWithFallback = async function(url){
+      let attempt = 0;
+      while(attempt <= MAX_RETRIES){
+        try{
+          await rateGate();
+          const res = await _orig_fetchWithFallback(url);
+          return res;
+        }catch(e){
+          const delay = BACKOFFS[Math.min(attempt, BACKOFFS.length-1)];
+          await sleep(delay);
+          attempt++;
+        }
+      }
+      // final try
+      return _orig_fetchWithFallback(url);
+    };
+  }
+
+  // If there's a global enqueue, we can throttle it (optional)
+  if(typeof window.enqueue === 'function'){
+    const _orig_enqueue = window.enqueue;
+    window.enqueue = function(task){
+      const wrapped = async () => { await rateGate(); return task(); };
+      return _orig_enqueue(wrapped);
+    };
+  }
+})();
 </script>
 </body>
 </html>
