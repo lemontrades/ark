@@ -7,16 +7,185 @@
 <meta content="width=device-width, initial-scale=1" name="viewport"/>
 <title>ARK Trades – Dashboard </title>
 <style>
+
+/* === v8.2 — Sidebar nav come type-chip === */
+.sidebar-nav{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+/* chip base */
+.sidebar .nav-item{
+  width:100%;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:10px 12px;
+  border-radius:999px;
+  border:1px solid rgba(148,163,184,0.35);
+  background:radial-gradient(circle at 0% 0%,
+    rgba(76,29,149,0.45),
+    rgba(10,6,20,0.98));
+  color:var(--muted);
+  font-size:13px;
+  cursor:pointer;
+  text-align:left;
+  box-shadow:0 0 0 1px rgba(15,23,42,0.9);
+  transition:
+    background .15s ease,
+    border-color .15s ease,
+    box-shadow .15s ease,
+    transform .05s ease,
+    color .15s ease;
+}
+
+
+
+/* vecchio pallino nascosto */
+.sidebar .nav-item .nav-dot{
+  display:none;
+}
+
+/* icona tipo .chip-icon */
+.sidebar .nav-item .nav-icon{
+  width:32px;
+  height:32px;
+  border-radius:14px;
+  background:linear-gradient(
+    135deg,
+    rgba(88,28,135,0.95),
+    rgba(129,140,248,0.9)
+  );
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 0 6px rgba(129,140,248,0.45);
+  flex-shrink:0;
+}
+.sidebar .nav-item .nav-icon img{
+  width:18px;
+  height:18px;
+  display:block;
+}
+
+/* testo */
+.sidebar .nav-item .nav-label{
+  font-size:13px;
+  font-weight:600;
+}
+
+/* hover */
+.sidebar .nav-item:hover{
+  border-color:rgba(198,138,255,0.7);
+  box-shadow:0 0 14px rgba(198,138,255,0.45);
+  color:var(--ink);
+}
+
+/* stato attivo: viola + icona arancione come le type-chip */
+.sidebar .nav-item.active{
+  background:radial-gradient(circle at 0% 0%,
+    rgba(196,116,255,0.95),
+    rgba(88,28,135,0.98));
+  color:#ffffff;
+  border-color:var(--accent);
+  box-shadow:0 0 14px rgba(198,138,255,0.45);
+  transform:translateY(-1px);
+}
+.sidebar .nav-item.active .nav-icon{
+  background:linear-gradient(135deg,#ff8c00,#ff6700);
+  box-shadow:0 0 40px rgba(255,136,0,0.9);
+}
+
+
+/* === v9.2 — TOTAL BUY SELLS qui modifichi colori e altro === */
+.stat-new{
+  background: radial-gradient(circle at 10% 10%, rgba(137, 0, 255, 0.1), rgb(5, 0, 10)),
+              linear-gradient(160deg, rgba(45,15,70,0.9), rgba(10,5,20,0.95));
+  border: 1px solid rgb(131, 0, 255, 0.55);
+  box-shadow: 0 0 10px rgb(86, 5, 137), inset 0 0 18px rgba(120,60,200,0.15);
+  border-radius: 18px;
+
+  padding: 18px 24px;
+  min-height:120px;
+
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+
+  position:relative;      /* 👈 serve per l’icona sullo sfondo */
+  overflow:hidden;        /* taglia eventuali bordi dell’icona */
+  cursor:default;
+
+  backdrop-filter: blur(12px);
+  transition:transform .15s ease, box-shadow .2s ease;
+}
+
+
+
+/* 👈 questa è l'icona nelle 3 chips */
+
+.stat-new .icon{
+  position:absolute;
+  left:76px;
+  top:50%;
+  transform:translateY(-50%);
+  width:96px;
+  height:96px;
+  border-radius:24px;
+  background:rgba(0,0,0,0.0);   /* niente sfondo pieno, solo l’SVG */
+  box-shadow:0 0 22px rgba(0,0,0,0.4);
+  display:flex;
+  align-items:center;
+  justify-content:right;
+  opacity:0.14;                 /* 👈 qui regoli quanto “fantasma” vuoi l’icona */
+  pointer-events:none;          /* non blocca i click sul contenuto */
+}
+
+.stat-ic img{
+  width:215px;
+  height:250px;
+  opacity:1;
+}
+
+.stat-new .label{
+  font-size:16px;
+  opacity:100;
+  font-weight:500;
+}
+
+.stat-new .sub{
+  font-size:14px;
+  opacity:.75;
+}
+
+
+
+/* Colonna destra: numero grosso, allineato a destra */
+.stat-right{
+  text-align:right;
+  flex-shrink:0;
+}
+
+.stat-new .value{
+  font-size:57px; /* DIMENSIONE FONT NUMERI */
+  font-weight:800;
+  letter-spacing:0px;
+  line-height:1;
+}
+
+
 @media (prefers-color-scheme: dark) {
   input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); }
 }
 
 /* ===== Modern theme tokens ===== */
 :root {
-  --bg: #090812; /* SFONDO DARK PROFONDO 🟪 */ /* SFONDO DARK NEUTRO 🟪 */
-  --bg-grad: radial-gradient(150vmax 80vmax at -10% -20%, rgba(124,58,237,0.14), transparent 60%),
-             radial-gradient(120vmax 70vmax at 110% -25%, rgba(88,28,135,0.10), transparent 65%),
-             #090812; /* GRADIENTE VIOLA ARK SCURO 🟪 */
+  --bg: #1100ab; /* SFONDO DARK PROFONDO 🟪 */ /* SFONDO DARK NEUTRO 🟪 */
+  --bg-grad: radial-gradient(150vmax 80vmax at 0% 0%, rgb(77, 0, 212), transparent 100%),
+             radial-gradient(120vmax 70vmax at 100% 90%, rgba(13, 0, 61, 0.6), transparent 100%),
+             #000000; /* GRADIENTE VIOLA ARK SCURO 🟪 */
   --panel: rgba(14,11,22,0.94); /* PANNELLO DARK VIOLA INTENSO 🟪 */ /* PANNELLO DARK VIOLA 🟪 */ /* PANNELLO VIOLA SCURO 🟪 */
   --ink: #e8eaee;
   --muted: #b5bfd3; /* TESTO SECONDARIO PIÙ CHIARO 🟪 */
@@ -34,7 +203,7 @@
 }
 [data-theme="light"] {
   --bg: #090812; /* SFONDO DARK PROFONDO 🟪 */ /* SFONDO DARK NEUTRO 🟪 */
-  --bg-grad: radial-gradient(150vmax 80vmax at -10% -20%, rgba(124,58,237,0.14), transparent 60%),
+  --bg-grad: radial-gradient(150vmax 80vmax at -10% -20%, rgba(85, 0, 231, 0.14), transparent 60%),
              radial-gradient(120vmax 70vmax at 110% -25%, rgba(88,28,135,0.10), transparent 65%),
              #090812; /* GRADIENTE VIOLA ARK SCURO 🟪 */
   --panel: rgba(14,11,22,0.94); /* PANNELLO DARK VIOLA INTENSO 🟪 */ /* PANNELLO DARK VIOLA 🟪 */ /* PANNELLO VIOLA SCURO 🟪 */
@@ -52,14 +221,172 @@
 
 /* ===== Base ===== */
 html,body{
-  margin:0;padding:0;
-  background: var(--bg-grad);
+  margin:0;
+  padding:0;
+  background:#000;
+  background-image:url('background/bg.jpg');
+  background-size:cover;
+  background-position:center;
+  background-attachment:fixed;
   color:var(--ink);
-  font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Arial, sans-serif;
+  font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial,sans-serif;
 }
-.container{max-width:1250px;margin:0 auto;padding:24px}
+.container{
+  max-width:none;
+  width:95%;
+  margin:0;
+  padding:24px 32px;
+}
+
 h1{font-size:22px;margin:0 0 4px; letter-spacing:.2px}
 p.note{color:var(--muted);font-size:13px;margin:6px 0 18px}
+
+/* === v7: App shell with sidebar navigation === */
+.app-shell{
+  display:flex;
+  min-height:100vh;
+
+  /* FIX: spingi tutto il contenuto a destra della sidebar */
+  padding-left:240px; /* 230px di sidebar + 10px di respiro */
+}
+.sidebar{
+  width:230px;
+  padding:20px 16px;
+  display:flex;
+  flex-direction:column;
+  gap:24px;
+
+  background:rgba(6,4,18,0.65);
+  border-right:1px solid rgba(198,138,255,0.35);
+  box-shadow:0 0 24px rgba(0,0,0,0.65);
+  backdrop-filter:blur(18px);
+
+  position:fixed;
+  top:0;
+  left:0;
+  bottom:0;
+
+  height:100vh;
+  overflow-y:auto;
+  z-index:50;
+}
+
+.main-area{
+  flex:1;
+  overflow-x:hidden;
+}
+.sidebar-header{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
+.sidebar-logo-dot{
+  width:26px;
+  height:26px;
+  border-radius:999px;
+  background:linear-gradient(135deg,#22c55e,#7c3aed);
+  box-shadow:0 0 16px rgba(34,197,94,0.65);
+  margin-bottom:6px;
+}
+.sidebar-title{
+  font-size:15px;
+  font-weight:700;
+}
+.sidebar-subtitle{
+  font-size:12px;
+  color:var(--muted);
+  opacity:.9;
+}
+.sidebar-nav{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+.nav-item{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  width:100%;
+  padding:8px 10px;
+  border-radius:999px;
+  border:1px solid transparent;
+  background:transparent;
+  color:var(--muted);
+  font-size:13px;
+  cursor:pointer;
+  text-align:left;
+  transition:background .18s ease, color .18s ease, box-shadow .18s ease, border-color .18s ease, transform .05s ease;
+}
+.nav-item .nav-dot{
+  width:8px;
+  height:8px;
+  border-radius:999px;
+  background:rgba(148,163,184,0.7);
+}
+.nav-item span{
+  pointer-events:none;
+}
+.nav-item:hover{
+  background:rgba(148,163,184,0.1);
+  color:var(--ink);
+}
+.nav-item.active{
+  background:var(--accent);
+  color:var(--accent-ink);
+  border-color:rgba(250,250,255,0.45);
+  box-shadow:0 0 0 1px rgba(198,138,255,0.45),0 0 18px rgba(198,138,255,0.75);
+  transform:translateY(-0.5px);
+}
+.nav-item.active .nav-dot{
+  background:#22c55e;
+  box-shadow:0 0 10px rgba(34,197,94,0.75);
+}
+
+/* Sidebar footer (small status) */
+.sidebar-footer{
+  margin-top:auto;
+  font-size:11px;
+  color:var(--muted);
+  opacity:.8;
+}
+
+/* Mobile: collapse sidebar on top */
+@media (max-width: 960px){
+  .app-shell{
+    flex-direction:column;
+  }
+  .sidebar{
+    width:100%;
+    flex-direction:row;
+    align-items:center;
+    justify-content:space-between;
+    position:static;
+    border-right:none;
+    border-bottom:1px solid rgba(198,138,255,0.35);
+    margin-bottom:8px;
+    padding:10px 16px;
+  }
+  .sidebar-header{
+    flex-direction:row;
+    align-items:center;
+    gap:10px;
+  }
+  .sidebar-logo-dot{
+    margin-bottom:0;
+  }
+  .sidebar-nav{
+    flex-direction:row;
+    justify-content:flex-end;
+  }
+  .nav-item{
+    width:auto;
+    padding:6px 10px;
+  }
+  .container{
+    padding-top:16px;
+  }
+}
+
 
 /* ===== Cards ===== */
 .card{
@@ -186,7 +513,7 @@ tr:hover{background:rgba(255,255,255,.03)}
 
 .overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;padding:20px}
 .overlay .panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;max-width:600px;width:100%;max-height:85vh;overflow:auto;box-shadow:var(--shadow)}
-.overlay .panel .hdr{display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid var(--line)}
+.overlay .panel .hdr{display:flex;align-items:center;gap:8px;padding:12px 16px;border-bottom:1px solid var(--line)}
 .overlay .panel .body{padding:12px 16px}
 .close{margin-left:auto}
 
@@ -315,7 +642,7 @@ section.controls{
 }
 
 /* Keep search input + buttons inline and wide */
-.search-inline{ display:flex; gap:12px; align-items:center; flex-wrap:nowrap; }
+.search-inline{ display:flex; gap:8px; align-items:center; flex-wrap:nowrap; }
 .search-inline input[type="text"]{ flex:1 1 auto !important; max-width:100% !important; width:100% !important; min-width:0 !important; }
 
 /* Suggestions solid and on top */
@@ -332,7 +659,7 @@ section.controls{
   align-items: stretch !important;
 }
 .search-card{ max-width: none !important; width: 100% !important; min-width: 0 !important; overflow: hidden; }
-.search-inline{ display:flex !important; gap:12px; align-items:center; flex-wrap:nowrap; min-width:0 !important; }
+.search-inline{ display:flex !important; gap:8px; align-items:center; flex-wrap:nowrap; min-width:0 !important; }
 .search-inline input[type="text"]{ flex:1 1 auto !important; min-width:0 !important; width:100% !important; }
 .search-inline .btn{ white-space:nowrap; }
 
@@ -354,7 +681,7 @@ section.controls{
 /* remove any margins that could push the last card */
 section.controls > .card.pad{ margin: 0 !important; max-width: 100% !important; overflow: hidden; }
 .search-card{ max-width: 100% !important; width: 100% !important; min-width: 0 !important; }
-.search-inline{ display:flex !important; gap:12px; align-items:center; flex-wrap:nowrap; min-width:0; }
+.search-inline{ display:flex !important; gap:8px; align-items:center; flex-wrap:nowrap; min-width:0; }
 .search-inline input[type="text"]{ flex:1 1 auto !important; width:100% !important; min-width:0 !important; }
 
 /* === v3.11b-fixed.3: eliminate right overflow for search chip === */
@@ -378,12 +705,13 @@ body::before{
   inset: 0;
   z-index: -1;
   pointer-events: none;
-  background: var(--bg-grad);
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  background-position: center;
+  background:#000;
+  background-image:url('background/bg.jpg');
+  background-repeat:no-repeat;
+  background-attachment:fixed;
+  background-position:center;
   /* v* units garantiscono copertura oltre i bordi anche su schermi ultrawide */
-  background-size: cover;
+  background-size:cover;
 }
 
 
@@ -635,8 +963,8 @@ textarea:focus {
 }
 
 /* Arrow colors aligned with Buy/Sell */
-.buy .arrow { color: #16E8A5 !important; }
-.sell .arrow { color: #EC6C51 !important; }
+.buy .arrow { color: #68cf74 !important; }
+.sell .arrow { color: #e94c2b !important; }
 
 
 /* === v4.12 — Ticker avatars (local + online fallback) === */
@@ -667,8 +995,8 @@ textarea:focus {
 
 /* 2) Unify BUY/SELL color: same for text and arrow */
 td.num.buy, td.num.sell { font-weight: 700; }
-td.num.buy  { color: #16E8A5 !important; }  /* green (buy) */
-td.num.sell { color: #EC6C51 !important; }  /* red (sell) */
+td.num.buy  { color: #68cf74 !important; }  /* green (buy) */
+td.num.sell { color: #e94c2b !important; }  /* red (sell) */
 td.num .arrow { color: currentColor !important; } /* arrow matches text color */
 
 
@@ -770,7 +1098,7 @@ td.num .arrow { color: currentColor !important; } /* arrow matches text color */
 
 
 /* === V16 fixes === */
-.results-head{ display:flex; align-items:center; justify-content:space-between; gap:12px; }
+.results-head{ display:flex; align-items:center; justify-content:space-between; gap:8px; }
 .results-actions{ display:flex; align-items:center; gap:8px; }
 
 #toggleMineBtn{
@@ -847,13 +1175,87 @@ td.num .arrow { color: currentColor !important; } /* arrow matches text color */
   box-shadow: 0 0 0 2px rgba(198,138,255,0.45), inset 0 0 0 1px rgba(198,138,255,0.35) !important;
 }
 /* Results header layout */
-.results-head{ display:grid; grid-template-columns: 1fr auto 1fr; align-items:center; gap:12px; }
-.results-left{ display:flex; align-items:center; gap:12px; }
+.results-head{ display:grid; grid-template-columns: 1fr auto 1fr; align-items:center; gap:8px; }
+.results-left{ display:flex; align-items:center; gap:8px; }
 .results-center{ display:flex; align-items:center; justify-content:center; gap:6px; } /* tighter gap */
 .results-right{ display:flex; align-items:center; justify-content:flex-end; gap:8px; }
 
 /* Compact pager buttons */
-.pager-btn{ width:36px; height:36px; border-radius:999px; display:inline-flex; align-items:center; justify-content:center; }
+.pager-btn{
+  width:22px;
+  height:22px;
+  border-radius:999px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:0;
+  border:1px solid rgba(255,176,120,0.85);
+  background: linear-gradient(135deg, #ffb347, #ff7a18);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.04) inset,
+    0 8px 22px rgba(255,140,0,0.55);
+}
+
+/* Pager "chip" container */
+.pager-chip{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:4px 10px;
+  border-radius:999px;
+  background: radial-gradient(circle at 0% 0%, rgba(124,58,237,0.45), rgba(10,8,25,0.96));
+  border:1px solid rgba(204,160,255,0.6);
+  box-shadow:
+    0 0 0 1px rgba(0,0,0,0.65),
+    0 10px 26px rgba(4,0,20,0.75);
+  backdrop-filter: blur(14px);
+}
+
+.pager-label{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  line-height:1.1;
+}
+
+.pager-text{ display:none; }
+
+.pager-numbers{
+  font-weight:700;
+  font-size:13px;
+  letter-spacing:0.35em;
+}
+
+.pager-arrow .pager-icon{
+  width:14px;
+  height:14px;
+  display:block;
+  filter: drop-shadow(0 0 4px rgba(0,0,0,0.7));
+}
+
+.pager-prev .pager-icon{
+  transform: rotate(-90deg);
+}
+
+.pager-next .pager-icon{
+  transform: rotate(90deg);
+}
+
+.pager-btn:disabled{
+  opacity:0.35;
+  box-shadow:none;
+}
+
+@media (max-width: 720px){
+  .pager-chip{
+    padding:6px 10px;
+    gap:8px;
+  }
+  .pager-label{
+    align-items:flex-start;
+  }
+}
 
 /* Pill-styled selects (uniform with theme) */
 .pill-select, select#typeFilter{
@@ -873,14 +1275,88 @@ td.num .arrow { color: currentColor !important; } /* arrow matches text color */
   outline: none;
   box-shadow: 0 0 0 2px rgba(198,138,255,0.35), 0 0 18px rgba(198,138,255,0.45) !important;
 }
-.results-head{ display:grid; grid-template-columns: 1fr auto 1fr; align-items:center; gap:12px; }
-.results-left{ display:flex; align-items:center; gap:12px; }
+.results-head{ display:grid; grid-template-columns: 1fr auto 1fr; align-items:center; gap:8px; }
+.results-left{ display:flex; align-items:center; gap:8px; }
 .inline-size{ display:flex; align-items:center; gap:8px; }
 .results-center{ display:flex; align-items:center; justify-content:center; gap:10px; }
 .results-right{ display:flex; align-items:center; justify-content:flex-end; gap:8px; }
 
 /* Pager buttons compact */
-.pager-btn{ width:36px; height:36px; border-radius:999px; display:inline-flex; align-items:center; justify-content:center; }
+.pager-btn{
+  width:22px;
+  height:22px;
+  border-radius:999px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:0;
+  border:1px solid rgba(255,176,120,0.85);
+  background: linear-gradient(135deg, #ffb347, #ff7a18);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.04) inset,
+    0 8px 22px rgba(255,140,0,0.55);
+}
+
+/* Pager "chip" container */
+.pager-chip{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:4px 10px;
+  border-radius:999px;
+  background: radial-gradient(circle at 0% 0%, rgba(124,58,237,0.45), rgba(10,8,25,0.96));
+  border:1px solid rgba(204,160,255,0.6);
+  box-shadow:
+    0 0 0 1px rgba(0,0,0,0.65),
+    0 10px 26px rgba(4,0,20,0.75);
+  backdrop-filter: blur(14px);
+}
+
+.pager-label{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  line-height:1.1;
+}
+
+.pager-text{ display:none; }
+
+.pager-numbers{
+  font-weight:700;
+  font-size:13px;
+  letter-spacing:0.35em;
+}
+
+.pager-arrow .pager-icon{
+  width:14px;
+  height:14px;
+  display:block;
+  filter: drop-shadow(0 0 4px rgba(0,0,0,0.7));
+}
+
+.pager-prev .pager-icon{
+  transform: rotate(-90deg);
+}
+
+.pager-next .pager-icon{
+  transform: rotate(90deg);
+}
+
+.pager-btn:disabled{
+  opacity:0.35;
+  box-shadow:none;
+}
+
+@media (max-width: 720px){
+  .pager-chip{
+    padding:6px 10px;
+    gap:8px;
+  }
+  .pager-label{
+    align-items:flex-start;
+  }
+}
 
 /* Pill-styled selects (page size + trade type) */
 .pill-select, select#typeFilter{
@@ -891,10 +1367,10 @@ td.num .arrow { color: currentColor !important; } /* arrow matches text color */
   padding: 6px 10px;
 }
 .pill-select:focus, select#typeFilter:focus{ outline: none; box-shadow: 0 0 0 2px rgba(198,138,255,0.35); }
-.results-head{ display:flex; align-items:center; justify-content:space-between; gap:12px; }
+.results-head{ display:flex; align-items:center; justify-content:space-between; gap:8px; }
 .results-actions{ display:flex; align-items:center; gap:8px; }
 #toggleMineBtn{
-  width:36px; height:36px; padding:0 !important; display:inline-flex; align-items:center; justify-content:center;
+  width:22px; height:22px; padding:0 !important; display:inline-flex; align-items:center; justify-content:center;
   border-radius:999px; line-height:1;
 }
 #toggleMineBtn svg{ width:18px; height:18px; display:block; }
@@ -1010,7 +1486,7 @@ td.num .arrow { color: currentColor !important; } /* arrow matches text color */
 .stat-card{ position:relative; }
 .stat-card .badge{
   margin-left:auto;
-  width:36px; height:36px; border-radius:10px;
+  width:22px; height:22px; border-radius:10px;
   display:flex; align-items:center; justify-content:center;
   font-size:18px;
 }
@@ -1019,7 +1495,7 @@ td.num .arrow { color: currentColor !important; } /* arrow matches text color */
 /* === V29: remove Search Filters title + reposition stat icons === */
 
 /* Remove header block of filters */
-#filterHeader { display:none !important; }
+/* removed display none for filterHeader */
 
 /* Stat icons pinned to right edge */
 .stat-card {
@@ -1438,15 +1914,577 @@ h1, #mainTitle, #titleARK {
   padding-right: 40px !important;  /* room for inner X */
 }
 
+
+
+/* === v7.1 — Filters docked inside sidebar === */
+
+
+/* Sidebar filter card: single source of truth */
+.sidebar #filterCard{
+  margin-top:10px;
+  background: radial-gradient(
+      circle at 0% 0%,
+      rgba(124,58,237,0.40) 0%,
+      rgba(22,14,46,0.98) 45%,
+      rgba(3,2,8,1) 100%
+  ) !important;
+  border-radius:20px !important;
+  border:1px solid rgba(131, 0, 255, 0.55) !important;
+  box-shadow:0 0 12px rgba(65, 0, 131, 0.41) !important;
+}
+
+
+
+
+.sidebar #filterCard .card.pad{
+  background:transparent !important;
+  border:none !important;
+  box-shadow:none !important;
+  padding:0 !important;
+  margin:8px 0 0 0 !important;
+  border-radius:0 !important;
+}
+.sidebar #filterCard label{
+  font-size:12px;
+}
+.sidebar #filterCard #filterTitle{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-bottom:6px;
+}
+.sidebar #filterCard #filterTitle span{
+  font-size:13px;
+}
+
+/* Results layout: single wide column when filters are in sidebar */
+#layoutTwoCol{
+  grid-template-columns:1fr !important;
+}
+
+
+/* Sidebar trade type chips */
+
+
+.sidebar-chips{
+  margin-top:18px;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+.sidebar-chips-label{
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:0.08em;
+  color:var(--muted);
+  opacity:.9;
+  margin-bottom:2px;
+}
+
+.type-chip{
+  width:100%;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:10px 12px;
+  border-radius:999px;
+  border:1px solid rgba(148,163,184,0.3);
+  background:radial-gradient(circle at 0% 0%,
+    rgba(76,29,149,0.45),
+    rgba(10,6,20,0.98));
+  font-size:13px;
+  color:var(--ink);
+  cursor:pointer;
+  transition:background .15s ease, border-color .15s ease,
+             box-shadow .15s ease, transform .05s ease;
+  box-shadow:0 0 0 1px rgba(15,23,42,0.9);
+}
+
+.type-chip:hover{
+  border-color:rgba(198,138,255,0.6);
+  box-shadow:0 0 10px rgba(198,138,255,0.30);
+}
+
+.chip-icon{
+  width:32px;
+  height:32px;
+  border-radius:14px;
+  background:linear-gradient(135deg, rgba(88,28,135,0.95), rgba(129,140,248,0.9));
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 0 6px rgba(129,140,248,0.45);
+  flex-shrink:0;
+}
+.chip-icon img{
+  width:18px;
+  height:18px;
+}
+
+.chip-text{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  gap:2px;
+}
+.chip-title{
+  font-size:13px;
+  font-weight:600;
+}
+.chip-sub{
+  font-size:11px;
+  opacity:.75;
+}
+
+/* Active state */
+.type-chip.active{
+  background:var(--accent);
+  color:#ffffff !important;
+  border-color:var(--accent);
+  box-shadow:0 0 10px rgba(198,138,255,0.8);
+  transform:translateY(-1px);
+}
+.type-chip.active .chip-title,
+.type-chip.active .chip-sub{
+  color:#ffffff !important;
+}
+.type-chip.active .chip-icon{
+  background:linear-gradient(135deg, #ff8c00, #ff6700);
+  box-shadow:0 0 40px rgba(255,136,0,0.9);
+
+}
+
+/* === v8.1 — Fix date width inside sidebar filter card === */
+.sidebar #filterCard input[type="date"],
+.sidebar #filterCard input[type="text"] {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+/* --- Source API: testo + bottone sulla stessa riga --- */
+.note{
+  display:flex;
+  align-items:center;
+  gap:8px;       /* distanza tra testo e bottone */
+  margin:0;
+}
+
+/* bottone stile pillola, inline */
+.api-status-btn{
+  display:inline-flex;
+  align-items:center;
+  padding:4px 12px;
+  border-radius:999px;
+  font-size:12px;
+  font-weight:600;
+  background:rgba(120,60,255,0.18);
+  color:#ebe3ff;
+  text-decoration:none;
+
+
+  margin:0;      /* IMPORTANTISSIMO per evitare che scenda sotto */
+}
+
+
+
+/* Added Lemon logo image style */
+.sidebar-logo-img {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.sidebar-logo-img img {
+  width: 28px;
+  height: 28px;
+  display: block;
+  object-fit: contain;
+}
+
+
+/* === Custom: Sidebar ticker search pill + date pills === */
+
+/* Search pill container */
+.sidebar #filterCard #slot-search{
+  position: relative;
+  display: flex !important;
+  align-items: center;
+  gap: 8px;
+  padding: 3px 3px;
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at 0% 0%, rgba(124,58,237,0.35), rgba(15,10,30,0.96));
+  border: 1px solid rgba(198,138,255,0.75);
+  box-shadow:0 0 10px rgba(124,58,237,0.25);
+  width: 100%;
+}
+
+/* wrapper inside slot-search (where input lives) */
+.sidebar #filterCard #slot-search .search-wrap{
+  flex: 1 1 auto;
+}
+
+/* text input inside pill */
+.sidebar #filterCard #slot-search #searchBox{
+  width: 100% !important;
+  max-width: none !important;
+  min-width: 0 !important;
+  border: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  padding: 8px 40px 8px 14px !important; /* spazio per la X (anche se nascosta) */
+  font-size: 13px;
+  color: var(--ink);
+}
+.sidebar #filterCard #slot-search #searchBox:focus{
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* hide clear X */
+.sidebar #filterCard #slot-search .clear-inside{
+  display:none !important;
+}
+
+/* orange circular search button */
+.sidebar #filterCard #slot-search #fetchBtn{
+  width: 36px !important;
+  height: 36px !important;
+  flex: 0 0 36px !important;
+  padding: 0 !important;
+  border-radius: 999px !important;
+  border: 1px solid rgba(255,163,80,0.95) !important;
+  background: linear-gradient(135deg,#ffb347,#ff7a18) !important;
+  box-shadow: 0 0 18px rgba(255,163,80,0.9) !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.sidebar #filterCard #slot-search #fetchBtn img,
+.sidebar #filterCard #slot-search #fetchBtn svg{
+  width: 16px;
+  height: 16px;
+}
+.sidebar #filterCard #slot-search #fetchBtn:hover,
+.sidebar #filterCard #slot-search #fetchBtn:focus{
+  border-color: rgba(255,196,130,1) !important;
+  box-shadow: 0 0 22px rgba(255,180,100,1) !important;
+}
+
+/* Date inputs as full-width violet pills */
+#filterCard input[type="date"]{
+  width: 100% !important;
+  max-width: none !important;
+  box-sizing: border-box !important;
+  background: radial-gradient(circle at 0% 0%, rgba(124,58,237,0.25), rgba(15,10,30,0.92)) !important;
+  border: 1px solid rgba(85, 0, 185, 0.75) !important;
+  border-radius: 999px !important;
+  padding: 8px 14px !important;
+  color: var(--ink) !important;
+  box-shadow:0 0 6px rgba(124,58,237,0.25);
+}
+#filterCard input[type="date"]:focus{
+  outline:none !important;
+  box-shadow:0 0 18px rgba(124,58,237,0.55) !important;
+}
+
+/* Equal vertical spacing between dates row and search block */
+#filterCard > .card.pad:first-of-type{
+  margin-top: 12px !important;
+}
+
+
+/* spacing between date fields matching search */
+#filterCard .row .card.pad {
+  margin-bottom: 16px !important;
+}
+
+/* gradient header */
+#filterHeader{
+  background: radial-gradient(circle at 0% 0%, rgba(124,58,237,0.35), rgba(24,18,44,0.95)) !important;
+  border: 1px solid rgba(198,138,255,0.4) !important;
+  box-shadow:
+      inset 0 0 0 1px rgba(255,255,255,0.05),
+      0 0 22px rgba(124,58,237,0.45) !important;
+}
+
+
+/* === FIX: Restore and modernize Search Filters chip === */
+#filterHeader{
+  display:flex !important;
+  align-items:center;
+  gap:10px;
+
+  background: linear-gradient(
+      135deg,
+      rgba(65,32,112,0.65) 0%,
+      rgba(20,14,38,0.85) 100%
+  ) !important;
+
+  border: 1px solid rgba(180,120,255,0.35) !important;
+  border-radius: 18px !important;
+
+  padding: 10px 16px !important;
+  margin: 6px 0 12px 0 !important;
+
+  box-shadow:
+      inset 0 0 0 1px rgba(255,255,255,0.04),
+      0 0 26px rgba(120,60,255,0.40) !important;
+}
+
+#filterHeader h3{
+  margin:0 !important;
+  font-size:14px !important;
+  font-weight:700 !important;
+}
+
+
+/* === FIX v2: hide legacy title, keep only gradient chip === */
+#filterTitle{
+  display:none !important;
+}
+
+/* override spacing + style for gradient chip */
+#filterHeader{
+  display:flex !important;
+  align-items:center;
+  gap:10px;
+
+  background: linear-gradient(
+      135deg,
+      rgba(65,32,112,0.65) 0%,
+      rgba(20,14,38,0.85) 100%
+  ) !important;
+
+  border: 1px solid rgba(180,120,255,0.35) !important;
+  border-radius: 18px !important;
+
+  padding: 10px 16px !important;
+  margin: 2px 0 12px 0 !important;
+
+  box-shadow:
+      inset 0 0 0 1px rgba(255,255,255,0.04),
+      0 0 26px rgba(120,60,255,0.40) !important;
+}
+
+
+/* === FIX v3: gradient chip on #filterTitle, hide #filterHeader === */
+#filterHeader{
+  display:none !important;
+}
+
+#filterTitle{
+  display:flex !important;
+  align-items:center;
+  gap:10px;
+
+  background: linear-gradient(
+      135deg,
+      rgba(65,32,112,0.65) 0%,
+      rgba(20,14,38,0.9) 100%
+  ) !important;
+
+  border: 1px solid rgba(180,120,255,0.35) !important;
+  border-radius: 18px !important;
+
+  padding: 10px 16px !important;
+  margin: 4px 0 12px 0 !important;
+
+  box-shadow:
+      inset 0 0 0 1px rgba(255,255,255,0.04),
+      0 0 26px rgba(120,60,255,0.40) !important;
+
+  color:#fff;
+}
+#filterTitle span{
+  font-size:14px !important;
+  font-weight:700 !important;
+}
+
+
+/* === FIX v4: gradient on whole filter card, clean title row === */
+
+/* duplicate .sidebar #filterCard removed */
+
+
+/* Title row: icon + text, no pill background */
+#filterTitle{
+  display:flex !important;
+  align-items:center;
+  gap:8px;
+  margin:0 0 10px 0 !important;
+  padding:0 !important;
+  background:transparent !important;
+  border:none !important;
+  box-shadow:none !important;
+}
+#filterTitle span{
+  font-size:14px !important;
+  font-weight:700 !important;
+}
+
+/* Ensure old header chip stays hidden */
+#filterHeader{ display:none !important; }
+
+
+/* === RADIALE SEARCH FILTER LO MODIFICHI DA QUI */
+.sidebar #filterCard{
+  background: radial-gradient(
+      circle at 0% 0%,
+      rgba(83, 63, 189, 0.32) 0%,
+      rgba(47, 14, 90, 0.96) 20%,
+      rgb(8, 2, 28) 55%,
+      rgba(5,3,12,1) 100%
+  ) !important;
+}
+
+/* Date pills: no extra glow rectangle */
+#filterCard input[type="date"]{
+  background: #120a24 !important;
+  box-shadow: none !important;
+}
+
+/* Search pill: softer glow only around the orange button, not the whole row */
+.sidebar #filterCard #slot-search{
+  box-shadow: none !important;
+}
+
+
+/* === Filters: compact spacing between Start/End date === */
+#filterCard > .row{
+  gap:4px !important;
+}
+
+
+/* Make entire date pill clickable */
+#slot-fromDate, #slot-toDate{
+  cursor: pointer;
+}
+#slot-fromDate input[type="date"],
+#slot-toDate input[type="date"]{
+  pointer-events: none;
+}
+
+
+.chip-count{
+  margin-left: auto;
+  padding-left: 12px;
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: 0.5px;
+  font-variant-numeric: tabular-nums;
+  display: flex;
+  align-items: center;
+}
+
+
+/* === V42 — Results card radial background === */
+.results-card{
+  position:relative;
+  overflow:hidden;
+  background:rgba(9, 0, 36, 0.74);
+  backdrop-filter:blur(27px);
+  -webkit-backdrop-filter:blur(24px);
+}
+
+.results-card::before{content:none;}
+
+
 </style>
 <link crossorigin="True" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/></head>
 <body>
-<div class="container">
-<div class="row" style="justify-content:space-between;gap:12px">
-<div>
-<h1>ARK Trades – Dashboard (Dark v4)</h1>
-<p class="note">Source: Unofficial API <a href="https://status.arkfunds.io/status/arkfunds" target="_blank" rel="noopener" class="api-status-btn">arkfunds.io ↗</a></p>
+<div class="app-shell">
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo-img">
+    <img src="icons/Lemon.svg" alt="Lemon Trades Logo">
 </div>
+      <div>
+        <div class="sidebar-title">Lemon Trades</div>
+        <div class="sidebar-subtitle">ARK Dashboard</div>
+      </div>
+
+    </div>
+    <nav class="sidebar-nav">
+  <button class="nav-item active" data-view-target="home">
+    <span class="nav-icon">
+      <img src="icons/Overview.svg" alt="Overview">
+    </span>
+    <span class="nav-label">Overview</span>
+  </button>
+
+  <button class="nav-item" data-view-target="favorites">
+    <span class="nav-icon">
+      <img src="icons/Favorites.svg" alt="Favorites">
+    </span>
+    <span class="nav-label">Favorites</span>
+  </button>
+</nav>
+
+
+
+    <div class="sidebar-chips">
+  <div class="sidebar-chips-label">Trade type</div>
+
+  <button class="type-chip active" data-type-chip="ALL">
+    <span class="chip-icon">
+      <img src="icons/total_bars.svg" alt="All"/>
+    </span>
+    <span class="chip-text">
+      <span class="chip-title">All operations</span>
+      <span class="chip-sub">All ARK trades</span>
+    </span>
+    <span class="chip-count chip-total" id="statTotalN">0</span>
+  </button>
+
+  <button class="type-chip" data-type-chip="BUY">
+    <span class="chip-icon">
+      <img src="icons/buy_stairs.svg" alt="Buys"/>
+    </span>
+    <span class="chip-text">
+      <span class="chip-title">Buys only</span>
+      <span class="chip-sub">Accumulation / entries</span>
+    </span>
+    <span class="chip-count chip-buy" id="statBuyN">0</span>
+  </button>
+
+  <button class="type-chip" data-type-chip="SELL">
+    <span class="chip-icon">
+      <img src="icons/sell_stairs.svg" alt="Sells"/>
+    </span>
+    <span class="chip-text">
+      <span class="chip-title">Sells only</span>
+      <span class="chip-sub">Trims / exits</span>
+    </span>
+    <span class="chip-count chip-sell" id="statSellN">0</span>
+  </button>
+</div>
+
+    <div id="sidebarFiltersMount"></div>
+    <div class="sidebar-footer">
+<div class="sidebar-source-note">
+  <p class="note">
+  Source: Unofficial API
+  <a href="https://status.arkfunds.io/status/arkfunds"
+     target="_blank"
+     rel="noopener"
+     class="api-status-btn">
+    arkfunds.io ↗
+  </a>
+</p>
+</div>
+
+      View mode: <span id="sidebarViewLabel">Overview</span>
+    </div>
+  </aside>
+  <main class="main-area">
+    <div class="container">
+<div class="row" style="justify-content:space-between;gap:12px">
+
+
+
   
 </div>
 <section class="controls grid fit-240" style="display:none!important">
@@ -1459,9 +2497,13 @@ h1, #mainTitle, #titleARK {
 <input id="toDate" type="date"/>
 </div>
 <div class="card pad search-card">
-<label>Search (ticker or fund)</label><div class="search-inline"><div class="search-wrap"><input id="searchBox" placeholder="e.g. NVDA" type="text"/><button class="btn icon clear-inside" id="clearBtn" title="Clear Search" aria-label="Clear Search"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div><button class="btn primary" id="fetchBtn" title="Search / Enter" aria-label="Search / Enter"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M19 7v4a2 2 0 0 1-2 2H5l4 4m0-8-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></button><button class="btn" id="csvBtn" title="Export CSV" aria-label="Export CSV"><svg viewBox="0 0 24 24" aria-hidden="true" style="width:16px;height:16px;margin-right:6px"><path d="M6 2h9l5 5v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zm8 1.5V8h4.5"/></svg><strong>Export CSV</strong></button><button class="btn" id="clearBtn" title="Clear Search" aria-label="Clear Search"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div><div class="card pad" id="suggestions" style="position:absolute;z-index:1000;display:none;max-height:240px;overflow:auto;font-size:13px;pointer-events:auto"></div>
+<label>Search (ticker or fund)</label><div class="search-inline"><div class="search-wrap"><input id="searchBox" placeholder="e.g. NVDA" type="text"/><button class="btn icon clear-inside" id="clearBtn" title="Clear Search" aria-label="Clear Search"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div><button class="btn primary" id="fetchBtn" title="Search / Enter">
+    <img src="icons/Enter.svg" width="18" height="18" />
+</button><button class="btn" id="csvBtn" title="Export CSV" aria-label="Export CSV"><svg viewBox="0 0 24 24" aria-hidden="true" style="width:16px;height:16px;margin-right:6px"><path d="M6 2h9l5 5v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zm8 1.5V8h4.5"/></svg><strong>Export CSV</strong></button><button class="btn" id="clearBtn" title="Clear Search" aria-label="Clear Search"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div><div class="card pad" id="suggestions" style="position:absolute;z-index:1000;display:none;max-height:240px;overflow:auto;font-size:13px;pointer-events:auto"></div>
+
 </div>
 </section>
+
 <section class="stats-funds-grid" style="margin-top:12px;margin-bottom:12px">
 <div class="card pad stat">
 <div class="label">Transactions displayed</div>
@@ -1472,8 +2514,8 @@ h1, #mainTitle, #titleARK {
 <div class="value" id="fundCount">0</div>
 </div>
 <div class="card pad">
-<div class="row" style="gap:12px;align-items:center;justify-content:space-between;flex-wrap:nowrap">
-<div class="row" style="gap:12px;flex:1 1 auto;overflow-x:auto;white-space:nowrap">
+<div class="row" style="gap:8px;align-items:center;justify-content:space-between;flex-wrap:nowrap">
+<div class="row" style="gap:8px;flex:1 1 auto;overflow-x:auto;white-space:nowrap">
 <span class="muted">Funds:</span>
 <div class="chips" id="fundsChips"></div>
 </div>
@@ -1481,41 +2523,10 @@ h1, #mainTitle, #titleARK {
 </div>
 </div>
 </section>
+
+
 <!-- Full-width results table -->
 
-<!-- === V15: Stats + Two-Column Layout === -->
-<section id="statsRow" class="grid" style="grid-template-columns: repeat(3, minmax(0,1fr)); gap:12px; margin-top:12px;">
-  <div class="card pad stat-card">
-    <div class="row" style="justify-content:space-between;align-items:center">
-      <div>
-        <div class="muted">Total Transactions</div>
-        <div class="big-num" id="statTotalN">0</div>
-        <div class="muted">All ARK operations</div>
-      </div>
-      <div class="badge mono"><img class="stat-icon" src="icons/total_bars.svg" alt="total"></div>
-    </div>
-  </div>
-  <div class="card pad stat-card">
-    <div class="row" style="justify-content:space-between;align-items:center">
-      <div>
-        <div class="muted">Buys</div>
-        <div class="big-num" id="statBuyN" style="color:#16E8A5">0</div>
-        <div class="muted"><span id="statBuyPct">0%</span> of total</div>
-      </div>
-      <div class="badge mono"><img class="stat-icon" src="icons/buy_stairs.svg" alt="buy"></div>
-    </div>
-  </div>
-  <div class="card pad stat-card">
-    <div class="row" style="justify-content:space-between;align-items:center">
-      <div>
-        <div class="muted">Sells</div>
-        <div class="big-num" id="statSellN" style="color:#EC6C51">0</div>
-        <div class="muted"><span id="statSellPct">0%</span> of total</div>
-      </div>
-      <div class="badge mono"><img class="stat-icon" src="icons/sell_stairs.svg" alt="sell"></div>
-    </div>
-  </div>
-</section>
 
 <section id="layoutTwoCol" class="grid" style="grid-template-columns: 320px 1fr; gap:16px; align-items:start; margin-top:12px;">
   <div id="filterCard" class="card pad">
@@ -1530,7 +2541,7 @@ h1, #mainTitle, #titleARK {
       <div class="icon" style="opacity:.85"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h18l-7 8v5l-4 2v-7L3 5z" stroke="currentColor" fill="none" stroke-width="2"/></svg></div>
       <h3 style="margin:0">Search Filters</h3>
     </div>
-    <div class="row" style="gap:12px">
+    <div class="row" style="gap:6px">
       <div class="card pad" style="flex:1">
         <label>Start Date</label>
         <div id="slot-fromDate"></div>
@@ -1566,7 +2577,7 @@ h1, #mainTitle, #titleARK {
   <div id="resultsSlot"></div>
 </section>
 
-<section class="card pad">
+<section class="card pad results-card" id="resultsCard">
 <div class="results-head">
   <div class="results-left">
     <div class="muted" style="display:inline-flex;align-items:center"><svg viewBox="0 0 24 24" aria-hidden="true" style="width:16px;height:16px;margin-right:6px;opacity:.85"><path d="M3 5h18v2H3zm0 6h18v2H3zm0 6h12v2H3z"/></svg><span>Results</span></div>
@@ -1580,13 +2591,21 @@ h1, #mainTitle, #titleARK {
       <option value="SELL">Sells only</option>
     </select>
 
-    <button class="btn pager-btn" id="prevPage" title="Previous page">‹</button>
-    <span id="pageInfo" class="muted" style="min-width:110px;text-align:center">Page 1 / 1</span>
-    <button class="btn pager-btn" id="nextPage" title="Next page">›</button>
+    <div class="pager-chip">
+      <button class="btn pager-btn pager-arrow pager-prev" id="prevPage" title="Previous page">
+        <img src="icons/arrow.svg" alt="" class="pager-icon" />
+      </button>
+      <div class="pager-label">
+        <span class="pager-text">PAGE</span>
+        <span id="pageInfo" class="pager-numbers">●</span>
+      </div>
+      <button class="btn pager-btn pager-arrow pager-next" id="nextPage" title="Next page">
+        <img src="icons/arrow.svg" alt="" class="pager-icon" />
+      </button>
+    </div>
   </div>
 
   <div class="results-right">
-    <button class="btn" id="toggleMineBtn" title="Only my tickers" aria-label="Only my tickers">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12a1 1 0 0 1 1 1v15l-7-4-7 4V5a1 1 0 0 1 1-1z"/></svg>
     </button>
   </div>
@@ -1611,13 +2630,24 @@ h1, #mainTitle, #titleARK {
 </table>
   <div class="results-foot inside">
     <div class="results-center">
-      <button class="btn pager-btn" id="prevPageBottom" title="Previous page">‹</button>
-      <span id="pageInfoBottom" class="muted" style="min-width:110px;text-align:center">Page 1 / 1</span>
-      <button class="btn pager-btn" id="nextPageBottom" title="Next page">›</button>
+      <div class="pager-chip pager-chip-bottom">
+        <button class="btn pager-btn pager-arrow pager-prev" id="prevPageBottom" title="Previous page">
+          <img src="icons/arrow.svg" alt="" class="pager-icon" />
+        </button>
+        <div class="pager-label">
+          <span class="pager-text">PAGE</span>
+          <span id="pageInfoBottom" class="pager-numbers">●</span>
+        </div>
+        <button class="btn pager-btn pager-arrow pager-next" id="nextPageBottom" title="Next page">
+          <img src="icons/arrow.svg" alt="" class="pager-icon" />
+        </button>
+      </div>
     </div>
   </div>
 </div>
 </section>
+</div>
+  </main>
 </div>
 <div class="overlay" id="overlay">
 <div class="panel">
@@ -2286,12 +3316,14 @@ document.querySelectorAll('.gf-open').forEach(el=>{
       document.body.appendChild(suggestionsBox);
     }
     var r = searchBox.getBoundingClientRect();
+    var BUTTON_SPACE = 56; // spazio riservato al tasto Enter (40px) + gap
     suggestionsBox.style.position = 'fixed';
     suggestionsBox.style.left = r.left + 'px';
     suggestionsBox.style.top = (r.bottom + 6) + 'px';
-    suggestionsBox.style.minWidth = r.width + 'px';
+    suggestionsBox.style.minWidth = Math.max(0, r.width - BUTTON_SPACE) + 'px';
     suggestionsBox.style.display='block';
   }
+
   function applySuggestion(t){
     searchBox.value = t;
     hideSuggestions();
@@ -2336,11 +3368,13 @@ document.querySelectorAll('.gf-open').forEach(el=>{
     if (!suggestionsBox || suggestionsBox.style.display === 'none') return;
     try{
       var r = searchBox.getBoundingClientRect();
+      var BUTTON_SPACE = 56; // spazio riservato al tasto Enter (40px) + gap
       suggestionsBox.style.left = r.left + 'px';
       suggestionsBox.style.top = (r.bottom + 6) + 'px';
-      suggestionsBox.style.minWidth = r.width + 'px';
+      suggestionsBox.style.minWidth = Math.max(0, r.width - BUTTON_SPACE) + 'px';
     }catch(e){}
   }
+
   window.addEventListener('scroll', repositionSuggestions, true);
   window.addEventListener('resize', repositionSuggestions);
   document.addEventListener('keydown', function(e){ if(e.key==='Escape') hideSuggestions(); });
@@ -2525,8 +3559,34 @@ async function hydrateLogoInHeader(ticker){
     const slot = document.getElementById('slot-search'); if (wrap && slot) slot.appendChild(wrap);
   }
   move('fundsChips','slot-fundsChips');
+  
   move('fetchBtn','slot-fetchBtn');
   move('csvBtn','slot-csvBtn');
+
+  // Make entire date chip clickable
+  try{
+    const fromSlot = document.getElementById('slot-fromDate');
+    const toSlot = document.getElementById('slot-toDate');
+    if (fromSlot && fromDate){
+      fromSlot.addEventListener('click', () => {
+        if (typeof fromDate.showPicker === 'function') {
+          fromDate.showPicker();
+        } else {
+          fromDate.focus();
+        }
+      });
+    }
+    if (toSlot && toDate){
+      toSlot.addEventListener('click', () => {
+        if (typeof toDate.showPicker === 'function') {
+          toDate.showPicker();
+        } else {
+          toDate.focus();
+        }
+      });
+    }
+  }catch(e){}
+
   // === v4.18 — Arrange search actions + Clear behavior ===
   (function(){
     const $ = (id)=>document.getElementById(id);
@@ -2551,7 +3611,7 @@ async function hydrateLogoInHeader(ticker){
     if (csvBtn && slotCSV && !slotCSV.contains(csvBtn)) slotCSV.appendChild(csvBtn);
 
     // Placeholder simplified
-    if (searchBox) searchBox.placeholder = 'e.g. NVDA';
+    if (searchBox) searchBox.placeholder = 'Search ticker…';
 
     // Clear should emulate manual clearing (no refetch): empty + dispatch input
     if (clearBtn && searchBox){
@@ -3057,7 +4117,19 @@ try{
     // Then show filtered slice
     rows.slice(start, end).forEach(tr => tr.style.display = '');
 
-    if (pageInfoEl) pageInfoEl.textContent = `Page ${pages ? currentPage : 1} / ${Math.max(pages,1)}`;
+        if (pageInfoEl || document.getElementById('pageInfoBottom')) {
+      const maxPages = Math.max(pages,1);
+      const current = pages ? currentPage : 1;
+      let dots = "";
+      const visible = Math.min(maxPages, 10);
+      for (let i = 1; i <= visible; i++){
+        dots += (i === current ? "●" : "○");
+        if (i < visible) dots += " ";
+      }
+      const infoBottom = document.getElementById('pageInfoBottom');
+      if (pageInfoEl) pageInfoEl.textContent = dots;
+      if (infoBottom) infoBottom.textContent = dots;
+    }
     if (prevPageBtn) prevPageBtn.disabled = (currentPage<=1);
     if (nextPageBtn) nextPageBtn.disabled = (currentPage>=pages);
   }
@@ -3097,36 +4169,39 @@ try{
 // === Stat-cards drive Trade filter (Total / Buy / Sell) ===
 try{
   const typeSel = document.getElementById('typeFilter');
-  const cardTotal = document.getElementById('statTotalN') ? document.getElementById('statTotalN').closest('.stat-card') : null;
-  const cardBuy   = document.getElementById('statBuyN') ? document.getElementById('statBuyN').closest('.stat-card') : null;
-  const cardSell  = document.getElementById('statSellN') ? document.getElementById('statSellN').closest('.stat-card') : null;
+
+  // Sidebar chips
+  const chipAll  = document.querySelector('.type-chip[data-type-chip="ALL"]');
+  const chipBuy  = document.querySelector('.type-chip[data-type-chip="BUY"]');
+  const chipSell = document.querySelector('.type-chip[data-type-chip="SELL"]');
 
   function setActive(mode){
-    [cardTotal, cardBuy, cardSell].forEach(c => c && c.classList.remove('active'));
-    if (mode==='ALL' && cardTotal) cardTotal.classList.add('active');
-    if (mode==='BUY' && cardBuy)   cardBuy.classList.add('active');
-    if (mode==='SELL' && cardSell) cardSell.classList.add('active');
+    const chips = [chipAll, chipBuy, chipSell];
+    chips.forEach(c => c && c.classList.remove('active'));
+    if (mode === 'ALL' && chipAll)  chipAll.classList.add('active');
+    if (mode === 'BUY' && chipBuy)  chipBuy.classList.add('active');
+    if (mode === 'SELL' && chipSell) chipSell.classList.add('active');
   }
+
   function setMode(mode){
     if (typeSel){
       typeSel.value = mode;
       typeSel.dispatchEvent(new Event('change'));
     } else {
-      // fallback: force re-render/pager
       if (typeof applyPager === 'function') applyPager();
       else if (typeof render === 'function') render();
     }
     setActive(mode);
   }
 
-  if (cardTotal) cardTotal.addEventListener('click', ()=> setMode('ALL'));
-  if (cardBuy)   cardBuy.addEventListener('click',  ()=> setMode('BUY'));
-  if (cardSell)  cardSell.addEventListener('click', ()=> setMode('SELL'));
+  if (chipAll)  chipAll.addEventListener('click', () => setMode('ALL'));
+  if (chipBuy)  chipBuy.addEventListener('click', () => setMode('BUY'));
+  if (chipSell) chipSell.addEventListener('click', () => setMode('SELL'));
 
   // initial: reflect current select value
   setActive(typeSel && typeSel.value ? typeSel.value.toUpperCase() : 'ALL');
-}catch(e){ console.error('Stat-card filter binding error', e); }
-})();
+}catch(e){ console.error('Type-chip filter binding error', e); }
+})();;
 
 </script>
 
@@ -3611,5 +4686,100 @@ try{
   }
 })();
 </script>
+
+<script>
+// === v7: sidebar routing (Overview / Favorites) ===
+(function(){
+  function initRouting(){
+    var navButtons = document.querySelectorAll('.nav-item[data-view-target]');
+    if (!navButtons.length) return;
+    var titleEl = document.querySelector('h1');
+    var statusEl = document.getElementById('status');
+    var onlyMine = document.getElementById('onlyMine');
+    var toggleMineBtn = document.getElementById('toggleMineBtn');
+    var sidebarLabel = document.getElementById('sidebarViewLabel');
+
+    // Move filter card into sidebar, if mount exists
+    var sidebarMount = document.getElementById('sidebarFiltersMount');
+    var filterCard = document.getElementById('filterCard');
+    if (sidebarMount && filterCard){
+      sidebarMount.appendChild(filterCard);
+      filterCard.classList.add('sidebar-filters');
+      var layout = document.getElementById('layoutTwoCol');
+      if (layout){
+        layout.style.gridTemplateColumns = '1fr';
+      }
+    }
+
+
+    function applyOnlyMine(on){
+      if (!onlyMine) return;
+      onlyMine.checked = !!on;
+      if (toggleMineBtn){
+        toggleMineBtn.classList.toggle('on', !!on);
+        toggleMineBtn.title = on ? 'Showing only my tickers' : 'Only my tickers';
+      }
+      if (typeof render === 'function'){
+        try{ render(); }catch(e){}
+      }
+      if (statusEl){
+        statusEl.style.display = 'block';
+        statusEl.textContent = on ? 'View: Favorites (only your followed tickers).' : 'View: All trades.';
+      }
+    }
+
+    function setView(view){
+      navButtons.forEach(function(btn){
+        btn.classList.toggle('active', btn.getAttribute('data-view-target') === view);
+      });
+      document.documentElement.setAttribute('data-view', view);
+      if (sidebarLabel){
+        sidebarLabel.textContent = view === 'favorites' ? 'Favorites' : 'Overview';
+      }
+      if (titleEl){
+        titleEl.textContent = view === 'favorites'
+          ? 'ARK Trades – Favorites'
+          : 'ARK Trades – Dashboard (Dark v7)';
+      }
+      if (view === 'favorites'){
+        applyOnlyMine(true);
+      } else {
+        applyOnlyMine(false);
+      }
+    }
+
+    function initFromHash(){
+      var hash = (location.hash || '').replace('#','');
+      if (hash === 'favorites'){
+        setView('favorites');
+      } else {
+        setView('home');
+      }
+    }
+
+    navButtons.forEach(function(btn){
+      btn.addEventListener('click', function(){
+        var view = btn.getAttribute('data-view-target') || 'home';
+        if (view === 'favorites'){
+          history.replaceState(null, '', '#favorites');
+        } else {
+          history.replaceState(null, '', '#home');
+        }
+        setView(view);
+      });
+    });
+
+    window.addEventListener('hashchange', initFromHash);
+    initFromHash();
+  }
+
+  if (document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', initRouting);
+  } else {
+    initRouting();
+  }
+})();
+</script>
+
 </body>
 </html>
