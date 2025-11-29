@@ -612,10 +612,10 @@ tr:hover{background:rgba(255,255,255,.03)}
 .ticker-link{cursor:pointer;text-decoration:none}
 .ticker-link:hover{opacity:.95}
 
-.overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;padding:20px}
-.overlay .panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;max-width:600px;width:100%;max-height:85vh;overflow:auto;box-shadow:var(--shadow)}
-.overlay .panel .hdr{display:flex;align-items:center;gap:8px;padding:12px 16px;border-bottom:1px solid var(--line)}
-.overlay .panel .body{padding:12px 16px}
+
+
+
+
 .close{margin-left:auto}
 
 .btn.on{background:var(--ink);color:var(--chip-on-ink);border-color:var(--ink)}
@@ -665,21 +665,16 @@ tr:hover{background:rgba(255,255,255,.03)}
 .icon-link:hover{opacity:1; transform: translateY(-1px);}
 
 /* === Patches v3.7 === */
-.overlay{background:rgba(0,0,0,.65)!important}
-.overlay .panel{background:#111418!important; backdrop-filter:none!important}
+
+
 /* Right-align Shares header */
 th.num{ text-align:right !important; }
 /* Slightly tighter table cell spacing */
 th,td{ padding:10px 12px; }
 
 /* === v3.8 patches === */
-.overlay .panel table th, 
-.overlay .panel table td {
-  padding: 8px 10px !important;
-}
-.overlay .panel table colgroup col:nth-child(4) {
-  width: 70px !important;
-}
+
+
 .buy .arrow { color: var(--green); }
 .sell .arrow { color: var(--red); }
 
@@ -689,14 +684,14 @@ th,td{ padding:10px 12px; }
   .search-card .row { justify-content: flex-start; }
 }
 /* Overlay table tighter and defined column widths */
-.overlay .panel table{ table-layout: fixed; width: 100%; }
-.overlay .panel table th, .overlay .panel table td{ padding: 6px 8px !important; }
+
+
 
 .buy .arrow { color: var(--green); } .sell .arrow { color: var(--red); }
 
 /* === v3.10 patches === */
-.overlay .panel table{ table-layout: fixed; width: 100%; }
-.overlay .panel table th, .overlay .panel table td{ padding: 6px 6px !important; } /* tighter */
+
+ /* tighter */
 
 /* === v3.11 patches === */
 /* Merge UI: if any empty control cards remain, hide them */
@@ -816,43 +811,20 @@ body::before{
 }
 
 
-/* === OVERLAY THEME + Z-INDEX FIX (v3.11b-fixed.7) === */
-/* Porta il pop-up sopra a tutto (chips/search incluse) e uniforma i colori al tema viola. */
-.overlay{ 
-  position: fixed; inset: 0; 
-  background: rgba(0,0,0,.72) !important; 
-  z-index: 50000 !important;  /* sopra a suggestions (30k) e search-card (2k) */
-}
-.overlay .panel{ 
-  background: var(--panel) !important; 
-  border: 1px solid var(--line) !important; 
-  border-radius: 16px; 
-  box-shadow: 0 20px 60px rgba(0,0,0,.45); 
-  backdrop-filter: none !important;
-  color: var(--ink);
-}
-.overlay .panel .hdr{ 
-  border-bottom: 1px solid var(--line) !important; 
-}
-/* Pulsanti nell'overlay: coerenti con il viola */
-.overlay .panel .btn.primary{ 
-  background: var(--accent); 
-  border-color: var(--accent); 
-  color: #fff;
-  
-}
-.overlay .panel .btn.on{ 
-  background: var(--accent); color: #fff; border-color: var(--accent);
-}
+/* === OVERLAY THEME + Z-INDEX FIX (v4 - unified with holdings card) === */
+/* Pop-up risultati trades: stesso look & feel del popup holdings. */
+
+
+
+
+
+/* Pulsanti nell'overlay: coerenti con tema ma riusiamo gli stili esistenti per GF / Follow */
+
+
+
 /* Tabella nel pop-up: bordi e hover coerenti */
-.overlay .panel table thead{
-  background: linear-gradient(180deg, rgba(124,58,237,.10), rgba(124,58,237,.03)) !important;
-  border-bottom: 1px solid var(--line) !important;
-}
-.overlay .panel table th, 
-.overlay .panel table td{ 
-  border-top: 1px solid var(--line) !important;
-}
+
+
 
 
 /* === SUGGESTIONS FIX (v3.11b-fixed.8) === */
@@ -969,14 +941,7 @@ textarea:focus{
     0 0 22px rgba(198,138,255,0.55) !important;
 }
 /* Overlay buttons share the same interaction effect */
-.overlay .panel .btn:hover,
-.overlay .panel .btn:focus,
-.overlay .panel .btn:focus-visible {
-  border-color: #d5aaff !important;
-  box-shadow:
-    0 0 0 2px rgba(198,138,255,0.35),
-    0 0 18px rgba(198,138,255,0.50) !important;
-}
+
 /* Explicitly ensure chips DO NOT inherit button neon */
 .chip, .chip:hover, .chip:focus { box-shadow: none !important; }
 
@@ -1097,9 +1062,8 @@ textarea:focus {
 #table thead th.num, #table tbody td.num { text-align: right !important; }
 
 /* Popup table too */
-.overlay .panel table thead th { text-align: left !important; }
-.overlay .panel table thead th.num,
-.overlay .panel table tbody td.num { text-align: right !important; }
+
+
 
 /* 2) Unify BUY/SELL color: same for text and arrow */
 td.num.buy, td.num.sell { font-weight: 700; }
@@ -1111,22 +1075,15 @@ td.num .arrow { color: currentColor !important; } /* arrow matches text color */
 /* === v4.14 — Overlay polish (solid, compact, header info) === */
 
 /* Solid panel (no transparency) + narrower width */
-.overlay { background: rgba(0,0,0,.78) !important; }
-.overlay .panel{
-  background: #14111c !important;   /* solid dark violet-ish */
-  max-width: 600px !important;      /* narrower */
-  width: 100% !important;
-}
+
+
 
 /* Header: align items and allow our badge row */
-.overlay .panel .hdr{
-  gap: 10px !important;
-  align-items: center !important;
-}
+
 
 /* Compact table spacing + slightly smaller font */
-.overlay .panel table{ table-layout: fixed; width: 100%; font-size: 14px; }
-.overlay .panel table th, .overlay .panel table td{ padding: 6px 8px !important; }
+
+
 
 /* Name row visuals inside header */
 #focusTitle .td-name{ display:flex; align-items:center; gap:8px; }
@@ -1137,44 +1094,24 @@ td.num .arrow { color: currentColor !important; } /* arrow matches text color */
 
 /* === V6-from-backup — Popup header tweaks === */
 /* Smaller Follow button */
-.overlay .panel .hdr #followBtn{
-  padding: 6px 10px !important;
-  font-size: 13px !important;
-  border-radius: 999px !important;
-  line-height: 1.1 !important;
-}
+
 /* Close as circular X */
-.overlay .panel .hdr #closeOverlay{
-  width: 32px; height: 32px;
-  padding: 0 !important;
-  display:flex; align-items:center; justify-content:center;
-  border-radius: 999px !important;
-  font-size: 18px !important;
-  font-weight: 700 !important;
-}
 
 
-/* === V8 — Follow → Bookmark icon toggle === */
+
+/* === V8 — Follow → Bookmark icon toggle (updated to work with orange icon buttons) === */
 #followBtn{
-  width: 36px; height: 36px;
-  padding: 0 !important;
+  width: 40px; height: 40px;
+  padding: 0;
   display: inline-flex; align-items: center; justify-content: center;
   border-radius: 999px;
   line-height: 1;
 }
-#followBtn svg{ width: 18px; height: 18px; display:block; }
-#followBtn svg path{ stroke: currentColor; fill: none; stroke-width: 2; }
 #followBtn.on{
-  background: var(--accent) !important;
-  border-color: var(--accent) !important;
-  color: var(--accent-ink) !important;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.7);
 }
-/* subtle hover ring like chips/buttons */
 #followBtn:hover{
-  border-color: #d5aaff !important;
-  box-shadow:
-    0 0 0 2px rgba(198,138,255,0.35),
-    0 0 18px rgba(198,138,255,0.45) !important;
+  opacity: 0.95;
 }
 
 
@@ -1477,12 +1414,8 @@ td.num .arrow { color: currentColor !important; } /* arrow matches text color */
 
 /* === V26 fixes === */
 /* Popup bookmark active: white icon/text */
-.overlay .panel .hdr #followBtn.on{
-  color:#fff !important;
-  background: var(--accent) !important;
-  border-color: var(--accent) !important;
-}
-.overlay .panel .hdr #followBtn svg path{ stroke: currentColor; fill: none; stroke-width: 2; }
+
+
 
 
 /* Tighten Search Filters header vertical spacing */
@@ -1817,47 +1750,19 @@ h1, #mainTitle, #titleARK {
 
 
 /* === v4.15 — Popup scrollbar violet + sticky header === */
-.overlay .panel {
-  display: flex;
-  flex-direction: column;
-  max-height: 85vh; /* already set above, reaffirm for clarity */
-  overflow: auto;
-}
+
 
 /* Sticky header (ticker/title + buttons remain visible while scrolling) */
-.overlay .panel .hdr {
-  position: sticky;
-  top: 0;
-  z-index: 5;
-  background: #14111c; /* match panel solid */
-}
+
 
 /* WebKit scrollbars (Panel + inner body) */
-.overlay .panel::-webkit-scrollbar,
-.overlay .panel .body::-webkit-scrollbar {
-  width: 10px;
-}
-.overlay .panel::-webkit-scrollbar-track,
-.overlay .panel .body::-webkit-scrollbar-track {
-  background: rgba(124,58,237,0.12);
-  border-radius: 10px;
-}
-.overlay .panel::-webkit-scrollbar-thumb,
-.overlay .panel .body::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #a882ff, #7c3aed);
-  border-radius: 10px;
-}
-.overlay .panel::-webkit-scrollbar-thumb:hover,
-.overlay .panel .body::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, #d5b8ff, #9b5cf3);
-}
+
+
+
+
 
 /* Firefox scrollbar colors */
-.overlay .panel,
-.overlay .panel .body {
-  scrollbar-color: #7c3aed rgba(124,58,237,0.12);
-  scrollbar-width: thin;
-}
+
 
 
 /* === v4.16 — Compact ticker search width + inline controls === */
@@ -2947,16 +2852,630 @@ h1, #mainTitle, #titleARK {
   color:#f9f5ff;
 }
 
+
+/* === Full Holdings tab === */
+/* === Full Holdings tab === */
+.holdings-main .avatar{
+  width:56px;
+  height:56px;
+  min-width:56px;
+  border-radius:50%;
+  overflow:hidden;
+  background:transparent;
+  border:none;
+  box-shadow:none;
+  margin-right:10px;
+}
+
+.holdings-card{
+  margin-top:12px;
+  background:rgba(9, 0, 36, 0.74);
+  backdrop-filter:blur(24px);
+  -webkit-backdrop-filter:blur(24px);
+}
+
+.card.pad.holdings-card{padding:12px 16px 16px 0;}
+
+
+
+.holdings-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  margin-bottom:6px;
+  padding:0 8px 0 8px;
+}
+.holdings-head-left span{
+  font-size:12px;
+  text-transform:uppercase;
+  letter-spacing:0.06em;
+}
+.holdings-head-icon{
+  width:16px;
+  height:16px;
+  margin-right:6px;
+  opacity:.95;
+}
+.holdings-head-right{
+  font-size:11px;
+  opacity:.7;
+  text-align:right;
+}
+.holdings-count-sep{
+  display:inline-block;
+  margin:0 4px;
+}
+
+
+
+
+.holdings-row{cursor:pointer;}
+.holdings-table-wrap{
+  margin-top:8px;
+  max-height:none;
+  overflow:visible;
+}
+
+.holdings-card .num{ text-align:center !important; padding-right:0; }
+
+.holdings-table{
+  width:100%;
+  margin-left:0;
+  border-collapse:collapse;
+  font-size:12px;
+}
+
+.holdings-table thead th{
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:0.06em;
+  opacity:.7;
+  padding:4px 6px 6px;
+  border-bottom:1px solid rgba(148,163,184,0.35);
+}
+
+.holdings-table tbody td{
+  padding:6px 6px;
+  border-bottom:1px solid rgba(15,23,42,0.9);
+  vertical-align:middle;
+}
+.holdings-table thead th:first-child,
+.holdings-table tbody td:first-child{
+  padding-left:4px;
+}
+
+.holdings-main{
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+
+.holdings-main .ticker-pill{
+  font-size:11px;
+  padding:3px 8px;
+}
+
+.holdings-name{
+  font-size:11px;
+  color:var(--muted);
+  white-space:normal;
+  overflow:visible;
+  text-overflow:unset;
+}
+
+.holdings-table th.holding-col{
+  text-align:left;
+  padding-left:8px;
+  padding-right:0;
+}
+
+.holdings-rank{
+  width:28px;
+}
+
+.holdings-value,
+.holdings-shares,
+.holdings-weight,
+.holdings-last{
+  font-variant-numeric:tabular-nums;
+  text-align:right;
+  font-size:15px;
+  font-weight:700;
+}
+
+.holdings-weight{
+  color:#ffffff;
+}
+
+/* ticker pills style inside holdings table */
+.holdings-card .ticker-pill{
+  background:var(--accent);
+  color:#ffffff;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.10);
+}
+
+/* first 10 rows highlight like TOP 10 card */
+.holdings-table tbody tr:nth-child(-n+10) .ticker-pill{
+  background:var(--accent-orange);
+  color:#ffffff;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.18);
+}
+
+/* stronger value column + neutral weight color */
+.holdings-value{
+  font-weight:600;
+}
+
+
+
+/* tighter first column and give more room to holding name */
+.holdings-table th:first-child,
+.holdings-table td:first-child{
+  padding-left:0;
+  width:40px;
+  text-align:left;
+}
+
+/* Last close $ */
+.holdings-table th:nth-child(3),
+.holdings-table td:nth-child(3){
+  width:110px;
+}
+
+/* Total value */
+.holdings-table th:nth-child(4),
+.holdings-table td:nth-child(4){
+  width:120px;
+}
+
+/* Total shares */
+.holdings-table th:nth-child(5),
+.holdings-table td:nth-child(5){
+  width:140px;
+}
+
+/* Weight % */
+.holdings-table th:nth-child(6),
+.holdings-table td:nth-child(6){
+  width:80px;
+}
+
+#holdingsStatus{
+  font-size:11px;
+  margin-top:4px;
+}
 html[data-view="news"] #resultsCard{
   display:none;
 }
 html[data-view="news"] #newsCard{
   display:block;
 }
-html[data-view="home"] #newsCard,
-html[data-view="favorites"] #newsCard{
+html[data-view="news"] #holdingsCard{
   display:none;
 }
+
+html[data-view="holdings"] #resultsCard,
+html[data-view="holdings"] #newsCard{
+  display:none;
+}
+html[data-view="holdings"] #holdingsCard{
+  display:block;
+}
+
+html[data-view="home"] #newsCard,
+html[data-view="favorites"] #newsCard,
+html[data-view="home"] #holdingsCard,
+html[data-view="favorites"] #holdingsCard{
+  display:none;
+}
+
+
+
+
+/* === Holdings detail popup — clean v2 (ALL HOLDINGS) === */
+#holdingOverlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.78);
+  z-index: 52000;
+  padding: 20px;
+  box-sizing: border-box;
+  align-items: center;
+  justify-content: center;
+}
+
+#holdingOverlay .holding-card {
+  max-width: 820px;
+  width: 100%;
+  border-radius: 26px;
+  background:
+    radial-gradient(circle at 0% 0%, rgba(76,29,149,0.55), transparent 55%),
+    radial-gradient(circle at 100% 120%, rgba(15,23,42,0.95), rgba(10,6,20,0.98));
+  border: 1px solid rgba(148,163,184,0.45);
+  box-shadow: 0 26px 60px rgba(0,0,0,0.80);
+  padding: 20px 22px 18px;
+  color: var(--ink);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* header */
+#holdingOverlay .holding-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(15,23,42,0.88);
+}
+
+#holdingOverlay .holding-main {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+}
+
+#holdingOverlay .avatar-focus {
+  width: 64px;
+  height: 64px;
+  min-width: 64px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #020617;
+  border: 1px solid rgba(15,23,42,0.9);
+  box-shadow: 0 10px 24px rgba(0,0,0,0.65);
+}
+
+#holdingOverlay .avatar-focus .mono {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: .14em;
+}
+
+#holdingOverlay .holding-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+#holdingOverlay #holdingFocusTicker {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 18px;
+  border-radius: 999px;
+  border: 1px solid rgba(192,132,252,0.85);
+  background: linear-gradient(135deg, #7c3aed, #a855f7);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .16em;
+  align-self: flex-start;
+  max-width: max-content;
+}
+
+#holdingOverlay #holdingFocusName {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: #e5e7eb;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#holdingOverlay .holding-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+#holdingOverlay .holding-icon-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background: linear-gradient(135deg, #241238, #0b0618);
+  /* glow rimosso: ombra più corta e neutra */
+  box-shadow: 0 4px 10px rgba(0,0,0,0.55);
+  transition: transform .08s ease, box-shadow .12s ease, opacity .15s ease;
+  color: #fff;
+}
+#holdingOverlay .holding-icon-btn img {
+  width: 18px;
+  height: 18px;
+  display: block;
+}
+#holdingOverlay .holding-icon-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.65);
+}
+#holdingOverlay .holding-icon-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 3px 8px rgba(0,0,0,0.6);
+}
+#holdingOverlay .holding-icon-btn.close {
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+
+#holdingOverlay .holding-icon-btn.active{
+  background: linear-gradient(135deg, #ff8c00, #ff6700);
+}
+#holdingOverlay .holding-icon-btn.close{
+  background: linear-gradient(135deg, #ff8c00, #ff6700);
+}
+
+/* body */
+#holdingOverlay .holding-body {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+#holdingOverlay .holding-company-info {
+  font-size: 12px;
+  color: var(--muted);
+  max-height: 120px;
+  overflow: auto;
+}
+
+#holdingOverlay .holding-company-info strong {
+  color: #e5e7eb;
+}
+
+/* metrics row */
+#holdingOverlay .holding-metrics-row {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+#holdingOverlay .holding-metric {
+  background: radial-gradient(circle at 0% 0%, rgba(15,23,42,0.90), rgba(15,23,42,0.96));
+  border-radius: 18px;
+  border: 1px solid rgba(31,41,55,0.95);
+  box-shadow:
+    0 0 0 1px rgba(148,163,184,0.25),
+    0 12px 28px rgba(0,0,0,0.75);
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 4px;
+}
+
+#holdingOverlay .holding-metric-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: .18em;
+  color: rgba(148,163,184,0.85);
+}
+
+#holdingOverlay .holding-metric-value {
+  font-size: 18px;
+  font-weight: 700;
+  color: #f9fafb;
+}
+
+/* weight emphasis */
+#holdingOverlay #holdingMetricWeight.heat-low {
+  color: #facc15;
+}
+#holdingOverlay #holdingMetricWeight.heat-mid {
+  color: #fb923c;
+}
+#holdingOverlay #holdingMetricWeight.heat-high {
+  color: #ef4444;
+}
+
+/* make holdings rows obviously clickable */
+.holdings-row {
+  cursor: pointer;
+}
+
+@media (max-width: 720px) {
+  #holdingOverlay .holding-card {
+    padding: 16px 14px 14px;
+    border-radius: 22px;
+  }
+  #holdingOverlay .holding-header {
+    align-items: flex-start;
+  }
+  #holdingOverlay .holding-metrics-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+
+
+/* === Trades detail overlay (results popup) — clean v2 === */
+#overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.78);
+  z-index: 50000;
+  padding: 20px;
+  box-sizing: border-box;
+  align-items: center;
+  justify-content: center;
+}
+
+#overlay .panel {
+  max-width: 820px;
+  width: 100%;
+  border-radius: 26px;
+  background:
+    radial-gradient(circle at 0% 0%, rgba(76,29,149,0.5), transparent 55%),
+    radial-gradient(circle at 100% 120%, rgba(15,23,42,0.95), rgba(10,6,20,0.98));
+  border: 1px solid rgba(148,163,184,0.45);
+  box-shadow: 0 26px 60px rgba(0,0,0,0.85);
+  color: var(--ink);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+#overlay .hdr {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 10px 18px 10px 18px;
+  border-bottom: 1px solid rgba(15,23,42,0.90);
+}
+
+#overlay .body {
+  padding: 6px 18px 12px 18px;
+}
+
+/* Title area (avatar + chip + company) reuse existing .td-name styles, just space properly */
+#overlay #focusTitle .td-name {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Buttons in trades overlay: match holdings popup orange icon buttons */
+#overlay .hdr .overlay-actions{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+#overlay .overlay-icon-btn{
+  width:40px;
+  height:40px;
+  border-radius:999px;
+  border:none;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  background:linear-gradient(135deg,#241238,#0b0618);
+  box-shadow:0 4px 10px rgba(0,0,0,0.55);
+  transition:transform .08s ease, box-shadow .12s ease, opacity .15s ease;
+  color:#fff;
+}
+#overlay .overlay-icon-btn img{
+  width:18px;
+  height:18px;
+  display:block;
+}
+#overlay .overlay-icon-btn:hover{
+  transform:translateY(-1px);
+  box-shadow:0 6px 14px rgba(0,0,0,0.65);
+}
+#overlay .overlay-icon-btn:active{
+  transform:translateY(0);
+  box-shadow:0 3px 8px rgba(0,0,0,0.6);
+}
+#overlay .overlay-icon-btn.close{
+  font-size:18px;
+  font-weight:700;
+  line-height:1;
+}
+
+
+#overlay .overlay-icon-btn.on,
+#overlay .overlay-icon-btn.close{
+  background: linear-gradient(135deg,#ff8c00,#ff6700);
+}
+
+
+/* Results popup header: avatar + ticker pill + name stacked like holdings */
+#overlay .focus-main{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  min-width:0;
+}
+#overlay .avatar-focus{
+  width:64px;
+  height:64px;
+  min-width:64px;
+  border-radius:50%;
+  overflow:hidden;
+  background:#020617;
+  border:1px solid rgba(15,23,42,0.9);
+  box-shadow:0 10px 24px rgba(0,0,0,0.65);
+}
+#overlay .avatar-focus .mono{
+  font-size:18px;
+  font-weight:700;
+  letter-spacing:.14em;
+}
+#overlay .focus-text{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+  min-width:0;
+}
+#overlay .focus-ticker-pill{
+  padding:4px 18px;
+  border-radius:999px;
+  border:1px solid rgba(192,132,252,0.85);
+  font-size:11px;
+  font-weight:600;
+  letter-spacing:.16em;
+  align-self:flex-start;
+  max-width:max-content;
+}
+#overlay .focus-name{
+  font-size:18px;
+  font-weight:700;
+  letter-spacing:.04em;
+  text-transform:uppercase;
+  color:#e5e7eb;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+/* Table inside overlay */
+
+#overlay table th{
+  text-align:left;
+}
+#overlay table td{
+  text-align:left;
+}
+#overlay table th.num,
+#overlay table td.num{
+  text-align:right;
+}
+#overlay table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+#overlay table thead {
+  background: linear-gradient(180deg, rgba(124,58,237,.10), rgba(124,58,237,.03));
+  border-bottom: 1px solid var(--line);
+}
+
+#overlay table th,
+#overlay table td {
+  padding: 8px 10px;
+  border-top: 1px solid var(--line);
+}
+
+#overlay table th.num,
+#overlay table td.num {
+  text-align: right;
+}
+
 </style>
 <link crossorigin="True" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/></head>
 <body>
@@ -2989,6 +3508,13 @@ html[data-view="favorites"] #newsCard{
       <img src="icons/News.svg" alt="News">
     </span>
     <span class="nav-label">News</span>
+  </button>
+
+  <button class="nav-item pill-glow-ring" data-view-target="holdings">
+    <span class="nav-icon">
+      <img src="icons/Holdings.svg" alt="Holdings">
+    </span>
+    <span class="nav-label">Holdings</span>
   </button>
 </nav>
 
@@ -3263,15 +3789,97 @@ html[data-view="favorites"] #newsCard{
     </div>
   </section>
 
+
+<section class="card pad holdings-card" id="holdingsCard">
+  <div class="holdings-head">
+    <div class="holdings-head-left muted" style="display:inline-flex;align-items:center">
+      <img src="icons/Holdings.svg" alt="Holdings" class="holdings-head-icon"/>
+      <span>ALL HOLDINGS</span>
+    </div>
+    <div class="holdings-head-right muted">
+      <span id="holdingsUpdated"></span>
+      <span class="holdings-count-sep">•</span>
+      <span><span id="holdingsCount">0</span> tickers</span>
+    </div>
+  </div>
+
+  <div class="muted" id="holdingsStatus">Loading aggregated holdings…</div>
+
+  <div class="holdings-table-wrap">
+    <table class="holdings-table">
+      <thead>
+        <tr>
+          <th class="num">#</th>
+          <th class="holding-col">Holding</th>
+          <th class="num">Last close $</th>
+          <th class="num">Total value</th>
+          <th class="num">Total shares</th>
+          <th class="num">Weight %</th>
+        </tr>
+      </thead>
+      <tbody id="holdingsBody"></tbody>
+    </table>
+  </div>
+</section>
+
+
 </div>
   </main>
 </div>
+
+
+<div class="overlay" id="holdingOverlay">
+  <div class="holding-card">
+    <div class="holding-header">
+      <div class="holding-main">
+        <span class="avatar avatar-focus" id="holdingFocusAvatar" data-ticker="">
+          <span class="mono"></span>
+        </span>
+        <div class="holding-text">
+          <span id="holdingFocusTicker">TSLA</span>
+          <div id="holdingFocusName">TESLA INC</div>
+        </div>
+      </div>
+      <div class="holding-actions">
+        <button class="holding-icon-btn close" id="holdingCloseBtn" title="Close">×</button>
+      </div>
+    </div>
+    <div class="holding-body">
+      <div class="holding-company-info" id="holdingCompanyInfo">
+        Loading company info...
+      </div>
+      <div class="holding-metrics-row">
+        <div class="holding-metric">
+          <div class="holding-metric-label">LAST CLOSE</div>
+          <div class="holding-metric-value" id="holdingMetricLast">—</div>
+        </div>
+        <div class="holding-metric">
+          <div class="holding-metric-label">TOTAL VALUE</div>
+          <div class="holding-metric-value" id="holdingMetricValue">—</div>
+        </div>
+        <div class="holding-metric">
+          <div class="holding-metric-label">TOTAL SHARES</div>
+          <div class="holding-metric-value" id="holdingMetricShares">—</div>
+        </div>
+        <div class="holding-metric">
+          <div class="holding-metric-label">WEIGHT %</div>
+          <div class="holding-metric-value" id="holdingMetricWeight">—</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="overlay" id="overlay">
 <div class="panel">
 <div class="hdr">
-<div id="focusTitle" style="font-weight:700">Ticker</div>
-<button class="btn" id="openGFBtn" title="Open on Google Finance" aria-label="Open on Google Finance"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" stroke="currentColor" fill="none" stroke-width="2"/><path d="M8 16L16 8M9 8h7v7" stroke="currentColor" stroke-width="2" fill="none"/></svg></button><button class="btn" id="followBtn" title="Follow / Unfollow"><strong>Follow</strong></button>
-<button class="btn close" id="closeOverlay"><strong>×</strong></button>
+  <div id="focusTitle" style="font-weight:700">Ticker</div>
+  <div class="overlay-actions">
+    <button class="overlay-icon-btn" id="followBtn" title="Save / unsave">
+      <img src="icons/Favorites.svg" alt="Favorite"/>
+    </button>
+    <button class="overlay-icon-btn close" id="closeOverlay" title="Close">×</button>
+  </div>
 </div>
 <div class="body">
 <div class="muted" id="focusInfo" style="margin-bottom:8px"></div>
@@ -3296,6 +3904,51 @@ html[data-view="favorites"] #newsCard{
 <script>
 (function(){
   const FUNDS = ["ARKK","ARKG","ARKQ","ARKF","ARKX","ARKW"];
+  function escapeHTML(str){
+    return String(str ?? '').replace(/[&<>"']/g, s => ({
+      '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'
+    }[s] || s));
+  }
+
+  async function fetchStockProfile(symbol){
+    try{
+      const u = new URL('https://arkfunds.io/api/v2/stock/profile');
+      u.searchParams.set('symbol', symbol);
+      const res = await fetch(u.toString());
+      if(!res.ok) throw new Error('HTTP ' + res.status);
+      const data = await res.json();
+      return data && data.profile ? data.profile : null;
+    }catch(e){
+      console.error('stock/profile failed', e);
+      return null;
+    }
+  }
+
+  function renderCompanyInfo(info){
+    if(!info) return '<div class="company-meta">No company profile available.</div>';
+    const name   = info.company || info.name || info.security_name || '';
+    const sector = info.sector || '';
+    const industry = info.industry || '';
+    const desc   = info.description || info.business_summary || '';
+    const website = info.website || info.homepage || '';
+
+    const parts = [];
+    if(sector || industry){
+      parts.push('<div class="company-meta">' + escapeHTML([sector, industry].filter(Boolean).join(' • ')) + '</div>');
+    }
+    if(desc){
+      parts.push('<div class="company-desc">' + escapeHTML(desc) + '</div>');
+    }
+    if(website){
+      const url = escapeHTML(website);
+      parts.push('<div class="company-link"><a href="' + url + '" target="_blank" rel="noopener">Website</a></div>');
+    }
+    if(!parts.length){
+      parts.push('<div class="company-meta">No extra company details available from API.</div>');
+    }
+    return parts.join('');
+  }
+
   function getMyTickers(){try{return JSON.parse(localStorage.getItem("MY_TICKERS")||"[]");}catch(e){return []}}
 function setMyTickers(arr){localStorage.setItem("MY_TICKERS",JSON.stringify(arr))}
 
@@ -3467,7 +4120,20 @@ const NAME_MAP = {
   const overlay = document.getElementById('overlay');
   const closeOverlay = document.getElementById('closeOverlay');
   const followBtn = document.getElementById('followBtn');
+  const holdingOverlay      = document.getElementById('holdingOverlay');
+  const holdingCloseBtn     = document.getElementById('holdingCloseBtn');
+  const holdingFavBtn       = null;
+  const holdingFocusName    = document.getElementById('holdingFocusName');
+  const holdingFocusTicker  = document.getElementById('holdingFocusTicker');
+  const holdingFocusAvatar  = document.getElementById('holdingFocusAvatar');
+  const holdingCompanyInfo  = document.getElementById('holdingCompanyInfo');
+  const holdingMetricLast   = document.getElementById('holdingMetricLast');
+  const holdingMetricValue  = document.getElementById('holdingMetricValue');
+  const holdingMetricShares = document.getElementById('holdingMetricShares');
+  const holdingMetricWeight = document.getElementById('holdingMetricWeight');
+  const holdingHeat         = document.getElementById('holdingHeat');
   let focusTicker = '';
+  let holdingOverlayTicker  = '';
 try{ refreshFollowBtn(); }catch(e){}
  // --- Google Finance: exchange mapping (corretto al 23 Oct 2025) ---
 const EXCHANGE_MAP = {
@@ -3558,6 +4224,7 @@ const EXCHANGE_MAP = {
   const focusInfo  = document.getElementById('focusInfo');
   const focusBody  = document.getElementById('focusBody');
   closeOverlay.onclick = ()=> overlay.style.display='none';
+  if(holdingCloseBtn && holdingOverlay){ holdingCloseBtn.onclick = ()=> holdingOverlay.style.display='none'; }
   
   followBtn.onclick = ()=>{
     if(!focusTicker) return;
@@ -3571,6 +4238,11 @@ const EXCHANGE_MAP = {
     refreshFollowBtn();
     render();
   };
+
+  function updateHoldingFavBtn(){
+    // no-op: holdings popup no longer has a favorites toggle button
+  }
+
   searchBox.addEventListener('keydown', (e)=>{
     if(e.key==='Escape'){ searchBox.value=''; hideSuggestions(); render(); return; }
     if(e.key==='Enter'){
@@ -3865,10 +4537,8 @@ document.querySelectorAll('.gf-open').forEach(el=>{
   function refreshFollowBtn(){
   if(!focusTicker) return;
   const on = isFollowed(focusTicker);
-  // Minimal bookmark icon (outline). When active, button bg turns violet.
-  followBtn.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">'
-    + '<path d="M6 4h12a1 1 0 0 1 1 1v15l-7-4-7 4V5a1 1 0 0 1 1-1z" />'
-    + '</svg>';
+  // Use the same Favorites bookmark icon as holdings popup
+  followBtn.innerHTML = '<img src="icons/Favorites.svg" alt="Favorite"/>';
   followBtn.setAttribute('aria-pressed', on ? 'true' : 'false');
   followBtn.title = on ? 'Saved' : 'Save';
   followBtn.classList.toggle('on', on);
@@ -3880,16 +4550,19 @@ document.querySelectorAll('.gf-open').forEach(el=>{
     mergeWeights(allRows);
     const rows = getFiltered().filter(r=>r.ticker===ticker);
     focusTicker = ticker; window.focusTicker = ticker;
+    
     focusTitle.innerHTML = (function(){
   var nm = (NAME_MAP && NAME_MAP[ticker]) ? NAME_MAP[ticker] : '';
   var s  = tickerStyles(ticker||'');
   var T  = (ticker||'').toUpperCase();
   var initials = T.slice(0,2);
   return `
-    <div class="td-name">
-      <span class="avatar" data-ticker="${T}"><span class="mono">${initials}</span></span>
-      <span class="ticker-pill gf-open" data-ticker="${T}" style="background:${s.bg};color:${s.fg}">${T}</span>
-      ${nm ? `<span class="company">${nm}</span>` : ''}
+    <div class="focus-main">
+      <span class="avatar avatar-focus" data-ticker="${T}"><span class="mono">${initials}</span></span>
+      <div class="focus-text">
+        <span class="focus-ticker-pill ticker-pill gf-open" data-ticker="${T}" style="background:${s.bg};color:${s.fg}">${T}</span>
+        ${nm ? `<div class="focus-name">${nm}</div>` : ''}
+      </div>
     </div>`;
 })();
     refreshFollowBtn();
@@ -4023,7 +4696,7 @@ document.querySelectorAll('.gf-open').forEach(el=>{
 
 
   onlyMine.onchange = ()=>render();
-  document.addEventListener('keydown', e=>{ if(e.key==='Escape') overlay.style.display='none'; });
+  document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ overlay.style.display='none'; if(holdingOverlay) holdingOverlay.style.display='none'; } });
 
   
 // Delegated handler: open Google Finance when clicking any .gf-open (including in popup header)
@@ -5433,6 +6106,8 @@ try{
           sidebarLabel.textContent = 'Favorites';
         } else if (view === 'news'){
           sidebarLabel.textContent = 'News';
+        } else if (view === 'holdings'){
+          sidebarLabel.textContent = 'Holdings';
         } else {
           sidebarLabel.textContent = 'Overview';
         }
@@ -5442,6 +6117,8 @@ try{
           titleEl.textContent = 'ARK Trades – Favorites';
         } else if (view === 'news'){
           titleEl.textContent = 'ARK Trades – News';
+        } else if (view === 'holdings'){
+          titleEl.textContent = 'ARK Trades – Holdings';
         } else {
           titleEl.textContent = 'ARK Trades – Dashboard (Dark v7)';
         }
@@ -5453,20 +6130,30 @@ try{
       }
     }
 
-    function initFromHash(){
+
+function initFromHash(){
       var hash = (location.hash || '').replace('#','');
       if (hash === 'favorites'){
         setView('favorites');
+      } else if (hash === 'news'){
+        setView('news');
+      } else if (hash === 'holdings'){
+        setView('holdings');
       } else {
         setView('home');
       }
     }
 
-    navButtons.forEach(function(btn){
+
+navButtons.forEach(function(btn){
       btn.addEventListener('click', function(){
         var view = btn.getAttribute('data-view-target') || 'home';
         if (view === 'favorites'){
           history.replaceState(null, '', '#favorites');
+        } else if (view === 'news'){
+          history.replaceState(null, '', '#news');
+        } else if (view === 'holdings'){
+          history.replaceState(null, '', '#holdings');
         } else {
           history.replaceState(null, '', '#home');
         }
@@ -5628,10 +6315,32 @@ try{
     const status = document.getElementById('arkTop10Status');
     const list = document.getElementById('arkTop10List');
     const updated = document.getElementById('arkTop10Updated');
+
+    // elements for full holdings tab
+    const holdingsBody    = document.getElementById('holdingsBody');
+    const holdingsStatus  = document.getElementById('holdingsStatus');
+    const holdingsUpdated = document.getElementById('holdingsUpdated');
+    const holdingsCount   = document.getElementById('holdingsCount');
+
+    if(holdingsBody){
+      holdingsBody.addEventListener('click', function(e){
+        const row = e.target.closest('.holdings-row');
+        if(!row) return;
+        // evita conflitti con eventuali link gf-open/esterni
+        if(e.target.closest('.gf-open')) return;
+        if(typeof openHoldingOverlayFromRow === 'function'){
+          openHoldingOverlayFromRow(row);
+        }
+      });
+    }
+
+
     if (!status || !list) return;
 
     try{
       status.textContent = 'Loading ARK aggregated holdings…';
+      if (holdingsStatus) holdingsStatus.textContent = 'Loading aggregated holdings…';
+
       const url = new URL(ENDPOINT);
       url.searchParams.set('symbol', FUNDS.join(','));
 
@@ -5642,35 +6351,52 @@ try{
       const holdings = Array.isArray(json.holdings) ? json.holdings : [];
       const grouped = {};
 
-      holdings.forEach(h=>{
+      holdings.forEach(h => {
         const t = h.ticker;
         if (!t) return;
-        if (!grouped[t]) grouped[t] = {ticker:t, mv:0, shares:0};
-        grouped[t].mv += h.market_value || 0;
+        const nameField = h.company || h.name || h.security_name || h.full_name || '';
+        if (!grouped[t]){
+          grouped[t] = { ticker: t, mv: 0, shares: 0, name: nameField };
+        } else if (!grouped[t].name && nameField){
+          grouped[t].name = nameField;
+        }
+        grouped[t].mv     += h.market_value || 0;
         grouped[t].shares += h.shares || 0;
       });
 
-      const arr = Object.values(grouped).sort((a,b)=>b.mv - a.mv).slice(0,10);
+      const values = Object.values(grouped);
+      if (!values.length){
+        status.textContent = 'No holdings data available.';
+        if (holdingsStatus) holdingsStatus.textContent = 'No holdings data available.';
+        return;
+      }
 
-      list.innerHTML = '';
-      arr.forEach((item,i)=>{
-        const li = document.createElement('li');
-        const sym = (item.ticker || '').trim().toUpperCase();
-        const name = (typeof NAME_MAP !== 'undefined' && NAME_MAP[sym]) ? NAME_MAP[sym] : '';
-        const mv = item.mv || 0;
+      // total market value for weight%
+      const totalMv = values.reduce((sum, x) => sum + (x.mv || 0), 0);
 
-        let label;
+      const formatMV = (mv) => {
         if (mv >= 1e9){
           const b = mv / 1e9;
-          label = '$ ' + b.toLocaleString('it-IT',{ maximumFractionDigits: 2 });
-          label += 'B';
+          return '$ ' + b.toLocaleString('it-IT',{ maximumFractionDigits: 2 }) + 'B';
         } else if (mv >= 1e6){
           const m = mv / 1e6;
-          label = '$ ' + Math.round(m).toLocaleString('it-IT',{ maximumFractionDigits: 0 });
-          label += 'M';
+          return '$ ' + Math.round(m).toLocaleString('it-IT',{ maximumFractionDigits: 0 }) + 'M';
         } else {
-          label = '$ ' + mv.toLocaleString('it-IT',{ maximumFractionDigits: 0 });
+          return '$ ' + mv.toLocaleString('it-IT',{ maximumFractionDigits: 0 });
         }
+      };
+
+      // === TOP 10 by market value ===
+      const top10 = values.slice().sort((a,b) => (b.mv || 0) - (a.mv || 0)).slice(0, 10);
+
+      list.innerHTML = '';
+      top10.forEach((item, i) => {
+        const li = document.createElement('li');
+        const sym = (item.ticker || '').trim().toUpperCase();
+        const name = item.name || ((typeof NAME_MAP !== 'undefined' && NAME_MAP[sym]) ? NAME_MAP[sym] : '');
+        const mv = item.mv || 0;
+
+        const label = formatMV(mv);
 
         li.className = 'ark-top10-item';
         li.innerHTML =
@@ -5678,7 +6404,6 @@ try{
             '<div class="ark-top10-left">' +
               '<span class="ark-top10-rank">' + (i+1) + '.</span>' +
               '<span class="ticker-pill gf-open" data-ticker="' + sym + '">' + sym + '</span>' +
-              (name ? '<span class="ark-top10-name">' + name + '</span>' : '') +
             '</div>' +
             '<div class="ark-top10-mv">' + label + '</div>' +
           '</div>';
@@ -5699,17 +6424,161 @@ try{
         list.appendChild(li);
       });
 
-      
-const now = new Date();
-      updated.textContent = 'Updated: '+ now.toLocaleString('en-US',{hour:'2-digit',minute:'2-digit'});
+      const now = new Date();
+      if (updated){
+        updated.textContent = 'Updated: ' + now.toLocaleString('en-US',{hour:'2-digit',minute:'2-digit'});
+      }
       status.textContent = '';
+
+      // === FULL HOLDINGS TAB (sorted by total market value) ===
+      if (holdingsBody && holdingsStatus){
+        const sortedByMv = values.slice().sort((a,b) => (b.mv || 0) - (a.mv || 0));
+
+        holdingsBody.innerHTML = '';
+        sortedByMv.forEach((item, idx) => {
+          const sym = (item.ticker || '').trim().toUpperCase();
+          const name = item.name || ((typeof NAME_MAP !== 'undefined' && NAME_MAP[sym]) ? NAME_MAP[sym] : '');
+          const shares = item.shares || 0;
+          const mv = item.mv || 0;
+          const weight = totalMv ? (item.mv / totalMv) * 100 : 0;
+          const lastClose = (shares > 0 && mv > 0) ? (mv / shares) : 0;
+          const lastCloseLabel = lastClose
+            ? '$ ' + lastClose.toLocaleString('en-US',{minimumFractionDigits:2, maximumFractionDigits:2})
+            : '—';
+
+          const tr = document.createElement('tr');
+          tr.className = 'holdings-row';
+          tr.dataset.ticker = sym;
+          tr.dataset.name = name || '';
+          tr.dataset.lastClose = lastCloseLabel;
+          tr.dataset.mvLabel = formatMV(mv);
+          tr.dataset.sharesLabel = shares.toLocaleString('it-IT');
+          tr.dataset.weightLabel = weight.toFixed(2).replace(".", ",") + '%';
+          tr.innerHTML =
+            '<td class="num holdings-rank">' + (idx+1) + '.</td>' +
+            '<td class="holdings-main">' +
+              '<span class="avatar" data-ticker="' + sym + '"><span class="mono">' + sym.slice(0,2) + '</span></span>' +
+              '<span class="ticker-pill gf-open" data-ticker="' + sym + '">' + sym + '</span>' +
+              (name ? '<span class="holdings-name">' + name + '</span>' : '') +
+            '</td>' +
+            '<td class="num holdings-last">' + lastCloseLabel + '</td>' +
+            '<td class="num holdings-value">' + formatMV(mv) + '</td>' +
+            '<td class="num holdings-shares">' + shares.toLocaleString('it-IT') + '</td>' +
+            '<td class="num holdings-weight">' + weight.toFixed(2).replace(".", ",") + '%</td>';
+
+          tr.addEventListener('click', ()=>{
+            if(typeof openHoldingOverlayFromRow === 'function'){
+              openHoldingOverlayFromRow(tr);
+            }
+          });
+
+          holdingsBody.appendChild(tr);
+        });
+
+        if (holdingsCount){
+          holdingsCount.textContent = sortedByMv.length.toLocaleString('it-IT');
+        }
+        if (holdingsUpdated){
+          const now2 = new Date();
+          holdingsUpdated.textContent = 'Updated: ' + now2.toLocaleString('en-US',{hour:'2-digit',minute:'2-digit'});
+        }
+        holdingsStatus.textContent = '';
+
+        // hydrate ticker avatars if resolver is available
+        try{
+          if (window.__logoResolver && typeof __logoResolver.hydrateAvatar === 'function'){
+            sortedByMv.forEach(item => {
+              const T = (item.ticker || '').toUpperCase();
+              __logoResolver.hydrateAvatar('#holdingsCard .avatar[data-ticker="'+T+'"]', T);
+            });
+          }
+        }catch(_){}
+      }
     }catch(e){
       console.error(e);
       status.textContent = 'Unable to compute ARK global holdings';
+      if (holdingsStatus) holdingsStatus.textContent = 'Unable to compute ARK global holdings';
     }
   }
 
-  document.addEventListener('DOMContentLoaded', loadTop10);
+
+
+  function openHoldingOverlayFromRow(row){
+    if(!row || !holdingOverlay) return;
+    // show overlay immediately, we'll fill details below
+    holdingOverlay.style.display = 'flex';
+    try{
+      const ticker = (row.dataset.ticker || '').toUpperCase();
+      const name   = row.dataset.name || ticker;
+      const last   = row.dataset.lastClose || '';
+      const mv     = row.dataset.mvLabel || '';
+      const shares = row.dataset.sharesLabel || '';
+      const weight = row.dataset.weightLabel || '';
+
+      holdingOverlayTicker = ticker;
+
+      if(holdingFocusName)   holdingFocusName.textContent = name;
+      if(holdingFocusTicker) holdingFocusTicker.textContent = ticker;
+      if(holdingMetricLast)  holdingMetricLast.textContent = last || '—';
+      if(holdingMetricValue) holdingMetricValue.textContent = mv || '—';
+      if(holdingMetricShares)holdingMetricShares.textContent = shares || '—';
+      
+      if(holdingMetricWeight){
+        const valueText = weight || '—';
+        holdingMetricWeight.textContent = valueText;
+        holdingMetricWeight.classList.remove('heat-low','heat-mid','heat-high');
+        const parsed = parseFloat(String(weight).replace('%','').replace(',','.'));
+        if(!isNaN(parsed)){
+          let cls = 'heat-low';
+          if(parsed >= 5) cls = 'heat-high';
+          else if(parsed >= 2) cls = 'heat-mid';
+          holdingMetricWeight.classList.add(cls);
+        }
+      }
+
+if(holdingCompanyInfo) holdingCompanyInfo.textContent = 'Loading company profile…';
+
+      if(holdingFocusAvatar){
+        holdingFocusAvatar.setAttribute('data-ticker', ticker);
+        const inner = holdingFocusAvatar.querySelector('.mono');
+        if(inner) inner.textContent = ticker.slice(0,2);
+        try{
+          if(window.__logoResolver && typeof window.__logoResolver.hydrateAvatar === 'function'){
+            window.__logoResolver.hydrateAvatar('#holdingFocusAvatar', ticker);
+          }
+        }catch(e){}
+      }
+
+      const infoPlaceholder = holdingCompanyInfo;
+      if(infoPlaceholder){
+        infoPlaceholder.textContent = 'Loading company profile…';
+        setTimeout(()=>{
+          if(infoPlaceholder.textContent === 'Loading company profile…'){
+            infoPlaceholder.textContent = 'No company profile available.';
+          }
+        }, 3500);
+      }
+
+      fetchStockProfile(ticker).then(info => {
+        if(!holdingCompanyInfo) return;
+        if(!info){
+          holdingCompanyInfo.textContent = 'No company profile available.';
+          return;
+        }
+        holdingCompanyInfo.innerHTML = renderCompanyInfo(info);
+      }).catch(()=>{
+        if(holdingCompanyInfo){
+          holdingCompanyInfo.textContent = 'No company profile available.';
+        }
+      });
+
+      updateHoldingFavBtn();
+    }catch(e){
+      console.error('openHoldingOverlayFromRow error', e);
+    }
+  }
+
+      document.addEventListener('DOMContentLoaded', loadTop10);
 })();
 </script>
 </body>
