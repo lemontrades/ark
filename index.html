@@ -23,7 +23,7 @@
   gap:10px;
   padding:10px 12px;
   border-radius:999px;
-  border:1px solid rgba(148,163,184,0.35);
+  border:1px solid transparent;
   background:radial-gradient(circle at 0% 0%,
     rgba(76,29,149,0.45),
     rgba(10,6,20,0.98));
@@ -71,7 +71,7 @@
 
 /* testo */
 .sidebar .nav-item .nav-label{
-  font-size:13px;
+  font-size:12px;
   font-weight:600;
 }
 
@@ -84,9 +84,7 @@
 
 /* stato attivo: viola + icona arancione come le type-chip */
 .sidebar .nav-item.active{
-  background:radial-gradient(circle at 0% 0%,
-    rgba(196,116,255,0.95),
-    rgba(88,28,135,0.98));
+  background: linear-gradient(90deg, rgba(116, 0, 189, 0.69), #6f00c1, #2c0060);
   color:#ffffff;
   border-color:var(--accent);
   box-shadow:0 0 14px rgba(198,138,255,0.45);
@@ -94,7 +92,7 @@
 }
 .sidebar .nav-item.active .nav-icon{
   background:linear-gradient(135deg,#ff8c00,#ff6700);
-  box-shadow:0 0 40px rgba(255,136,0,0.9);
+  box-shadow:0 0 18px rgba(255, 255, 255, 0.9);
 }
 
 
@@ -182,40 +180,42 @@
 
 /* ===== Modern theme tokens ===== */
 :root {
-  --bg: #1100ab; /* SFONDO DARK PROFONDO 🟪 */ /* SFONDO DARK NEUTRO 🟪 */
+  --bg: #1100ab; /* SFONDO DARK PROFONDO */
   --bg-grad: radial-gradient(150vmax 80vmax at 0% 0%, rgb(77, 0, 212), transparent 100%),
              radial-gradient(120vmax 70vmax at 100% 90%, rgba(13, 0, 61, 0.6), transparent 100%),
-             #000000; /* GRADIENTE VIOLA ARK SCURO 🟪 */
-  --panel: rgba(14,11,22,0.94); /* PANNELLO DARK VIOLA INTENSO 🟪 */ /* PANNELLO DARK VIOLA 🟪 */ /* PANNELLO VIOLA SCURO 🟪 */
+             #000000;                                   /* GRADIENTE VIOLA ARK SCURO */
+  --panel: rgba(14,11,22,0.94);                              /* PANNELLO VIOLA SCURO */
   --ink: #e8eaee;
-  --muted: #b5bfd3; /* TESTO SECONDARIO PIÙ CHIARO 🟪 */
-  --line: rgba(198,138,255,0.38); /* brighter line violet */ /* LINEA/CONFINI VIOLA SCURO 🟪 */ /* LINEA/CONFINI VIOLA 🟪 */
-  --accent: #7c3aed; /* VIOLA ARK SCURO 🟪 */ /* VIOLA ARK PIÙ LUMINOSO 🟪 */ /* VIOLA ARK 🟪 */
-  --accent-ink: #0d0716; /* TESTO SU VIOLA SCURO 🟪 */ /* TESTO SU VIOLA LUMINOSO 🟪 */ /* TESTO SU VIOLA ARK 🟪 */
+  --muted: #b5bfd3;                                      /* TESTO SECONDARIO PIÙ CHIARO */
+  --line: rgba(148,163,184,0.22);                          /* LINEA/CONFINI VIOLA SCURO */
+  --accent: #7c3aed;                                          /* VIOLA ARK */
+  --accent-ink: #0d0716;                                     /* TESTO SU VIOLA ARK */
   --green:#22c55e;
   --red:#f43f5e;
-  --chip: #0f0a17; /* CHIP VIOLA SCURO 🟪 */ /* CHIP VIOLA 🟪 */
+  --chip: #0f0a17;                                               /* CHIP VIOLA */
   --chip-on:#e8eaee;
   --chip-on-ink:#0b0d10;
-  --pill-bg: #110b1b; /* PILL BACKGROUND VIOLA SCURO 🟪 */ /* PILL BACKGROUND VIOLA 🟪 */
+  --pill-bg: #110b1b;                                            /* PILL BACKGROUND VIOLA */
   --shadow: 0 12px 32px rgba(0,0,0,.35);
   --radius: 16px;
+
+  --accent-orange: #ff8a00;
 }
 [data-theme="light"] {
-  --bg: #090812; /* SFONDO DARK PROFONDO 🟪 */ /* SFONDO DARK NEUTRO 🟪 */
+  --bg: #090812;                                          /* SFONDO DARK NEUTRO  */
   --bg-grad: radial-gradient(150vmax 80vmax at -10% -20%, rgba(85, 0, 231, 0.14), transparent 60%),
              radial-gradient(120vmax 70vmax at 110% -25%, rgba(88,28,135,0.10), transparent 65%),
-             #090812; /* GRADIENTE VIOLA ARK SCURO 🟪 */
-  --panel: rgba(14,11,22,0.94); /* PANNELLO DARK VIOLA INTENSO 🟪 */ /* PANNELLO DARK VIOLA 🟪 */ /* PANNELLO VIOLA SCURO 🟪 */
+             #090812;                                      /* GRADIENTE VIOLA ARK SCURO */
+  --panel: rgba(14,11,22,0.94);                                 /* PANNELLO VIOLA SCURO */
   --ink:#0c1220;
-  --muted: #b5bfd3; /* TESTO SECONDARIO PIÙ CHIARO 🟪 */
-  --line: rgba(124,58,237,0.22); /* LINEA/CONFINI VIOLA SCURO 🟪 */ /* LINEA/CONFINI VIOLA 🟪 */
+  --muted: #b5bfd3;                                         /* TESTO SECONDARIO PIÙ CHIARO */
+  --line: rgba(124,58,237,0.22);                              /* LINEA/CONFINI VIOLA */
   --accent:#111;
   --accent-ink:#fff;
-  --chip: #0f0a17; /* CHIP VIOLA SCURO 🟪 */ /* CHIP VIOLA 🟪 */
+  --chip: #0f0a17;                                                 /* CHIP VIOLA */
   --chip-on:#111;
   --chip-on-ink:#fff;
-  --pill-bg: #110b1b; /* PILL BACKGROUND VIOLA SCURO 🟪 */ /* PILL BACKGROUND VIOLA 🟪 */
+  --pill-bg: #110b1b;                                      /* PILL BACKGROUND VIOLA */
   --shadow: 0 10px 24px rgba(0,0,0,.08);
 }
 
@@ -247,14 +247,14 @@ p.note{color:var(--muted);font-size:13px;margin:6px 0 18px}
   min-height:100vh;
 
   /* FIX: spingi tutto il contenuto a destra della sidebar */
-  padding-left:240px; /* 230px di sidebar + 10px di respiro */
+  padding-left:250px; /* 230px di sidebar + 10px di respiro */
 }
 .sidebar{
   width:230px;
   padding:20px 16px;
   display:flex;
   flex-direction:column;
-  gap:24px;
+  gap:8px;
 
   background:rgba(6,4,18,0.65);
   border-right:1px solid rgba(198,138,255,0.35);
@@ -276,24 +276,26 @@ p.note{color:var(--muted);font-size:13px;margin:6px 0 18px}
   overflow-x:hidden;
 }
 .sidebar-header{
+  position:relative;
+  min-height:160px;
+  padding:0px 0px 0px 0px;
   display:flex;
-  flex-direction:column;
-  gap:4px;
+  align-items:center;
 }
-.sidebar-logo-dot{
-  width:26px;
-  height:26px;
-  border-radius:999px;
-  background:linear-gradient(135deg,#22c55e,#7c3aed);
-  box-shadow:0 0 16px rgba(34,197,94,0.65);
-  margin-bottom:6px;
+.sidebar-header > div:last-child{
+  position:relative;
+  z-index:1;
+  margin-left:96px; /* distanza dal centro del lemon */
 }
+  
+  /* QUA TROVI LE COSE RELATIVE ALLA SIDEBAR ⚙️ */
+  
 .sidebar-title{
-  font-size:15px;
+  font-size:19px;
   font-weight:700;
 }
 .sidebar-subtitle{
-  font-size:12px;
+  font-size:14px;
   color:var(--muted);
   opacity:.9;
 }
@@ -448,6 +450,105 @@ input[type="checkbox"]{transform:scale(1.05);margin-right:6px}
   color:var(--accent-ink);
    /* OMBRA BOTTONE VIOLA ARK LUMINOSO 🟪 */
 }
+
+
+.btn-glow-ring{
+  position: relative;
+  overflow: hidden;
+}
+.btn-glow-ring::before{
+  content:"";
+  position:absolute;
+  inset:-2px;
+  border-radius:inherit;
+  background: conic-gradient(
+    from 0deg,
+    rgba(236,72,153,0),
+    rgba(236,72,153,0.9),
+    rgba(56,189,248,0.9),
+    rgba(129,140,248,0.9),
+    rgba(236,72,153,0)
+  );
+  filter: blur(6px);
+  opacity:0;
+  transform: rotate(0deg);
+  transition: opacity .35s ease-out;
+  animation: btnNeonSpin 4s linear infinite;
+  animation-play-state: paused;
+  pointer-events:none;
+  z-index:-1;
+}
+.btn-glow-ring:hover::before,
+.btn-glow-ring:focus-visible::before{
+  opacity:1;
+  animation-play-state: running;
+}
+@keyframes btnNeonSpin{
+  to{ transform: rotate(360deg); }
+}
+
+
+
+@property --angle{
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+
+@keyframes pillGlowSpin{
+  to{ --angle: 360deg; }
+}
+
+.pill-glow-ring{
+  position: relative;
+  border-radius: 999px;
+  overflow: visible;
+  z-index: 0;
+}
+
+/* Neon ring: coincide col bordo pill + glow verso l'esterno */
+.pill-glow-ring::before{
+  content: "";
+  position: absolute;
+  inset: 0;                     /* stesso raggio del bordo reale */
+  border-radius: inherit;
+  padding: 2px;                 /* spessore dell'anello neon */
+  --angle: 0deg;
+  background: conic-gradient(
+    from var(--angle),
+    rgb(225, 0, 255),
+    rgba(46, 0, 0, 0),      /* punta scura */
+    rgba(46, 0, 0, 0),      /* punta scura */
+    rgba(249,115,22,1.0),       /* arancione acceso */
+    rgba(46, 0, 0, 0),      /* punta scura */
+    rgba(46, 0, 0, 0),      /* punta scura */
+    rgba(168,85,247,1.0),       /* viola medio saturo */
+    rgb(255, 2, 255)
+  );
+  /* maschera: mantiene solo l'anello, centro trasparente */
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+
+  box-shadow:
+    0 0 7px rgba(216,180,254,1.0),
+    0 0 56px rgba(249,115,22,0.95);
+  opacity: 0;                          /* pill spenta: neon invisibile */
+  animation: pillGlowSpin 4s linear infinite;
+  animation-play-state: paused;        /* ruota solo all'hover */
+  pointer-events: none;
+  z-index: 2;                           /* sopra il contenuto della pill */
+}
+
+.pill-glow-ring:hover::before,
+.pill-glow-ring:focus-within::before{
+  opacity: 1;                          /* pill attiva: neon pieno */
+  animation-play-state: running;
+}
+
+/* === end neon glow ring === */
 
 /* ===== Chips ===== */
 .chips{display:flex;flex-wrap:nowrap;gap:8px;overflow-x:auto}
@@ -814,7 +915,7 @@ label:has(#onlyMine) {
 
 /* Chips: brighter border, NO blur glow */
 .chip {
-  border-color: #c68aff !important; /* vivid purple */
+  border-color: rgba(148,163,184,0.22) !important; /* vivid purple */
   box-shadow: none !important;
 }
 .chip:hover {
@@ -914,7 +1015,7 @@ textarea:focus {
 /* === v4.8 — Fix fund chip glow (only on hover/focus; subtle when active) === */
 .chips .chip{
   box-shadow: none !important;            /* default: NO glow */
-  border-color: #c68aff !important;       /* bright border */
+  border-color: rgba(148,163,184,0.22) !important;       /* bright border */
   transition: border-color .2s ease, box-shadow .2s ease, transform .06s ease;
 }
 .chips .chip:hover,
@@ -944,6 +1045,13 @@ textarea:focus {
 
 /* === v4.9 — Row-level click to open overlay (cursor hint) === */
 #table tbody tr { cursor: pointer; }
+#table tbody tr.day-break td{
+  border-top: 1px solid rgba(163, 106, 255, 0.76);
+}
+#table tbody tr.day-break td:first-child{
+  padding-top: 10px;
+}
+
 #table tbody tr .gf-open { cursor: pointer; } /* ticker chip keeps its behavior */
 
 
@@ -1201,15 +1309,14 @@ td.num .arrow { color: currentColor !important; } /* arrow matches text color */
   display:inline-flex;
   align-items:center;
   gap:8px;
-  padding:4px 10px;
-  border-radius:999px;
-  background: radial-gradient(circle at 0% 0%, rgba(124,58,237,0.45), rgba(10,8,25,0.96));
-  border:1px solid rgba(204,160,255,0.6);
-  box-shadow:
-    0 0 0 1px rgba(0,0,0,0.65),
-    0 10px 26px rgba(4,0,20,0.75);
-  backdrop-filter: blur(14px);
+  padding:0;              /* niente pill: togliamo imbottitura extra */
+  border-radius:0;        /* nessun bordo arrotondato intorno ai bottoni */
+  background:transparent; /* nessuno sfondo viola */
+  border:none;            /* nessun bordo visibile */
+  box-shadow:none;        /* niente glow / ombra di contenitore */
+  backdrop-filter:none;   /* niente blur di vetro */
 }
+
 
 .pager-label{
   display:flex;
@@ -1283,34 +1390,20 @@ td.num .arrow { color: currentColor !important; } /* arrow matches text color */
 
 /* Pager buttons compact */
 .pager-btn{
-  width:22px;
-  height:22px;
+  width:20px;
+  height:20px;
   border-radius:999px;
   display:inline-flex;
   align-items:center;
   justify-content:center;
   padding:0;
-  border:1px solid rgba(255,176,120,0.85);
-  background: linear-gradient(135deg, #ffb347, #ff7a18);
+  border:0px solid rgb(0, 0, 0);
+  background:linear-gradient(135deg,#ff8c00,#ff6700);
   box-shadow:
-    0 0 0 1px rgba(255,255,255,0.04) inset,
-    0 8px 22px rgba(255,140,0,0.55);
+    0 0px 4px rgba(255,140,0,0.55);
 }
 
 /* Pager "chip" container */
-.pager-chip{
-  display:inline-flex;
-  align-items:center;
-  gap:8px;
-  padding:4px 10px;
-  border-radius:999px;
-  background: radial-gradient(circle at 0% 0%, rgba(124,58,237,0.45), rgba(10,8,25,0.96));
-  border:1px solid rgba(204,160,255,0.6);
-  box-shadow:
-    0 0 0 1px rgba(0,0,0,0.65),
-    0 10px 26px rgba(4,0,20,0.75);
-  backdrop-filter: blur(14px);
-}
 
 .pager-label{
   display:flex;
@@ -1415,7 +1508,14 @@ td.num .arrow { color: currentColor !important; } /* arrow matches text color */
 
 
 /* === V27 — Slim Search Filters: big chip header + flat fields === */
-#filterCard{ padding:14px 14px 16px; }
+#filterCard{
+  padding:14px 14px 16px;
+  border-radius:24px;
+  background:
+    radial-gradient(circle at 0% 0%, rgba(124,58,237,0.35), transparent 55%),
+    radial-gradient(circle at 100% 100%, rgba(15,23,42,0.9), rgba(10,6,20,0.98));
+  border:1px solid rgba(148,163,184,0.28);
+}
 #filterHeader{
   background: rgba(124, 58, 237, 0.1);
   box-shadow: inset 0 0 0 1px rgba(198,138,255,.35);
@@ -1641,14 +1741,14 @@ td.num .arrow { color: currentColor !important; } /* arrow matches text color */
 }
 #filterCard #slot-search input[type="text"]{ /* reset by v4.21 */ }
 /* Center the three inputs inside their slots so outer edges align */
-#slot-fromDate, #slot-toDate, #slot-search{
+#slot-search{
   display: flex !important;
   justify-content: center !important;
 }
 
 
 /* === v5.2: left-align filter inputs (no centering) === */
-#slot-fromDate, #slot-toDate, #slot-search{
+#slot-search{
   display: flex !important;
   justify-content: flex-start !important;  /* align to the left */
 }
@@ -1920,7 +2020,7 @@ h1, #mainTitle, #titleARK {
 
 
 /* Sidebar filter card: single source of truth */
-.sidebar #filterCard{
+#filterCard{
   margin-top:10px;
   background: radial-gradient(
       circle at 0% 0%,
@@ -1936,7 +2036,7 @@ h1, #mainTitle, #titleARK {
 
 
 
-.sidebar #filterCard .card.pad{
+#filterCard .card.pad{
   background:transparent !important;
   border:none !important;
   box-shadow:none !important;
@@ -1944,16 +2044,16 @@ h1, #mainTitle, #titleARK {
   margin:8px 0 0 0 !important;
   border-radius:0 !important;
 }
-.sidebar #filterCard label{
+#filterCard label{
   font-size:12px;
 }
-.sidebar #filterCard #filterTitle{
+#filterCard #filterTitle{
   display:flex;
   align-items:center;
   gap:8px;
   margin-bottom:6px;
 }
-.sidebar #filterCard #filterTitle span{
+#filterCard #filterTitle span{
   font-size:13px;
 }
 
@@ -1988,7 +2088,7 @@ h1, #mainTitle, #titleARK {
   gap:10px;
   padding:10px 12px;
   border-radius:999px;
-  border:1px solid rgba(148,163,184,0.3);
+  border:1px solid transparent;
   background:radial-gradient(circle at 0% 0%,
     rgba(76,29,149,0.45),
     rgba(10,6,20,0.98));
@@ -1998,6 +2098,71 @@ h1, #mainTitle, #titleARK {
   transition:background .15s ease, border-color .15s ease,
              box-shadow .15s ease, transform .05s ease;
   box-shadow:0 0 0 1px rgba(15,23,42,0.9);
+}
+
+/* Date range pill (filters) */
+#dateRangePill{ display:block; width:100%; }
+
+.date-range-pill{
+  position:relative;
+  width:100%;
+  display:flex;
+  align-items:center;
+  justify-content:flex-start;
+  gap:10px;
+  padding:12px 16px;           /* più alta e un filo più larga, come la search */
+  min-height:36px;             /* forza un'altezza simile alla pill di ricerca */
+  border-radius:999px;
+  border:1px solid rgba(184, 114, 252, 0.68);
+  background:radial-gradient(circle at 0% 0%,
+    rgba(76,29,149,0.45),
+    rgba(10,6,20,0.98));
+  cursor:pointer;
+  box-sizing:border-box;
+}
+);
+  background:radial-gradient(circle at 0% 0%,
+    rgba(76,29,149,0.45),
+    rgba(10,6,20,0.98));
+  cursor:pointer;
+  box-sizing:border-box;
+}
+.date-range-text{
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+}
+.date-range-caption{
+  display:none;
+}
+.date-range-value{
+  font-size:11px;
+  font-weight:600;
+  color:#ffffff;
+}
+.date-range-pill-icon{
+  position:absolute;
+  right:10px;
+  top:50%;
+  transform:translateY(-50%);
+  width:30px;
+  height:30px;
+  border-radius:999px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:linear-gradient(135deg,#ff8c00,#ff6700);
+  box-shadow:0 0 18px rgba(255,140,0,0.6);
+}
+.date-range-pill-icon svg{
+  width:16px;
+  height:16px;
+}
+.date-range-pill-icon svg rect,
+.date-range-pill-icon svg path{
+  fill:none;
+  stroke:#ffffff;
+  stroke-width:2;
 }
 
 .type-chip:hover{
@@ -2028,7 +2193,7 @@ h1, #mainTitle, #titleARK {
   gap:2px;
 }
 .chip-title{
-  font-size:13px;
+  font-size:12px;
   font-weight:600;
 }
 .chip-sub{
@@ -2038,10 +2203,10 @@ h1, #mainTitle, #titleARK {
 
 /* Active state */
 .type-chip.active{
-  background:var(--accent);
+  background: linear-gradient(90deg, rgba(116, 0, 189, 0.69), #6f00c1, #2c0060);
   color:#ffffff !important;
   border-color:var(--accent);
-  box-shadow:0 0 10px rgba(198,138,255,0.8);
+  box-shadow:0 0 77px rgb(84, 0, 183);
   transform:translateY(-1px);
 }
 .type-chip.active .chip-title,
@@ -2050,13 +2215,13 @@ h1, #mainTitle, #titleARK {
 }
 .type-chip.active .chip-icon{
   background:linear-gradient(135deg, #ff8c00, #ff6700);
-  box-shadow:0 0 40px rgba(255,136,0,0.9);
+  box-shadow:0 0 24px rgb(186, 0, 255);
 
 }
 
 /* === v8.1 — Fix date width inside sidebar filter card === */
-.sidebar #filterCard input[type="date"],
-.sidebar #filterCard input[type="text"] {
+#filterCard input[type="date"],
+#filterCard input[type="text"] {
   width: 100% !important;
   max-width: 100% !important;
 }
@@ -2075,7 +2240,7 @@ h1, #mainTitle, #titleARK {
   align-items:center;
   padding:4px 12px;
   border-radius:999px;
-  font-size:12px;
+  font-size:9px;
   font-weight:600;
   background:rgba(120,60,255,0.18);
   color:#ebe3ff;
@@ -2087,26 +2252,31 @@ h1, #mainTitle, #titleARK {
 
 
 
-/* Added Lemon logo image style */
-.sidebar-logo-img {
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+/* Added Lemon LOGO image style 🍋 */
+.sidebar-logo-img{
+  position:absolute;
+  left:-40px;
+  top:-50px;
+  width:240px;
+  height:240px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  opacity:0.95;
+  pointer-events:none;
 }
-.sidebar-logo-img img {
-  width: 28px;
-  height: 28px;
-  display: block;
-  object-fit: contain;
+.sidebar-logo-img img{
+  width:130%;
+  height:auto;
+  display:block;
+  object-fit:cover;
 }
 
 
 /* === Custom: Sidebar ticker search pill + date pills === */
 
 /* Search pill container */
-.sidebar #filterCard #slot-search{
+#filterCard #slot-search{
   position: relative;
   display: flex !important;
   align-items: center;
@@ -2121,12 +2291,12 @@ h1, #mainTitle, #titleARK {
 }
 
 /* wrapper inside slot-search (where input lives) */
-.sidebar #filterCard #slot-search .search-wrap{
+#filterCard #slot-search .search-wrap{
   flex: 1 1 auto;
 }
 
 /* text input inside pill */
-.sidebar #filterCard #slot-search #searchBox{
+#filterCard #slot-search #searchBox{
   width: 100% !important;
   max-width: none !important;
   min-width: 0 !important;
@@ -2137,18 +2307,18 @@ h1, #mainTitle, #titleARK {
   font-size: 13px;
   color: var(--ink);
 }
-.sidebar #filterCard #slot-search #searchBox:focus{
+#filterCard #slot-search #searchBox:focus{
   outline: none !important;
   box-shadow: none !important;
 }
 
 /* hide clear X */
-.sidebar #filterCard #slot-search .clear-inside{
+#filterCard #slot-search .clear-inside{
   display:none !important;
 }
 
 /* orange circular search button */
-.sidebar #filterCard #slot-search #fetchBtn{
+#filterCard #slot-search #fetchBtn{
   width: 36px !important;
   height: 36px !important;
   flex: 0 0 36px !important;
@@ -2161,13 +2331,13 @@ h1, #mainTitle, #titleARK {
   align-items: center;
   justify-content: center;
 }
-.sidebar #filterCard #slot-search #fetchBtn img,
-.sidebar #filterCard #slot-search #fetchBtn svg{
+#filterCard #slot-search #fetchBtn img,
+#filterCard #slot-search #fetchBtn svg{
   width: 16px;
   height: 16px;
 }
-.sidebar #filterCard #slot-search #fetchBtn:hover,
-.sidebar #filterCard #slot-search #fetchBtn:focus{
+#filterCard #slot-search #fetchBtn:hover,
+#filterCard #slot-search #fetchBtn:focus{
   border-color: rgba(255,196,130,1) !important;
   box-shadow: 0 0 22px rgba(255,180,100,1) !important;
 }
@@ -2305,7 +2475,7 @@ h1, #mainTitle, #titleARK {
 
 /* === FIX v4: gradient on whole filter card, clean title row === */
 
-/* duplicate .sidebar #filterCard removed */
+/* duplicate #filterCard removed */
 
 
 /* Title row: icon + text, no pill background */
@@ -2329,7 +2499,7 @@ h1, #mainTitle, #titleARK {
 
 
 /* === RADIALE SEARCH FILTER LO MODIFICHI DA QUI */
-.sidebar #filterCard{
+#filterCard{
   background: radial-gradient(
       circle at 0% 0%,
       rgba(83, 63, 189, 0.32) 0%,
@@ -2346,7 +2516,7 @@ h1, #mainTitle, #titleARK {
 }
 
 /* Search pill: softer glow only around the orange button, not the whole row */
-.sidebar #filterCard #slot-search{
+#filterCard #slot-search{
   box-shadow: none !important;
 }
 
@@ -2361,6 +2531,16 @@ h1, #mainTitle, #titleARK {
 #slot-fromDate, #slot-toDate{
   cursor: pointer;
 }
+
+/* inside date range pill: keep inputs invisibile ma presenti per showPicker */
+#dateRangePill #slot-fromDate,
+#dateRangePill #slot-toDate{
+  position:absolute;
+  inset:0;
+  opacity:0;
+  pointer-events:none;
+}
+
 #slot-fromDate input[type="date"],
 #slot-toDate input[type="date"]{
   pointer-events: none;
@@ -2369,11 +2549,11 @@ h1, #mainTitle, #titleARK {
 
 .chip-count{
   margin-left: auto;
-  padding-left: 12px;
-  font-size: 22px;
-  font-weight: 800;
-  line-height: 1;
-  letter-spacing: 0.5px;
+  padding-left: 10px;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: 0;
   font-variant-numeric: tabular-nums;
   display: flex;
   align-items: center;
@@ -2392,6 +2572,388 @@ h1, #mainTitle, #titleARK {
 .results-card::before{content:none;}
 
 
+
+/* === v8.x: align search pill style with date range === */
+#filterCard #slot-search{
+  display:block !important;
+  width:100% !important;
+}
+#filterCard #slot-search .pill-glow-ring::before{}
+
+/* Search input inside pill: no inner border, transparent bg */
+#filterCard #slot-search input[type="text"]{
+  width:100% !important;
+  padding:12px 16px !important;
+  border:none !important;
+  background:transparent !important;
+  border-radius:999px !important;
+}
+
+
+/* v9.1: force search pill same shell as date range */
+#filterCard #slot-search{
+  display:block !important;
+  width:100% !important;
+}
+#filterCard #slot-search .search-inline{
+  width:100% !important;
+}
+#filterCard #slot-search input[type="text"]{
+  width:100% !important;
+  padding:12px 16px !important;
+  border:none !important;
+  background:transparent !important;
+  border-radius:999px !important;
+}
+
+
+/* v9.2 — Search ticker pill in sidebar: allineata alla Date range */
+#filterCard #slot-search{
+  display:block !important;
+  width:100% !important;
+}
+#filterCard #slot-search .search-inline{
+  width:100% !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:space-between !important;
+  gap:10px !important;
+}
+#filterCard #slot-search input[type="text"]{
+  width:100% !important;
+  padding:12px 16px !important;
+  border:none !important;
+  background:transparent !important;
+  border-radius:999px !important;
+}
+
+/* Icona search: stesso stile della pill Date range */
+#filterCard #slot-search #fetchBtn{
+  width:30px !important;
+  height:30px !important;
+  flex:0 0 30px !important;
+  padding:0 !important;
+  margin-right:10px !important;
+  border-radius:999px !important;
+  border:none !important;
+  background:linear-gradient(135deg,#ff8c00,#ff6700) !important;
+  box-shadow:0 0 18px rgba(255,140,0,0.6) !important;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+#filterCard #slot-search #fetchBtn svg{
+  width:16px !important;
+  height:16px !important;
+}
+
+
+/* v10 — Clean rebuild of Search Ticker pill in sidebar filters */
+#filterCard #slot-search{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:space-between !important;
+  width:100% !important;
+  border-radius:999px;
+  padding:0;
+}
+#filterCard #slot-search .search-inline{
+  width:100% !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:space-between !important;
+  gap:10px !important;
+}
+#filterCard #slot-search .search-wrap{
+  flex:1 1 auto !important;
+}
+#filterCard #slot-search #searchBox{
+  width:100% !important;
+  padding:12px 16px !important;
+  border:none !important;
+  background:transparent !important;
+  border-radius:999px !important;
+  color:var(--muted);
+}
+#filterCard #slot-search #fetchBtn{
+  width:30px !important;
+  height:30px !important;
+  flex:0 0 30px !important;
+  padding:0 !important;
+  margin-right:10px !important;
+  border-radius:999px !important;
+  border:none !important;
+  background:linear-gradient(135deg,#ff8c00,#ff6700) !important;
+  box-shadow:0 0 18px rgba(255,140,0,0.6) !important;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+#filterCard #slot-search #fetchBtn svg{
+  width:16px !important;
+  height:16px !important;
+}
+
+/* v10.1 — remove extra light border from inner filter cards (date range, search, funds) */
+#filterCard > .card.pad{
+  border: 1px solid transparent !important;
+  box-shadow: none !important;
+  background: transparent !important;
+}
+
+  /* === ARK ETF News card === */
+  .news-card{
+    margin-top: 0;
+    margin-bottom: 12px;
+    border-radius: 24px;
+    background:
+      radial-gradient(circle at 0% 0%, rgba(124,58,237,0.30), transparent 55%),
+      radial-gradient(circle at 100% 100%, rgba(15,23,42,0.9), rgba(10,6,20,0.98));
+    border: 1px solid rgba(148,163,184,0.28);
+    box-shadow:
+      0 0 0 1px rgba(15,23,42,0.95),
+      0 18px 40px rgba(0,0,0,0.85);
+    padding: 14px 18px;
+  }
+  .news-head-icon{
+    width:16px; height:16px; margin-right:6px; opacity:.95;
+    filter: none;
+  }
+  .news-item{ border: 1px solid rgba(148,163,184,0.20); background:
+      radial-gradient(circle at 0 0, rgba(124,58,237,0.22), transparent 55%),
+      rgba(10, 6, 20, 0.92); }
+  .news-item-title a{ color:#e9ddff; }
+  .news-item-title a:hover{ color:#ffffff; text-decoration:underline; }
+  .news-dot{ background: linear-gradient(135deg, #ff9a1f, #ffca38); box-shadow: 0 0 0 1px rgba(0,0,0,.5); }
+  .news-thumb{ border:1px solid rgba(148,163,184,0.20); background: rgba(12, 11, 20, .9); }
+
+  .news-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:8px;
+    margin-bottom:6px;
+  }
+  .news-head svg{
+    width:16px;
+    height:16px;
+    margin-right:6px;
+    opacity:.9;
+  }
+  .news-head span{
+    font-size:12px;
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+  }
+  .news-head-right{
+    font-size:11px;
+    opacity:.7;
+    text-align:right;
+  }
+  .news-body{
+    margin-top:4px;
+  }
+  
+.news-list{
+    list-style:none;
+    margin:0;
+    padding:0;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+  }
+  .news-item{
+    position:relative;
+    display:flex;
+    align-items:flex-start;
+    gap:10px;
+    font-size:12px;
+    padding:10px 12px 9px;
+    border-radius:18px;
+    background:
+      radial-gradient(circle at 0 0, rgba(255,255,255,0.04), transparent 55%),
+      rgba(8,7,18,0.96);
+    border:1px solid rgba(255,255,255,0.06);
+    min-height:88px;
+  }
+
+  .news-thumb{
+    margin-left:auto;
+    width:64px;
+    height:64px;
+    border-radius:16px;
+    overflow:hidden;
+    flex-shrink:0;
+    background:rgba(15,23,42,0.9);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .news-thumb img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+  }
+
+  .news-dot{
+    width:6px;
+    height:6px;
+    border-radius:999px;
+    margin-top:5px;
+    background:linear-gradient(135deg,#ffb347,#ffcc33);
+    box-shadow:0 0 0 1px rgba(0,0,0,0.6);
+    flex-shrink:0;
+  }
+  .news-item-title{
+    font-size:12px;
+    line-height:1.3;
+  }
+  .news-item-title a{
+    color:#f6e9ff;
+    text-decoration:none;
+  }
+  .news-item-title a:hover{
+    text-decoration:underline;
+  }
+  .news-item-meta{
+    font-size:11px;
+    color:rgba(255,255,255,0.65);
+    margin-top:2px;
+  }
+  .news-item-summary{
+    font-size:11px;
+    color:var(--muted);
+    margin-top:4px;
+    line-height:1.35;
+  }
+  
+@media (max-width: 900px){
+    .news-card{
+      margin-bottom:8px;
+    }
+  }
+
+/* === ARK Global Top 10 === */
+.ark-top10-card{
+  margin-top:16px;
+  margin-bottom:14px;
+  border-radius:24px;
+  background:
+    radial-gradient(circle at 0% 0%, rgba(124,58,237,0.35), transparent 55%),
+    radial-gradient(circle at 100% 100%, rgba(15,23,42,0.9), rgba(10,6,20,0.98));
+  border:1px solid rgb(84, 0, 164),
+  padding:14px 16px;
+}
+.ark-top10-list > li:first-child .ark-top10-mv a,
+.ark-top10-list > li:first-child .ark-top10-mv{ color: var(--accent-orange) !important; }
+
+
+.ark-top10-list > li:first-child .ticker-pill{
+  background: var(--accent-orange);
+  color: #ffffff;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.18);
+}
+.ark-top10-list > li:first-child .ark-top10-mv{
+  color: var(--accent-orange);
+}
+.ark-top10-list{
+  list-style:none;
+  margin:0;
+  margin-top:8px;
+  padding:0;
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  font-size:12px;
+}
+
+.ark-top10-head{
+  display:flex;
+  align-items:flex-start;
+  justify-content:flex-start;
+}
+.ark-top10-title{
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+}
+.ark-top10-title-row{
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+.ark-top10-icon{
+  width:14px;
+  height:14px;
+  opacity:.9;
+  color:#f9fafb;
+}
+.ark-top10-label{
+  font-size:12px;
+  font-weight:700;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+  color:#ffffff;
+}
+.ark-top10-sub{
+  font-size:10px;
+  opacity:.7;
+  color:rgba(248,250,252,0.85);
+}
+.ark-top10-item{
+  list-style:none;
+}
+.ark-top10-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+}
+.ark-top10-left{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  min-width:0;
+}
+.ark-top10-rank{
+  font-size:11px;
+  opacity:.7;
+  width:18px;
+  flex-shrink:0;
+}
+.ark-top10-name{
+  font-size:11px;
+  color:var(--muted);
+  max-width:120px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.ark-top10-mv{
+  font-size:12px;
+  font-weight:600;
+  font-variant-numeric:tabular-nums;
+  margin-left:auto;
+}
+.ark-top10-card .ticker-pill{
+  font-size:11px;
+  padding:3px 8px;
+  background: rgb(94, 0, 255); /* violet */
+  box-shadow: inset 0 0 0 1px rgba(248,250,252,0.06);
+  color:#f9f5ff;
+}
+
+html[data-view="news"] #resultsCard{
+  display:none;
+}
+html[data-view="news"] #newsCard{
+  display:block;
+}
+html[data-view="home"] #newsCard,
+html[data-view="favorites"] #newsCard{
+  display:none;
+}
 </style>
 <link crossorigin="True" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/></head>
 <body>
@@ -2408,18 +2970,25 @@ h1, #mainTitle, #titleARK {
 
     </div>
     <nav class="sidebar-nav">
-  <button class="nav-item active" data-view-target="home">
+  <button class="nav-item active pill-glow-ring" data-view-target="home">
     <span class="nav-icon">
       <img src="icons/Overview.svg" alt="Overview">
     </span>
     <span class="nav-label">Overview</span>
   </button>
 
-  <button class="nav-item" data-view-target="favorites">
+  <button class="nav-item pill-glow-ring" data-view-target="favorites">
     <span class="nav-icon">
       <img src="icons/Favorites.svg" alt="Favorites">
     </span>
-    <span class="nav-label">Favorites</span>
+    <span class="nav-label">Saved Tickers</span>
+  </button>
+
+  <button class="nav-item pill-glow-ring" data-view-target="news">
+    <span class="nav-icon">
+      <img src="icons/News.svg" alt="News">
+    </span>
+    <span class="nav-label">News</span>
   </button>
 </nav>
 
@@ -2428,7 +2997,7 @@ h1, #mainTitle, #titleARK {
     <div class="sidebar-chips">
   <div class="sidebar-chips-label">Trade type</div>
 
-  <button class="type-chip active" data-type-chip="ALL">
+  <button class="type-chip active pill-glow-ring" data-type-chip="ALL">
     <span class="chip-icon">
       <img src="icons/total_bars.svg" alt="All"/>
     </span>
@@ -2439,7 +3008,7 @@ h1, #mainTitle, #titleARK {
     <span class="chip-count chip-total" id="statTotalN">0</span>
   </button>
 
-  <button class="type-chip" data-type-chip="BUY">
+  <button class="type-chip pill-glow-ring" data-type-chip="BUY">
     <span class="chip-icon">
       <img src="icons/buy_stairs.svg" alt="Buys"/>
     </span>
@@ -2450,7 +3019,7 @@ h1, #mainTitle, #titleARK {
     <span class="chip-count chip-buy" id="statBuyN">0</span>
   </button>
 
-  <button class="type-chip" data-type-chip="SELL">
+  <button class="type-chip pill-glow-ring" data-type-chip="SELL">
     <span class="chip-icon">
       <img src="icons/sell_stairs.svg" alt="Sells"/>
     </span>
@@ -2463,6 +3032,21 @@ h1, #mainTitle, #titleARK {
 </div>
 
     <div id="sidebarFiltersMount"></div>
+<section class="card pad ark-top10-card" id="arkTop10Card">
+  <div class="ark-top10-head">
+    <div class="ark-top10-title">
+      <div class="ark-top10-title-row">
+        <span class="ark-top10-label">TOP 10 HOLDINGS</span>
+      </div>
+      <div class="ark-top10-sub" id="arkTop10Updated"></div>
+    </div>
+  </div>
+  <div id="arkTop10Status" class="muted">Loading ARK aggregated holdings…</div>
+  <ul id="arkTop10List" class="ark-top10-list"></ul>
+</section>
+
+  
+
     <div class="sidebar-footer">
 <div class="sidebar-source-note">
   <p class="note">
@@ -2476,7 +3060,7 @@ h1, #mainTitle, #titleARK {
 </p>
 </div>
 
-      View mode: <span id="sidebarViewLabel">Overview</span>
+      
     </div>
   </aside>
   <main class="main-area">
@@ -2488,16 +3072,16 @@ h1, #mainTitle, #titleARK {
   
 </div>
 <section class="controls grid fit-240" style="display:none!important">
-<div class="card pad date-card">
+<div class="card pad date-card pill-glow-ring">
 <label>From</label>
 <input id="fromDate" type="date"/>
 </div>
-<div class="card pad date-card">
+<div class="card pad date-card pill-glow-ring">
 <label>To</label>
 <input id="toDate" type="date"/>
 </div>
 <div class="card pad search-card">
-<label>Search (ticker or fund)</label><div class="search-inline"><div class="search-wrap"><input id="searchBox" placeholder="e.g. NVDA" type="text"/><button class="btn icon clear-inside" id="clearBtn" title="Clear Search" aria-label="Clear Search"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div><button class="btn primary" id="fetchBtn" title="Search / Enter">
+<label>Search (ticker or fund)</label><div class="search-inline"><div class="search-wrap"><input id="searchBox" placeholder="e.g. NVDA" type="text"/><button class="btn icon clear-inside" id="clearBtn" title="Clear Search" aria-label="Clear Search"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div><button class="btn primary btn-glow-ring" id="fetchBtn" title="Search / Enter">
     <img src="icons/Enter.svg" width="18" height="18" />
 </button><button class="btn" id="csvBtn" title="Export CSV" aria-label="Export CSV"><svg viewBox="0 0 24 24" aria-hidden="true" style="width:16px;height:16px;margin-right:6px"><path d="M6 2h9l5 5v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zm8 1.5V8h4.5"/></svg><strong>Export CSV</strong></button><button class="btn" id="clearBtn" title="Clear Search" aria-label="Clear Search"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div><div class="card pad" id="suggestions" style="position:absolute;z-index:1000;display:none;max-height:240px;overflow:auto;font-size:13px;pointer-events:auto"></div>
 
@@ -2541,19 +3125,29 @@ h1, #mainTitle, #titleARK {
       <div class="icon" style="opacity:.85"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h18l-7 8v5l-4 2v-7L3 5z" stroke="currentColor" fill="none" stroke-width="2"/></svg></div>
       <h3 style="margin:0">Search Filters</h3>
     </div>
-    <div class="row" style="gap:6px">
-      <div class="card pad" style="flex:1">
-        <label>Start Date</label>
+    <div class="card pad" style="margin-top:8px">
+      <div id="dateRangePill" class="pill-glow-ring">
+        <div class="date-range-pill">
+          <div class="date-range-text">
+            <div class="date-range-caption">Range</div>
+            <div id="dateRangeValue" class="date-range-value">Last 2 days</div>
+          </div>
+          <div class="date-range-pill-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <rect x="3" y="5" width="18" height="16" rx="3" ry="3"></rect>
+              <path d="M8 3v4"></path>
+              <path d="M16 3v4"></path>
+              <path d="M3 11h18"></path>
+            </svg>
+          </div>
+        </div>
+        <!-- hidden slots for the real date inputs -->
         <div id="slot-fromDate"></div>
-      </div>
-      <div class="card pad" style="flex:1">
-        <label>End Date</label>
         <div id="slot-toDate"></div>
       </div>
     </div>
     <div class="card pad" style="margin-top:12px">
-      <label>Search Ticker / Fund</label>
-      <div id="slot-search"></div>
+      <div id="slot-search" class="pill-glow-ring"></div>
     </div>
     <div class="card pad" style="margin-top:12px">
       <label>ARK Funds</label>
@@ -2574,7 +3168,10 @@ h1, #mainTitle, #titleARK {
     </div>
   </div>
 
-  <div id="resultsSlot"></div>
+  <div id="resultsSlot">
+
+
+</div>
 </section>
 
 <section class="card pad results-card" id="resultsCard">
@@ -2646,6 +3243,22 @@ h1, #mainTitle, #titleARK {
   </div>
 </div>
 </section>
+
+
+<section class="card pad news-card" id="newsCard">
+    <div class="news-head">
+      <div class="news-head-left muted" style="display:inline-flex;align-items:center">
+        <img src="icons/News.svg" alt="News" class="news-head-icon"/>
+        <span>ARK ETF news</span>
+      </div>
+      <div class="news-head-right muted" id="newsUpdated"></div>
+    </div>
+    <div class="news-body" id="newsBody">
+      <div class="muted" id="newsStatus">Loading latest headlines…</div>
+      <ul class="news-list" id="newsList"></ul>
+    </div>
+  </section>
+
 </div>
   </main>
 </div>
@@ -3175,7 +3788,16 @@ function fmtDateDMY(ymd){ // expects 'YYYY-MM-DD' -> 'DD/MM/YY'
       if (mine && !getMyTickers().includes(r.ticker)) return false;
       if (q && !(String(r.ticker).toLowerCase().includes(q) || String(r.fund).toLowerCase().includes(q))) return false;
       return true;
-    }).sort((a,b)=> (a.date<b.date?1:-1));
+    }).sort((a,b)=>{
+      if (a.date === b.date){
+        const at = String(a.ticker || '').toUpperCase();
+        const bt = String(b.ticker || '').toUpperCase();
+        if (at < bt) return -1;
+        if (at > bt) return 1;
+        return 0;
+      }
+      return a.date < b.date ? 1 : -1;
+    });
   }
 
   function render(){
@@ -3184,11 +3806,15 @@ function fmtDateDMY(ymd){ // expects 'YYYY-MM-DD' -> 'DD/MM/YY'
     if (!filtered.length){
       const tr=document.createElement('tr'); const td=document.createElement('td'); td.colSpan=4; td.className='muted'; td.textContent='No results for current filters.'; tr.appendChild(td); tbody.appendChild(tr);
     } else {
+      let prevDay = null;
       for (const r of filtered){
         const dir=String(r.direction||'').toUpperCase();
         const name=NAME_MAP[r.ticker]||'';
         const s=tickerStyles(r.ticker||'');
         const tr=document.createElement('tr');
+        const dayKey = fmtDateDMY(r.date||'');
+        if (prevDay && dayKey!==prevDay) tr.classList.add('day-break');
+        prevDay = dayKey;
         tr.setAttribute("data-ticker", r.ticker||"");
         tr.innerHTML = `
 <td>${fmtDateDMY(r.date||'')}</td>
@@ -4688,6 +5314,71 @@ try{
 </script>
 
 <script>
+// Date range pill: default last 2 days + sequential picker
+(function(){
+  function pad(n){ return n < 10 ? '0' + n : '' + n; }
+  function toISO(d){
+    return d.getFullYear() + '-' + pad(d.getMonth()+1) + '-' + pad(d.getDate());
+  }
+  function toDisplay(d){
+    var year = ('' + d.getFullYear()).slice(-2);
+    return pad(d.getDate()) + '/' + pad(d.getMonth()+1) + '/' + year;
+  }
+  function initDateRange(){
+    var fromInput = document.getElementById('fromDate');
+    var toInput   = document.getElementById('toDate');
+    var pill      = document.getElementById('dateRangePill');
+    var valueEl   = document.getElementById('dateRangeValue');
+    if (!fromInput || !toInput || !pill || !valueEl) return;
+
+    // Default: last 2 days (yesterday → today) only if no existing values
+    if (!fromInput.value && !toInput.value){
+      var today = new Date();
+      var start = new Date(today);
+      start.setDate(start.getDate() - 1);
+      fromInput.value = toISO(start);
+      toInput.value   = toISO(today);
+    }
+
+    function syncLabel(){
+      if (fromInput.value && toInput.value){
+        var fromDate = new Date(fromInput.value);
+        var toDate   = new Date(toInput.value);
+        valueEl.textContent = toDisplay(fromDate) + ' – ' + toDisplay(toDate);
+      }
+    }
+    syncLabel();
+
+    // When clicking the pill, start from the FROM date picker
+    pill.addEventListener('click', function(){
+      if (typeof fromInput.showPicker === 'function'){
+        fromInput.showPicker();
+      } else {
+        fromInput.focus();
+      }
+    });
+
+    // After choosing FROM, immediately open TO, then sync label
+    fromInput.addEventListener('change', function(){
+      if (typeof toInput.showPicker === 'function'){
+        toInput.showPicker();
+      } else {
+        toInput.focus();
+      }
+      syncLabel();
+    });
+    toInput.addEventListener('change', syncLabel);
+  }
+
+  if (document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', initDateRange);
+  } else {
+    initDateRange();
+  }
+})();
+</script>
+
+<script>
 // === v7: sidebar routing (Overview / Favorites) ===
 (function(){
   function initRouting(){
@@ -4734,12 +5425,22 @@ try{
       });
       document.documentElement.setAttribute('data-view', view);
       if (sidebarLabel){
-        sidebarLabel.textContent = view === 'favorites' ? 'Favorites' : 'Overview';
+        if (view === 'favorites'){
+          sidebarLabel.textContent = 'Favorites';
+        } else if (view === 'news'){
+          sidebarLabel.textContent = 'News';
+        } else {
+          sidebarLabel.textContent = 'Overview';
+        }
       }
       if (titleEl){
-        titleEl.textContent = view === 'favorites'
-          ? 'ARK Trades – Favorites'
-          : 'ARK Trades – Dashboard (Dark v7)';
+        if (view === 'favorites'){
+          titleEl.textContent = 'ARK Trades – Favorites';
+        } else if (view === 'news'){
+          titleEl.textContent = 'ARK Trades – News';
+        } else {
+          titleEl.textContent = 'ARK Trades – Dashboard (Dark v7)';
+        }
       }
       if (view === 'favorites'){
         applyOnlyMine(true);
@@ -4781,5 +5482,231 @@ try{
 })();
 </script>
 
+
+<script>
+// === ARK ETF News loader (v1) — uses /v2/etf/news ===
+(function(){
+  const NEWS_LIMIT = 10;
+  const NEWS_ENDPOINT = 'https://arkfunds.io/api/v2/etf/news';
+  const NEWS_SYMBOLS = 'ARKK,ARKQ,ARKW,ARKG,ARKF,ARKX,PRNT,IZRL';
+
+  function setup(){
+    const statusEl  = document.getElementById('newsStatus');
+    const listEl    = document.getElementById('newsList');
+    const updatedEl = document.getElementById('newsUpdated');
+    if (!statusEl || !listEl) return;
+
+    function coerceNews(json){
+      if (Array.isArray(json)) return json;
+      if (!json || typeof json !== 'object') return [];
+      if (Array.isArray(json.news)) return json.news;
+      if (Array.isArray(json.data)) return json.data;
+      if (Array.isArray(json.items)) return json.items;
+      return [];
+    }
+
+    function formatTimeAgo(iso){
+      if (!iso) return '';
+      try{
+        const d = new Date(iso);
+        const now = new Date();
+        const diffMs = now - d;
+        const mins = Math.round(diffMs / 60000);
+        if (mins < 60){
+          return mins <= 1 ? 'just now' : mins + ' min ago';
+        }
+        const hrs = Math.round(mins / 60);
+        if (hrs < 24){
+          return hrs === 1 ? '1 hour ago' : hrs + ' hours ago';
+        }
+        const days = Math.round(hrs / 24);
+        if (days === 1) return '1 day ago';
+        return days + ' days ago';
+      }catch(e){
+        return '';
+      }
+    }
+
+    function renderNews(list){
+      let all = Array.isArray(list) ? list.slice() : [];
+      let shown = 0;
+      const PAGE = NEWS_LIMIT;
+      function sliceAndRender(){
+        statusEl.textContent = '';
+        listEl.innerHTML = '';
+        const chunk = all.slice(0, shown);
+        chunk.forEach(item => {
+          const title = item.title || item.headline || 'Untitled';
+          const url = item.url || item.link || '#';
+          const source = item.source || item.publisher || '';
+          const ts = item.published_at || item.date || item.publishedAt || '';
+          const when = formatTimeAgo(ts);
+          const summaryRaw = item.summary || item.description || item.excerpt || '';
+          const summary = summaryRaw
+            ? (summaryRaw.length > 220 ? summaryRaw.slice(0,217) + '…' : summaryRaw)
+            : '';
+          const thumb = item.image_url || item.image || item.thumbnail || item.thumb || '';
+
+          const li = document.createElement('li');
+          li.className = 'news-item';
+          li.innerHTML = ''
+            + '<span class="news-dot"></span>'
+            + '<div style="flex:1;min-width:0;">'
+            +   '<div class="news-item-title">'
+            +     (url && url !== '#' ? '<a href="' + url + '" target="_blank" rel="noopener">' + title + '</a>' : title)
+            +   '</div>'
+            +   (summary ? '<div class="news-item-summary">' + summary + '</div>' : '')
+            +   '<div class="news-item-meta">'
+            +     (source ? '<span>' + source + '</span>' : '')
+            +     (source && when ? ' · ' : '')
+            +     (when ? '<span>' + when + '</span>' : '')
+            +   '</div>'
+            + '</div>'
+            + (thumb ? '<div class="news-thumb"><img src="' + thumb + '" alt=""/></div>' : '');
+          listEl.appendChild(li);
+        });
+
+        // Show more button
+        let moreBtn = document.getElementById('newsMoreBtn');
+        if (!moreBtn){
+          moreBtn = document.createElement('button');
+          moreBtn.id = 'newsMoreBtn';
+          moreBtn.className = 'btn';
+          moreBtn.style.cssText = 'margin-top:10px;align-self:flex-start;border-radius:999px;padding:8px 12px;font-weight:600;background:rgba(124,58,237,0.18);border:1px solid rgba(148,163,184,0.25);color:#f6f0ff;';
+          moreBtn.textContent = 'Show more';
+          listEl.parentElement.appendChild(moreBtn);
+          moreBtn.addEventListener('click', ()=>{
+            shown = Math.min(all.length, shown + PAGE);
+            sliceAndRender();
+          });
+        }
+        moreBtn.style.display = shown < all.length ? 'inline-flex' : 'none';
+      }
+      shown = Math.min(all.length, PAGE);
+      sliceAndRender();
+    
+    async function loadNews(){
+      try{
+        statusEl.textContent = 'Loading latest headlines…';
+        const url = new URL(NEWS_ENDPOINT);
+        if (NEWS_SYMBOLS){
+          url.searchParams.set('symbol', NEWS_SYMBOLS);
+        }
+        url.searchParams.set('limit', String(40));
+        const res = await fetch(url.toString());
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const json = await res.json();
+        const list = coerceNews(json);
+        renderNews(list);
+      }catch(e){
+        statusEl.textContent = 'Unable to load news from arkfunds.io';
+        console.error('News load error', e);
+      }
+    }
+
+    loadNews();
+  }
+
+  if (document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', setup);
+  } else {
+    setup();
+  }
+})();
+</script>
+
+<script>
+(function(){
+  const FUNDS = ['ARKK','ARKQ','ARKW','ARKG','ARKF','ARKX','PRNT','IZRL'];
+  const ENDPOINT = 'https://arkfunds.io/api/v2/etf/holdings';
+
+  async function loadTop10(){
+    const status = document.getElementById('arkTop10Status');
+    const list = document.getElementById('arkTop10List');
+    const updated = document.getElementById('arkTop10Updated');
+    if (!status || !list) return;
+
+    try{
+      status.textContent = 'Loading ARK aggregated holdings…';
+      const url = new URL(ENDPOINT);
+      url.searchParams.set('symbol', FUNDS.join(','));
+
+      const res = await fetch(url);
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const json = await res.json();
+
+      const holdings = Array.isArray(json.holdings) ? json.holdings : [];
+      const grouped = {};
+
+      holdings.forEach(h=>{
+        const t = h.ticker;
+        if (!t) return;
+        if (!grouped[t]) grouped[t] = {ticker:t, mv:0, shares:0};
+        grouped[t].mv += h.market_value || 0;
+        grouped[t].shares += h.shares || 0;
+      });
+
+      const arr = Object.values(grouped).sort((a,b)=>b.mv - a.mv).slice(0,10);
+
+      list.innerHTML = '';
+      arr.forEach((item,i)=>{
+        const li = document.createElement('li');
+        const sym = (item.ticker || '').trim().toUpperCase();
+        const name = (typeof NAME_MAP !== 'undefined' && NAME_MAP[sym]) ? NAME_MAP[sym] : '';
+        const mv = item.mv || 0;
+
+        let label;
+        if (mv >= 1e9){
+          const b = mv / 1e9;
+          label = '$ ' + b.toLocaleString('it-IT',{ maximumFractionDigits: 2 });
+          label += 'B';
+        } else if (mv >= 1e6){
+          const m = mv / 1e6;
+          label = '$ ' + Math.round(m).toLocaleString('it-IT',{ maximumFractionDigits: 0 });
+          label += 'M';
+        } else {
+          label = '$ ' + mv.toLocaleString('it-IT',{ maximumFractionDigits: 0 });
+        }
+
+        li.className = 'ark-top10-item';
+        li.innerHTML =
+          '<div class="ark-top10-row">' +
+            '<div class="ark-top10-left">' +
+              '<span class="ark-top10-rank">' + (i+1) + '.</span>' +
+              '<span class="ticker-pill gf-open" data-ticker="' + sym + '">' + sym + '</span>' +
+              (name ? '<span class="ark-top10-name">' + name + '</span>' : '') +
+            '</div>' +
+            '<div class="ark-top10-mv">' + label + '</div>' +
+          '</div>';
+
+        const chip = li.querySelector('.gf-open');
+        if (chip){
+          chip.addEventListener('click', (e)=>{
+            e.preventDefault();
+            e.stopPropagation();
+            const t = chip.getAttribute('data-ticker') || sym;
+            const url = (typeof googleFinanceURL === 'function')
+              ? googleFinanceURL(t)
+              : `https://www.google.com/finance/quote/${encodeURIComponent(t)}:NASDAQ`;
+            window.open(url, '_blank', 'noopener');
+          });
+        }
+
+        list.appendChild(li);
+      });
+
+      
+const now = new Date();
+      updated.textContent = 'Updated: '+ now.toLocaleString('en-US',{hour:'2-digit',minute:'2-digit'});
+      status.textContent = '';
+    }catch(e){
+      console.error(e);
+      status.textContent = 'Unable to compute ARK global holdings';
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', loadTop10);
+})();
+</script>
 </body>
 </html>
