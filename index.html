@@ -277,15 +277,15 @@ p.note{color:var(--muted);font-size:13px;margin:6px 0 18px}
 }
 .sidebar-header{
   position:relative;
-  min-height:160px;
-  padding:0px 0px 0px 0px;
+  min-height:auto;
+  padding:8px 0 16px 0;
   display:flex;
-  align-items:center;
+  align-items:flex-start;
 }
 .sidebar-header > div:last-child{
   position:relative;
   z-index:1;
-  margin-left:96px; /* distanza dal centro del lemon */
+  margin-left:0; /* titolo allineato a sinistra */
 }
   
   /* QUA TROVI LE COSE RELATIVE ALLA SIDEBAR ⚙️ */
@@ -2255,10 +2255,11 @@ h1, #mainTitle, #titleARK {
 /* Added Lemon LOGO image style 🍋 */
 .sidebar-logo-img{
   position:absolute;
-  left:-40px;
-  top:-50px;
-  width:240px;
-  height:240px;
+  left:50%;
+  bottom:40px;            /* alzata rispetto al bordo */
+  transform:translateX(-50%);
+  width:220px;
+  height:220px;
   display:flex;
   align-items:center;
   justify-content:center;
@@ -2266,6 +2267,8 @@ h1, #mainTitle, #titleARK {
   pointer-events:none;
 }
 .sidebar-logo-img img{
+  transform: scaleX(-1);
+
   width:130%;
   height:auto;
   display:block;
@@ -2960,9 +2963,6 @@ html[data-view="favorites"] #newsCard{
 <div class="app-shell">
   <aside class="sidebar">
     <div class="sidebar-header">
-      <div class="sidebar-logo-img">
-    <img src="icons/Lemon.svg" alt="Lemon Trades Logo">
-</div>
       <div>
         <div class="sidebar-title">Lemon Trades</div>
         <div class="sidebar-subtitle">ARK Dashboard</div>
@@ -3047,7 +3047,11 @@ html[data-view="favorites"] #newsCard{
 
   
 
-    <div class="sidebar-footer">
+    
+    <div class="sidebar-logo-img">
+      <img src="icons/Lemon.svg" alt="Lemon Trades Logo">
+    </div>
+<div class="sidebar-footer">
 <div class="sidebar-source-note">
   <p class="note">
   Source: Unofficial API
