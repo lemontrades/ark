@@ -3478,83 +3478,6 @@ html[data-view="favorites"] #holdingsCard{
 
 
 
-
-#overlay .company-info{
-  font-size:12px;
-  color:var(--muted);
-  margin-bottom:10px;
-  max-height:120px;
-  overflow:auto;
-}
-
-#overlay .company-meta{
-  font-size:12px;
-  color:var(--muted);
-  margin-bottom:4px;
-}
-
-#overlay .company-desc{
-  font-size:12px;
-  color:#e5e7eb;
-  opacity:0.9;
-  line-height:1.5;
-  margin-bottom:4px;
-}
-
-#overlay .company-link a{
-  font-size:12px;
-  font-weight:500;
-  text-decoration:underline;
-  text-underline-offset:3px;
-  color:#ffb347;
-}
-#overlay .focus-metrics-row{
-  display:grid;
-  grid-template-columns:repeat(4,minmax(0,1fr));
-  gap:10px;
-  margin-bottom:12px;
-}
-
-#overlay .focus-metric{
-  background:radial-gradient(circle at 0% 0%, rgba(15,23,42,0.90), rgba(15,23,42,0.96));
-  border-radius:18px;
-  border:1px solid rgba(31,41,55,0.95);
-  box-shadow:
-    0 0 0 1px rgba(148,163,184,0.25),
-    0 12px 28px rgba(0,0,0,0.75);
-  padding:10px 14px;
-  display:flex;
-  flex-direction:column;
-  align-items:flex-start;
-  justify-content:center;
-  gap:4px;
-}
-
-#overlay .focus-metric-label{
-  font-size:10px;
-  text-transform:uppercase;
-  letter-spacing:.18em;
-  color:rgba(148,163,184,0.85);
-}
-
-#overlay .focus-metric-value{
-  font-size:18px;
-  font-weight:700;
-  color:#f9fafb;
-}
-
-/* reuse weight heat colors for search popup */
-#overlay #focusMetricWeight.heat-low{
-  color:#facc15;
-}
-#overlay #focusMetricWeight.heat-mid{
-  color:#fb923c;
-}
-#overlay #focusMetricWeight.heat-high{
-  color:#f97316;
-}
-
-
   /* --- News layout fix override --- */
   .news-item{
     display:flex;
@@ -3987,26 +3910,7 @@ html[data-view="favorites"] #holdingsCard{
   </div>
 </div>
 <div class="body">
-<div class="focus-metrics-row" id="focusMetricsRow" style="display:none">
-  <div class="focus-metric">
-    <div class="focus-metric-label">LAST CLOSE</div>
-    <div class="focus-metric-value" id="focusMetricLast">—</div>
-  </div>
-  <div class="focus-metric">
-    <div class="focus-metric-label">TOTAL VALUE</div>
-    <div class="focus-metric-value" id="focusMetricValue">—</div>
-  </div>
-  <div class="focus-metric">
-    <div class="focus-metric-label">TOTAL SHARES</div>
-    <div class="focus-metric-value" id="focusMetricShares">—</div>
-  </div>
-  <div class="focus-metric">
-    <div class="focus-metric-label">WEIGHT %</div>
-    <div class="focus-metric-value" id="focusMetricWeight">—</div>
-  </div>
-</div>
-<div id="companyInfo" class="company-info"></div>
-<div class="muted" id="focusInfo" style="margin-bottom:8px"></div
+<div class="muted" id="focusInfo" style="margin-bottom:8px"></div>
 <div style="overflow:auto">
 <table>
 <colgroup>
@@ -4346,12 +4250,6 @@ const EXCHANGE_MAP = {
 
   const focusTitle = document.getElementById('focusTitle');
   const focusInfo  = document.getElementById('focusInfo');
-  const companyInfoBox = document.getElementById('companyInfo');
-  const focusMetricsRow = document.getElementById('focusMetricsRow');
-  const focusMetricLast = document.getElementById('focusMetricLast');
-  const focusMetricValue = document.getElementById('focusMetricValue');
-  const focusMetricShares = document.getElementById('focusMetricShares');
-  const focusMetricWeight = document.getElementById('focusMetricWeight');
   const focusBody  = document.getElementById('focusBody');
   closeOverlay.onclick = ()=> overlay.style.display='none';
   if(holdingCloseBtn && holdingOverlay){ holdingCloseBtn.onclick = ()=> holdingOverlay.style.display='none'; }
@@ -4562,24 +4460,6 @@ function fmtDateDMY(ymd){ // expects 'YYYY-MM-DD' -> 'DD/MM/YY'
     return priceMap;
   }
 
-  function formatUsdCompact(mv){
-    if(!mv || !isFinite(mv)) return '\u2014';
-    if(mv >= 1e9){
-      const b = mv / 1e9;
-      return '$ ' + b.toLocaleString('it-IT',{ maximumFractionDigits: 2 }) + 'B';
-    } else if(mv >= 1e6){
-      const m = mv / 1e6;
-      return '$ ' + Math.round(m).toLocaleString('it-IT',{ maximumFractionDigits: 0 }) + 'M';
-    } else {
-      return '$ ' + mv.toLocaleString('it-IT',{ maximumFractionDigits: 0 });
-    }
-  }
-
-  function formatUsdPrice(v){
-    if(!v || !isFinite(v)) return '\u2014';
-    return '$ ' + v.toLocaleString('en-US',{ minimumFractionDigits: 2, maximumFractionDigits: 2 });
-  }
-
   let allRows=[];
 
   
@@ -4698,34 +4578,7 @@ document.querySelectorAll('.gf-open').forEach(el=>{
     mergeWeights(allRows);
     const rows = getFiltered().filter(r=>r.ticker===ticker);
     focusTicker = ticker; window.focusTicker = ticker;
-
-    if (focusMetricsRow){
-      const metaMap = (typeof holdingsMetaByTicker !== 'undefined') ? holdingsMetaByTicker : (window.__arkHoldingsMeta || {});
-      const meta = metaMap && metaMap[ticker.toUpperCase()];
-      if (meta){
-        focusMetricsRow.style.display = 'grid';
-        if (focusMetricLast)   focusMetricLast.textContent   = formatUsdPrice(meta.lastClose);
-        if (focusMetricValue)  focusMetricValue.textContent  = formatUsdCompact(meta.mv);
-        if (focusMetricShares) focusMetricShares.textContent = meta.shares ? meta.shares.toLocaleString('it-IT') : '\u2014';
-        if (focusMetricWeight){
-          const w = meta.weight;
-          focusMetricWeight.classList.remove('heat-low','heat-mid','heat-high');
-          if (typeof w === 'number' && isFinite(w)){
-            const label = w.toFixed(2).replace('.', ',') + '%';
-            focusMetricWeight.textContent = label;
-            let cls = 'heat-low';
-            if (w >= 5) cls = 'heat-high';
-            else if (w >= 2) cls = 'heat-mid';
-            focusMetricWeight.classList.add(cls);
-          } else {
-            focusMetricWeight.textContent = '\u2014';
-          }
-        }
-      } else {
-        focusMetricsRow.style.display = 'none';
-      }
-    }
-
+    
     focusTitle.innerHTML = (function(){
   var nm = (NAME_MAP && NAME_MAP[ticker]) ? NAME_MAP[ticker] : '';
   var s  = tickerStyles(ticker||'');
@@ -4741,15 +4594,6 @@ document.querySelectorAll('.gf-open').forEach(el=>{
     </div>`;
 })();
     refreshFollowBtn();
-    if (companyInfoBox){
-      companyInfoBox.innerHTML = '<div class="company-meta">Loading company info…</div>';
-      fetchStockProfile(ticker).then(function(info){
-        companyInfoBox.innerHTML = renderCompanyInfo(info);
-      }).catch(function(e){
-        console.error('company info load failed', e);
-        companyInfoBox.innerHTML = '';
-      });
-    }
     focusInfo.textContent = `${rows.length} transactions displayed for ${ticker}.`;
     focusBody.innerHTML='';
     rows.forEach(r=>{
@@ -6513,9 +6357,6 @@ navButtons.forEach(function(btn){
   const FUNDS = ['ARKK','ARKQ','ARKW','ARKG','ARKF','ARKX','PRNT','IZRL'];
   const ENDPOINT = 'https://arkfunds.io/api/v2/etf/holdings';
 
-  const holdingsMetaByTicker = {};
-  window.__arkHoldingsMeta = holdingsMetaByTicker;
-
   async function loadTop10(){
     const status = document.getElementById('arkTop10Status');
     const list = document.getElementById('arkTop10List');
@@ -6578,17 +6419,6 @@ navButtons.forEach(function(btn){
 
       // total market value for weight%
       const totalMv = values.reduce((sum, x) => sum + (x.mv || 0), 0);
-
-      // build lookup for metrics (search popup, holdings overlay, etc.)
-      values.forEach(v => {
-        const sym = (v.ticker || '').trim().toUpperCase();
-        if(!sym) return;
-        const mv = v.mv || 0;
-        const shares = v.shares || 0;
-        const weight = totalMv ? (mv / totalMv) * 100 : 0;
-        const lastClose = (shares > 0 && mv > 0) ? (mv / shares) : 0;
-        holdingsMetaByTicker[sym] = { mv, shares, weight, lastClose };
-      });
 
       const formatMV = (mv) => {
         if (mv >= 1e9){
