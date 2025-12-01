@@ -2633,7 +2633,7 @@ h1, #mainTitle, #titleARK {
   .news-item-title a{ color:#e9ddff; }
   .news-item-title a:hover{ color:#ffffff; text-decoration:underline; }
   .news-dot{ background: linear-gradient(135deg, #ff9a1f, #ffca38); box-shadow: 0 0 0 1px rgba(0,0,0,.5); }
-  .news-thumb{ border:1px solid rgba(148,163,184,0.20); background: rgba(12, 11, 20, .9); }
+  .news-thumb{ border:1px solid #5d00bc; background: rgba(12, 11, 20, .9); }
 
   .news-head{
     display:flex;
@@ -2687,12 +2687,12 @@ h1, #mainTitle, #titleARK {
 
   .news-thumb{
     margin-left:auto;
-    width:64px;
-    height:64px;
+    width:416px;
+    height:193px;
     border-radius:16px;
     overflow:hidden;
     flex-shrink:0;
-    background:rgba(15,23,42,0.9);
+    background:#2a0095;
     display:flex;
     align-items:center;
     justify-content:center;
@@ -2714,7 +2714,7 @@ h1, #mainTitle, #titleARK {
     flex-shrink:0;
   }
   .news-item-title{
-    font-size:12px;
+    font-size:27px;
     line-height:1.3;
   }
   .news-item-title a{
@@ -2725,12 +2725,12 @@ h1, #mainTitle, #titleARK {
     text-decoration:underline;
   }
   .news-item-meta{
-    font-size:11px;
+    font-size:10px;
     color:rgba(255,255,255,0.65);
     margin-top:2px;
   }
   .news-item-summary{
-    font-size:11px;
+    font-size:19px;
     color:var(--muted);
     margin-top:4px;
     line-height:1.35;
@@ -3476,8 +3476,113 @@ html[data-view="favorites"] #holdingsCard{
   text-align: right;
 }
 
+
+
+
+#overlay .company-info{
+  font-size:12px;
+  color:var(--muted);
+  margin-bottom:10px;
+  max-height:120px;
+  overflow:auto;
+}
+
+#overlay .company-meta{
+  font-size:12px;
+  color:var(--muted);
+  margin-bottom:4px;
+}
+
+#overlay .company-desc{
+  font-size:12px;
+  color:#e5e7eb;
+  opacity:0.9;
+  line-height:1.5;
+  margin-bottom:4px;
+}
+
+#overlay .company-link a{
+  font-size:12px;
+  font-weight:500;
+  text-decoration:underline;
+  text-underline-offset:3px;
+  color:#ffb347;
+}
+#overlay .focus-metrics-row{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:10px;
+  margin-bottom:12px;
+}
+
+#overlay .focus-metric{
+  background:radial-gradient(circle at 0% 0%, rgba(15,23,42,0.90), rgba(15,23,42,0.96));
+  border-radius:18px;
+  border:1px solid rgba(31,41,55,0.95);
+  box-shadow:
+    0 0 0 1px rgba(148,163,184,0.25),
+    0 12px 28px rgba(0,0,0,0.75);
+  padding:10px 14px;
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  justify-content:center;
+  gap:4px;
+}
+
+#overlay .focus-metric-label{
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:.18em;
+  color:rgba(148,163,184,0.85);
+}
+
+#overlay .focus-metric-value{
+  font-size:18px;
+  font-weight:700;
+  color:#f9fafb;
+}
+
+/* reuse weight heat colors for search popup */
+#overlay #focusMetricWeight.heat-low{
+  color:#facc15;
+}
+#overlay #focusMetricWeight.heat-mid{
+  color:#fb923c;
+}
+#overlay #focusMetricWeight.heat-high{
+  color:#f97316;
+}
+
+
+  /* --- News layout fix override --- */
+  .news-item{
+    display:flex;
+    align-items:flex-start;
+  }
+  .news-item .news-thumb{
+    margin:0;
+    margin-right:12px;
+    flex-shrink:0;
+  }
+  .news-item .news-text{
+    flex:1;
+    min-width:0;
+  }
 </style>
-<link crossorigin="True" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/></head>
+<link crossorigin="True" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<style id="news-more-style">
+.news-more-wrap{display:flex;justify-content:center;margin-top:12px}
+.news-more-btn{
+  appearance:none;border:1px solid rgba(148,163,184,.35);
+  border-radius:999px;padding:8px 14px;font-size:12px;
+  background:radial-gradient(120% 120% at 0% 0%, rgba(124,58,237,.35) 0%, rgba(19,17,28,.95) 42%);
+  color:#fff;cursor:pointer;box-shadow:0 8px 24px rgba(0,0,0,.45), inset 0 0 12px rgba(124,58,237,.25);
+}
+.news-more-btn:hover{box-shadow:0 10px 28px rgba(0,0,0,.55), inset 0 0 14px rgba(124,58,237,.35)}
+</style>
+
+</head>
 <body>
 <div class="app-shell">
   <aside class="sidebar">
@@ -3882,7 +3987,26 @@ html[data-view="favorites"] #holdingsCard{
   </div>
 </div>
 <div class="body">
-<div class="muted" id="focusInfo" style="margin-bottom:8px"></div>
+<div class="focus-metrics-row" id="focusMetricsRow" style="display:none">
+  <div class="focus-metric">
+    <div class="focus-metric-label">LAST CLOSE</div>
+    <div class="focus-metric-value" id="focusMetricLast">—</div>
+  </div>
+  <div class="focus-metric">
+    <div class="focus-metric-label">TOTAL VALUE</div>
+    <div class="focus-metric-value" id="focusMetricValue">—</div>
+  </div>
+  <div class="focus-metric">
+    <div class="focus-metric-label">TOTAL SHARES</div>
+    <div class="focus-metric-value" id="focusMetricShares">—</div>
+  </div>
+  <div class="focus-metric">
+    <div class="focus-metric-label">WEIGHT %</div>
+    <div class="focus-metric-value" id="focusMetricWeight">—</div>
+  </div>
+</div>
+<div id="companyInfo" class="company-info"></div>
+<div class="muted" id="focusInfo" style="margin-bottom:8px"></div
 <div style="overflow:auto">
 <table>
 <colgroup>
@@ -4222,6 +4346,12 @@ const EXCHANGE_MAP = {
 
   const focusTitle = document.getElementById('focusTitle');
   const focusInfo  = document.getElementById('focusInfo');
+  const companyInfoBox = document.getElementById('companyInfo');
+  const focusMetricsRow = document.getElementById('focusMetricsRow');
+  const focusMetricLast = document.getElementById('focusMetricLast');
+  const focusMetricValue = document.getElementById('focusMetricValue');
+  const focusMetricShares = document.getElementById('focusMetricShares');
+  const focusMetricWeight = document.getElementById('focusMetricWeight');
   const focusBody  = document.getElementById('focusBody');
   closeOverlay.onclick = ()=> overlay.style.display='none';
   if(holdingCloseBtn && holdingOverlay){ holdingCloseBtn.onclick = ()=> holdingOverlay.style.display='none'; }
@@ -4432,6 +4562,24 @@ function fmtDateDMY(ymd){ // expects 'YYYY-MM-DD' -> 'DD/MM/YY'
     return priceMap;
   }
 
+  function formatUsdCompact(mv){
+    if(!mv || !isFinite(mv)) return '\u2014';
+    if(mv >= 1e9){
+      const b = mv / 1e9;
+      return '$ ' + b.toLocaleString('it-IT',{ maximumFractionDigits: 2 }) + 'B';
+    } else if(mv >= 1e6){
+      const m = mv / 1e6;
+      return '$ ' + Math.round(m).toLocaleString('it-IT',{ maximumFractionDigits: 0 }) + 'M';
+    } else {
+      return '$ ' + mv.toLocaleString('it-IT',{ maximumFractionDigits: 0 });
+    }
+  }
+
+  function formatUsdPrice(v){
+    if(!v || !isFinite(v)) return '\u2014';
+    return '$ ' + v.toLocaleString('en-US',{ minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+
   let allRows=[];
 
   
@@ -4550,7 +4698,34 @@ document.querySelectorAll('.gf-open').forEach(el=>{
     mergeWeights(allRows);
     const rows = getFiltered().filter(r=>r.ticker===ticker);
     focusTicker = ticker; window.focusTicker = ticker;
-    
+
+    if (focusMetricsRow){
+      const metaMap = (typeof holdingsMetaByTicker !== 'undefined') ? holdingsMetaByTicker : (window.__arkHoldingsMeta || {});
+      const meta = metaMap && metaMap[ticker.toUpperCase()];
+      if (meta){
+        focusMetricsRow.style.display = 'grid';
+        if (focusMetricLast)   focusMetricLast.textContent   = formatUsdPrice(meta.lastClose);
+        if (focusMetricValue)  focusMetricValue.textContent  = formatUsdCompact(meta.mv);
+        if (focusMetricShares) focusMetricShares.textContent = meta.shares ? meta.shares.toLocaleString('it-IT') : '\u2014';
+        if (focusMetricWeight){
+          const w = meta.weight;
+          focusMetricWeight.classList.remove('heat-low','heat-mid','heat-high');
+          if (typeof w === 'number' && isFinite(w)){
+            const label = w.toFixed(2).replace('.', ',') + '%';
+            focusMetricWeight.textContent = label;
+            let cls = 'heat-low';
+            if (w >= 5) cls = 'heat-high';
+            else if (w >= 2) cls = 'heat-mid';
+            focusMetricWeight.classList.add(cls);
+          } else {
+            focusMetricWeight.textContent = '\u2014';
+          }
+        }
+      } else {
+        focusMetricsRow.style.display = 'none';
+      }
+    }
+
     focusTitle.innerHTML = (function(){
   var nm = (NAME_MAP && NAME_MAP[ticker]) ? NAME_MAP[ticker] : '';
   var s  = tickerStyles(ticker||'');
@@ -4566,6 +4741,15 @@ document.querySelectorAll('.gf-open').forEach(el=>{
     </div>`;
 })();
     refreshFollowBtn();
+    if (companyInfoBox){
+      companyInfoBox.innerHTML = '<div class="company-meta">Loading company info…</div>';
+      fetchStockProfile(ticker).then(function(info){
+        companyInfoBox.innerHTML = renderCompanyInfo(info);
+      }).catch(function(e){
+        console.error('company info load failed', e);
+        companyInfoBox.innerHTML = '';
+      });
+    }
     focusInfo.textContent = `${rows.length} transactions displayed for ${ticker}.`;
     focusBody.innerHTML='';
     rows.forEach(r=>{
@@ -6175,9 +6359,10 @@ navButtons.forEach(function(btn){
 
 
 <script>
-// === ARK ETF News loader (v1) — uses /v2/etf/news ===
+// === ARK ETF News loader (stable + Show more 5-by-5) — uses /v2/etf/news ===
 (function(){
-  const NEWS_LIMIT = 10;
+  const PAGE = 5;
+  const MAX_FETCH = 40;
   const NEWS_ENDPOINT = 'https://arkfunds.io/api/v2/etf/news';
   const NEWS_SYMBOLS = 'ARKK,ARKQ,ARKW,ARKG,ARKF,ARKX,PRNT,IZRL';
 
@@ -6185,110 +6370,127 @@ navButtons.forEach(function(btn){
     const statusEl  = document.getElementById('newsStatus');
     const listEl    = document.getElementById('newsList');
     const updatedEl = document.getElementById('newsUpdated');
-    if (!statusEl || !listEl) return;
+    const bodyEl    = listEl ? listEl.parentElement : null;
+    if (!statusEl || !listEl || !bodyEl) return;
 
     function coerceNews(json){
       if (Array.isArray(json)) return json;
-      if (!json || typeof json !== 'object') return [];
-      if (Array.isArray(json.news)) return json.news;
-      if (Array.isArray(json.data)) return json.data;
-      if (Array.isArray(json.items)) return json.items;
+      if (json && Array.isArray(json.news)) return json.news;
+      if (json && Array.isArray(json.data)) return json.data;
+      if (json && Array.isArray(json.items)) return json.items;
       return [];
     }
 
-    function formatTimeAgo(iso){
-      if (!iso) return '';
+    function timeAgo(iso){
       try{
         const d = new Date(iso);
-        const now = new Date();
-        const diffMs = now - d;
-        const mins = Math.round(diffMs / 60000);
-        if (mins < 60){
-          return mins <= 1 ? 'just now' : mins + ' min ago';
-        }
-        const hrs = Math.round(mins / 60);
-        if (hrs < 24){
-          return hrs === 1 ? '1 hour ago' : hrs + ' hours ago';
-        }
-        const days = Math.round(hrs / 24);
-        if (days === 1) return '1 day ago';
-        return days + ' days ago';
-      }catch(e){
-        return '';
+        const ms = Date.now() - d.getTime();
+        const m = Math.round(ms/60000);
+        if (m < 60) return (m<=1?'just now':m+' min ago');
+        const h = Math.round(m/60);
+        if (h < 24) return (h===1?'1 hour ago':h+' hours ago');
+        const dys = Math.round(h/24);
+        return (dys===1?'1 day ago':dys+' days ago');
+      }catch(e){ return ''; }
+    }
+
+    let all = [];
+    let shown = 0;
+    let moreWrap = null, moreBtn = null;
+
+    function ensureMore(){
+      if (!moreWrap){
+        moreWrap = document.createElement('div');
+        moreWrap.className = 'news-more-wrap';
+        moreBtn = document.createElement('button');
+        moreBtn.type = 'button';
+        moreBtn.className = 'news-more-btn';
+        moreBtn.id = 'newsMoreBtn';
+        moreBtn.textContent = 'Show more';
+        moreWrap.appendChild(moreBtn);
+        bodyEl.appendChild(moreWrap);
+        moreBtn.addEventListener('click', ()=>{
+          shown = Math.min(all.length, shown + PAGE);
+          renderSlice();
+        });
       }
     }
 
-    function renderNews(list){
-      let all = Array.isArray(list) ? list.slice() : [];
-      let shown = 0;
-      const PAGE = NEWS_LIMIT;
-      function sliceAndRender(){
+    function renderSlice(){
+      listEl.innerHTML = '';
+      const slice = all.slice(0, shown);
+      if (!slice.length){
+        statusEl.textContent = 'No recent headlines from arkfunds.io';
+      } else {
         statusEl.textContent = '';
-        listEl.innerHTML = '';
-        const chunk = all.slice(0, shown);
-        chunk.forEach(item => {
-          const title = item.title || item.headline || 'Untitled';
-          const url = item.url || item.link || '#';
-          const source = item.source || item.publisher || '';
-          const ts = item.published_at || item.date || item.publishedAt || '';
-          const when = formatTimeAgo(ts);
-          const summaryRaw = item.summary || item.description || item.excerpt || '';
-          const summary = summaryRaw
-            ? (summaryRaw.length > 220 ? summaryRaw.slice(0,217) + '…' : summaryRaw)
-            : '';
-          const thumb = item.image_url || item.image || item.thumbnail || item.thumb || '';
-
-          const li = document.createElement('li');
-          li.className = 'news-item';
-          li.innerHTML = ''
-            + '<span class="news-dot"></span>'
-            + '<div style="flex:1;min-width:0;">'
-            +   '<div class="news-item-title">'
-            +     (url && url !== '#' ? '<a href="' + url + '" target="_blank" rel="noopener">' + title + '</a>' : title)
-            +   '</div>'
-            +   (summary ? '<div class="news-item-summary">' + summary + '</div>' : '')
-            +   '<div class="news-item-meta">'
-            +     (source ? '<span>' + source + '</span>' : '')
-            +     (source && when ? ' · ' : '')
-            +     (when ? '<span>' + when + '</span>' : '')
-            +   '</div>'
-            + '</div>'
-            + (thumb ? '<div class="news-thumb"><img src="' + thumb + '" alt=""/></div>' : '');
-          listEl.appendChild(li);
-        });
-
-        // Show more button
-        let moreBtn = document.getElementById('newsMoreBtn');
-        if (!moreBtn){
-          moreBtn = document.createElement('button');
-          moreBtn.id = 'newsMoreBtn';
-          moreBtn.className = 'btn';
-          moreBtn.style.cssText = 'margin-top:10px;align-self:flex-start;border-radius:999px;padding:8px 12px;font-weight:600;background:rgba(124,58,237,0.18);border:1px solid rgba(148,163,184,0.25);color:#f6f0ff;';
-          moreBtn.textContent = 'Show more';
-          listEl.parentElement.appendChild(moreBtn);
-          moreBtn.addEventListener('click', ()=>{
-            shown = Math.min(all.length, shown + PAGE);
-            sliceAndRender();
-          });
-        }
-        moreBtn.style.display = shown < all.length ? 'inline-flex' : 'none';
       }
-      shown = Math.min(all.length, PAGE);
-      sliceAndRender();
-    
+
+      slice.forEach(item => {
+        const title = item.title || item.headline || 'Untitled';
+        const url = item.url || item.link || '#';
+        const src = item.source || item.publisher || '';
+        const ts = item.published_at || item.date || item.publishedAt || '';
+        const when = timeAgo(ts);
+        const summaryRaw = item.summary || item.description || item.excerpt || '';
+        const summary = summaryRaw ? (summaryRaw.length>220?summaryRaw.slice(0,217)+'…':summaryRaw) : '';
+        const thumb = item.image_url || item.image || item.thumbnail || item.thumb || '';
+
+        const li = document.createElement('li');
+        li.className = 'news-item';
+        li.innerHTML =
+          (thumb?('<div class="news-thumb"><img src="'+thumb+'" alt=""/></div>'):'')+
+          '<div class="news-text">'+
+            '<div class="news-item-header">'+
+              '<span class="news-dot"></span>'+
+              '<div class="news-item-title">'+
+                (url && url!="#"
+                  ? '<a href="'+url+'" target="_blank" rel="noopener">'+title+'</a>'
+                  : title)+
+              '</div>'+
+            '</div>'+
+            (summary?'<div class="news-item-summary">'+summary+'</div>':'')+
+            '<div class="news-item-meta">'+
+              (src?'<span>'+src+'</span>':'')+
+              (src&&when?' · ':'')+
+              (when?'<span>'+when+'</span>':'')+
+            '</div>'+
+          '</div>';
+        listEl.appendChild(li);
+      });
+
+      // toggle button
+      if (moreWrap){
+        if (shown >= all.length){ moreWrap.style.display='none'; }
+        else { moreWrap.style.display='flex'; }
+      }
+    }
+
     async function loadNews(){
       try{
         statusEl.textContent = 'Loading latest headlines…';
         const url = new URL(NEWS_ENDPOINT);
-        if (NEWS_SYMBOLS){
-          url.searchParams.set('symbol', NEWS_SYMBOLS);
-        }
-        url.searchParams.set('limit', String(40));
+        if (NEWS_SYMBOLS) url.searchParams.set('symbol', NEWS_SYMBOLS);
+        url.searchParams.set('limit', String(MAX_FETCH));
         const res = await fetch(url.toString());
-        if (!res.ok) throw new Error('HTTP ' + res.status);
+        if (!res.ok) throw new Error('HTTP '+res.status);
         const json = await res.json();
-        const list = coerceNews(json);
-        renderNews(list);
+        all = coerceNews(json);
+        if (!Array.isArray(all)) all = [];
+        ensureMore();
+        shown = Math.min(all.length, PAGE);
+        renderSlice();
+
+        if (updatedEl && all[0]){
+          const ts = all[0].published_at || all[0].date || all[0].publishedAt;
+          if (ts){
+            try{
+              const d = new Date(ts);
+              updatedEl.textContent = 'Last update: ' + d.toLocaleString('en-US', {
+                month:'short', day:'numeric', hour:'2-digit', minute:'2-digit'
+              });
+            }catch(e){ updatedEl.textContent = ''; }
+          }
+        }
       }catch(e){
         statusEl.textContent = 'Unable to load news from arkfunds.io';
         console.error('News load error', e);
@@ -6300,7 +6502,7 @@ navButtons.forEach(function(btn){
 
   if (document.readyState === 'loading'){
     document.addEventListener('DOMContentLoaded', setup);
-  } else {
+  }else{
     setup();
   }
 })();
@@ -6310,6 +6512,9 @@ navButtons.forEach(function(btn){
 (function(){
   const FUNDS = ['ARKK','ARKQ','ARKW','ARKG','ARKF','ARKX','PRNT','IZRL'];
   const ENDPOINT = 'https://arkfunds.io/api/v2/etf/holdings';
+
+  const holdingsMetaByTicker = {};
+  window.__arkHoldingsMeta = holdingsMetaByTicker;
 
   async function loadTop10(){
     const status = document.getElementById('arkTop10Status');
@@ -6373,6 +6578,17 @@ navButtons.forEach(function(btn){
 
       // total market value for weight%
       const totalMv = values.reduce((sum, x) => sum + (x.mv || 0), 0);
+
+      // build lookup for metrics (search popup, holdings overlay, etc.)
+      values.forEach(v => {
+        const sym = (v.ticker || '').trim().toUpperCase();
+        if(!sym) return;
+        const mv = v.mv || 0;
+        const shares = v.shares || 0;
+        const weight = totalMv ? (mv / totalMv) * 100 : 0;
+        const lastClose = (shares > 0 && mv > 0) ? (mv / shares) : 0;
+        holdingsMetaByTicker[sym] = { mv, shares, weight, lastClose };
+      });
 
       const formatMV = (mv) => {
         if (mv >= 1e9){
