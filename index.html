@@ -5816,10 +5816,11 @@ try{
 
 
 <script>
-/* === Totals Calculator v1.1 (x1000) — non‑destructive ===
+/* === Totals Calculator v1.2 (fixed) — non‑destructive ===
    - NON sposta/aggiunge colonne.
-   - Calcola: Total = (Close × Shares) * 1000
-   - Abbreviazione K/M/B/T con punto decimale.
+   - Calcola: Total = (Close × Shares)
+   - Importante: la formattazione compatta (K/M/B/T) avviene SOLO dopo il calcolo.
+   - Shares viene sempre interpretato come intero (gestisce separatori migliaia "." o ",").
 */
 (function(){
   const TABLE_ID = 'table';
@@ -5840,6 +5841,7 @@ try{
 
   function parseClose(text){
     if(!text) return null;
+    // Close: può contenere "$", spazi, separatori migliaia
     let s = String(text).replace(/\$/g,'').replace(/[ \u00A0,]/g,'');
     s = s.replace(/[^0-9.\-]/g,'');
     if(!s || s==='.' || s==='-' || s==='-.') return null;
@@ -5850,13 +5852,17 @@ try{
   function parseShares(text){
     if(!text) return null;
     // Usa solo la parte a sinistra di '|'
-    let s = String(text).split('|')[0];
-    s = s.replace(/[ \u00A0]/g,''); // spazi
-    s = s.replace(/,/g,'');        // virgole come migliaia
-    s = s.replace(/[^0-9.\-]/g,''); // tieni solo cifre, punto, segno
-    if(!s || s==='.' || s==='-' || s==='-.') return null;
-    const v = parseFloat(s);
-    return Number.isFinite(v) ? v : null;
+    let s = String(text).split('|')[0].trim();
+    if(!s) return null;
+
+    // Shares NON ha decimali: rimuovi separatori migliaia e qualsiasi cosa non numerica
+    const neg = s.includes('-');
+    s = s.replace(/[^0-9]/g,''); // elimina "." "," spazi ecc.
+    if(!s) return null;
+
+    const v = parseInt(s, 10);
+    if(!Number.isFinite(v)) return null;
+    return neg ? -v : v;
   }
 
   function fmtCompact(n){
@@ -5878,6 +5884,7 @@ try{
 
     const tbody = document.getElementById(TBODY_ID);
     if(!tbody) return;
+
     Array.from(tbody.rows).forEach(tr => {
       const cClose  = tr.children[close];
       const cTotal  = tr.children[total];
@@ -5888,7 +5895,7 @@ try{
       const vShares = parseShares(cShares.textContent);
 
       if(vClose!=null && vShares!=null){
-        const totalVal = (vClose * vShares) * 1000; // <— moltiplicatore x1000
+        const totalVal = (vClose * vShares); // ✅ niente x1000
         cTotal.textContent = fmtCompact(totalVal);
       } else {
         cTotal.textContent = '–';
@@ -5918,6 +5925,7 @@ try{
   }
 })();
 </script>
+
 
 <script>
 /* === Rate Limit Helper v1.0 (non-invasive) ===
